@@ -1,0 +1,29 @@
+/* Button Style */
+Button {
+    -fx-background-color: #1e1e1e; /* Default background color */
+    -fx-text-fill: white; /* Text color */
+    -fx-padding: 8 12 8 12; /* Padding: top, right, bottom, left */
+    -fx-alignment: baseline-left;
+}
+
+/* Hover Effect */
+Button:hover {
+    -fx-background-color: black; /* Change background color on hover */
+}
+
+.profileSettings {
+    -fx-background-radius: 20; /* Adjust the radius for the rounded corners */
+    -fx-background-color: linear-gradient(to bottom, #2c2e31, #202124); /* Gradient background color */
+    -fx-border-radius: 20; /* Rounded border */
+    -fx-border-color: linear-gradient(to bottom, #ff0000, #5e0505); /* Gradient border color */
+    -fx-border-width: 2; /* Border width */
+    -fx-text-fill: white; /* Text color */
+    -fx-padding: 10 20; /* Padding */
+    -fx-font-size: 14; /* Font size */
+}
+
+/* Hover Effect */
+.profileSettings:hover {
+    -fx-background-color: linear-gradient(to bottom, #202124, #2c2e31); /* Change background color on hover */
+    -fx-border-color: linear-gradient(to bottom, #ff0000, #650000); /* Change border color on hover */
+}

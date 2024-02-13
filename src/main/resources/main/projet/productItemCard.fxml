@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="productCardItem" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="287.0" styleClass="product-item-card" stylesheets="@css/product.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.projet.ProductItemCard">
+   <children>
+      <ImageView fx:id="productimg" fitHeight="140.0" fitWidth="236.0" pickOnBounds="true">
+         <image>
+            <Image url="@images/img.jpeg" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER" prefHeight="101.0" prefWidth="310.0">
+         <children>
+            <Label fx:id="productname" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="166.0" text="Product">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="12.0" />
+               </font></Label>
+            <Label fx:id="productprice" alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="124.0" text="20 TND" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleShopButton" prefHeight="46.0" prefWidth="66.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/orders.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <HBox.margin>
+                  <Insets right="4.0" />
+               </HBox.margin>
+            </Button>
+            <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleViewDetailsButton" prefHeight="46.0" prefWidth="61.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/flèche.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <HBox.margin>
+                  <Insets left="4.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+   </children>
+</VBox>

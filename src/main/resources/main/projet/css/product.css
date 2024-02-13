@@ -1,0 +1,628 @@
+/* Add your product-related CSS styling here */
+*{
+    -fx-font-family: "Arial Rounded MT Bold";
+}
+.add-product-card {
+    -fx-padding: 20;
+    -fx-spacing: 10;
+    -fx-background-color: rgba(0, 0, 0, 0.9); /* Transparent white background */
+    -fx-background-radius: 20; /* Adjust background radius as needed */
+    -fx-background-insets: 0 0 10 0, 0 0 0 0; /* Box shadow insets, adjust as needed */
+    -fx-max-width: 900;
+}
+.add-product-card:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+
+.card-title {
+    -fx-font-size: 25;
+    -fx-font-weight: bold;
+    -fx-margin-bottom: 10;
+    -fx-text-fill: red;
+}
+
+.input-field {
+    -fx-spacing: 10;
+    -fx-padding: 5;
+}
+
+/* Style labels and text fields */
+.input-field Label {
+    -fx-font-size: 19;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #c44e11, #fd7c2b);
+}
+
+.input-field TextField {
+    -fx-pref-width: 200;
+    -fx-pref-height: 30;
+    -fx-font-size: 20;
+    -fx-border-color: none;
+    -fx-border-radius: 4;
+    -fx-background-color: linear-gradient(to right, #c44e11, #fd7c2b);
+
+}
+
+DatePicker{
+    -fx-pref-width: 200;
+    -fx-pref-height: 30;
+    -fx-font-size: 20;
+    -fx-border-color: none;
+    -fx-border-radius: 4;
+    -fx-background-color: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-control-inner-background: #fd7c2b/* Background color for TextArea */
+
+}
+
+/* Style ChoiceBox */
+.input-field RadioButton {
+    -fx-pref-width: 200;
+    -fx-pref-height: 30;
+    -fx-font-size: 20;
+    -fx-border-radius: 3;
+    -fx-text-fill: linear-gradient(to bottom, #ff4d00, #f16602);;
+}
+
+/* Add more styling as needed */
+Button {
+    -fx-font-size: 18;
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-text-fill: #FF0000;
+    -fx-border-radius: 10;
+    -fx-background-radius: 20; /* Adjust the radius for the rounded corners */
+    -fx-background-color: linear-gradient(to bottom, #2c2e31, #202124); /* Gradient background color */
+    -fx-border-color: linear-gradient(to bottom, #ff0000, #5e0505); /* Gradient border color */
+    -fx-border-width: 2; /* Border width */
+    -fx-padding: 10 20; /* Padding */
+}
+
+/* Apply styles to buttons on hover */
+Button:hover {
+    /* Change cursor on hover */
+
+    /* Apply scaling transition */
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-transition: scale 0.7s;
+    -fx-animation-name: translateXAnimation;
+    -fx-animation-duration: 0.3s; /* Set the animation duration */
+    -fx-animation-fill-mode: forwards; /* Set to forwards to retain final state after animation */
+
+}
+#submitField{
+    -fx-alignment: center;
+}
+
+.TextArea {
+    -fx-pref-width: 200;
+    -fx-pref-height: 30;
+    -fx-font-size: 20;
+    -fx-border-radius: 4;
+    -fx-background-color: #fd7c2b;
+    -fx-control-inner-background: #fd7c2b;
+
+
+}
+
+/* Search Field Style */
+.search-field {
+    -fx-background-color: #424242; /* Background color */
+    -fx-border-color: none; /* Border color */
+    -fx-border-radius: 16; /* Border radius */
+    -fx-background-radius: 16;
+    -fx-padding: 8 10; /* Padding */
+    -fx-text-fill: white;
+}
+
+/* Label Style */
+.label-style {
+    -fx-font-size: 18; /* Font size */
+    -fx-font-weight: bold; /* Font weight */
+    -fx-text-fill: #ffffff; /* Text color */
+    -fx-background-color: transparent; /* Background color */
+
+
+}
+
+/* Apply styles to the prompt text in the search field */
+.search-field .text-input {
+    -fx-prompt-text-fill: white; /* Prompt text color */
+    -fx-font-size: 18; /* Font size */
+
+
+}
+.UpperSectionBtn{
+    -fx-border-radius: 50;
+}
+#searchBtn{
+    -fx-border-color: none;
+    -fx-background-color: transparent;
+}
+
+
+.table-view {
+    -fx-background-color: transparent;
+}
+.table-view .column-header-background .filler {
+    -fx-background-color: transparent;
+}
+.table-view .corner {
+    -fx-background-color: transparent;
+}
+.table-view .column-header-background{
+    -fx-background-color: linear-gradient(to bottom, #ff4d00, #f16602);
+    -fx-background-radius: 7px 7px 0px 0px;
+    -fx-background-insets: 0 11px 0 0;
+    -fx-padding: 0 0 5px 0;
+}
+.table-view .column-header {
+    -fx-background-color: transparent;
+}
+
+.table-view .table-cell{
+    -fx-border-color: transparent;
+    -fx-padding: 2 0 2 10px;
+    -fx-text-fill: white;
+    -fx-font-size: 17;
+}
+.table-row-cell:hover {
+    -fx-background-color: #93f9b911;
+    -fx-text-background-color: red;
+    -fx-text-fill: red;
+    -fx-font-size: 20;
+
+}
+.table-row-cell:odd{
+    -fx-background-color: #101010;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+
+}
+.table-row-cell:odd:hover{
+    -fx-text-fill: red;
+    -fx-font-size: 20;
+
+}
+.table-row-cell:even{
+    -fx-background-color: #1e1e1e;
+    -fx-background-insets: 0, 0 0 1 0;
+    -fx-padding: 0.0em;
+
+}
+.table-row-cell:even{
+    -fx-text-fill: red;
+    -fx-font-size: 20;
+
+}
+
+.table-view .virtual-flow .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track,
+.table-view .virtual-flow .scroll-bar:vertical .track-background,
+.table-view .virtual-flow .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.table-view .virtual-flow .scroll-bar .increment-button,
+.table-view .virtual-flow .scroll-bar .decrement-button {
+    -fx-opacity: 0;
+    -fx-padding: 2;
+}
+
+.table-view .virtual-flow .scroll-bar:vertical .thumb{
+    -fx-background-color:  linear-gradient(to bottom, #c44e11, #fd7c2b);
+}
+.table-view .virtual-flow .scroll-bar:horizontal .thumb {
+    -fx-background-color:  linear-gradient(to right, #c44e11, #fd7c2b);
+}
+
+.table-row-cell Button{
+    -fx-font-size: 18;
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-text-fill: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-border-radius: 10;
+    -fx-background-radius: 20; /* Adjust the radius for the rounded corners */
+    -fx-background-color: linear-gradient(to bottom, #2c2e31, #202124); /* Gradient background color */
+    -fx-border-color: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-border-width: 2; /* Border width */
+    -fx-padding: 10 20; /* Padding */
+    -fx-start-margin: 3;
+}
+
+
+.UpperSection{
+    -fx-background-color: linear-gradient(to bottom, #000000, #1e1e1e); /* Gradient background color */
+}
+
+.title{
+    -fx-font-weight: 800; /* Bold font weight */
+    -fx-font-size: 30;
+    -fx-text-fill: linear-gradient(to right, #c44e11, #fd7c2b);
+
+}
+
+
+
+.radio-button .radio {
+    -fx-border-width: 1px;
+    -fx-border-color: none;
+    -fx-background-color: #ff4d00;
+    -fx-background-image: null;
+    -fx-border-radius: 15px;
+    -fx-padding: 3px;
+}
+
+.radio-button .radio:selected {
+    -fx-background-color: #ff4d00;
+    -fx-background-image: null;
+}
+.radio-button -radio:armed {
+    -fx-background-color: #ff0000;
+    -fx-background-image: null;
+}
+.radio-button -radio:determinate {
+    -fx-background-color: #ff4d00;
+    -fx-background-image: null;
+}
+.radio-button -radio:indeterminate {
+    -fx-background-color: #ff0000;
+    -fx-background-image: null;
+}
+.radio-button .dot {
+    -fx-background-radius: 15px;
+    -fx-padding: 8px;
+}
+
+
+.orangebtn{
+    -fx-font-size: 18;
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-text-fill: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-border-radius: 10;
+    -fx-background-radius: 20; /* Adjust the radius for the rounded corners */
+    -fx-background-color: linear-gradient(to bottom, #2c2e31, #202124); /* Gradient background color */
+    -fx-border-color: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-border-width: 2; /* Border width */
+    -fx-padding: 10 20; /* Padding */
+    -fx-start-margin: 3;
+}
+
+.valuelabel_productdetails{
+    -fx-alignment: TOP-LEFT;
+    -fx-wrap-text: true; /* Optional: Enable text wrapping */
+    -fx-max-width: 900; /* Optional: Set the maximum width */
+    -fx-font-size: 20;
+    -fx-text-fill: rgba(232, 232, 232, 0.78);
+     -fx-padding: 20px;
+}
+.label-value{
+    -fx-text-fill: rgba(232, 232, 232, 0.78);
+
+}
+.img-view {
+    -fx-preserve-ratio: false;
+    -fx-fit-height: 366;
+    -fx-fit-width: 633;
+    -fx-min-width: 633;
+    -fx-min-height: 366;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+}
+.product-item-card {
+    -fx-background-color: linear-gradient(to bottom, #c44e11, #fd7c2b);
+    -fx-padding: 10px; /* Adjust padding as needed */
+    -fx-margin: 10px; /* Add margin as needed */
+    -fx-background-radius: 20px; /* Optional: Add rounded corners */
+    -fx-border-radius: 20px;
+
+}
+
+.product-item-card > * {
+    /* Optional: Add space between child elements */
+    -fx-margin: 0 0 10px 0;
+}
+
+
+.scroll-pane {
+    -fx-background-color:  #1e1e1e;
+}
+
+.scroll-pane .scroll-bar {
+    -fx-background-color:transparent;
+}
+
+.scroll-pane .scroll-bar .increment-button,
+.scroll-pane .scroll-bar .decrement-button,
+.scroll-pane .scroll-bar .track-background {
+    -fx-opacity: 0; /* Set opacity to 0 to make them invisible */
+    -fx-background-color:  transparent;
+
+}
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: linear-gradient(to bottom, #ff4d00, #f16602);
+
+}
+
+/* Optional: Adjust the width of the scroll bar */
+.scroll-pane .scroll-bar:vertical {
+    -fx-pref-width: 15px; /* Adjust the width as needed */
+}
+
+
+
+/* Set the track of the ScrollBar to be completely invisible */
+#productScroll .scroll-bar .track {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-background-insets: 0; /* Set background insets to 0 */
+}
+
+/* Set the background of the ScrollPane to be completely transparent */
+#productScroll .viewport {
+    -fx-background-color: transparent; /* Set background color to transparent */
+}
+
+/* Set the background of the ScrollPane content to be completely transparent */
+#productScroll .content {
+    -fx-background-color: transparent; /* Set background color to transparent */
+}
+
+/* Set the border of the ScrollPane to be completely transparent */
+#productScroll .scroll-pane {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+/* Set the border of the ScrollBar to be completely transparent */
+#productScroll .scroll-bar {
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+/* Set the border of the ScrollBar increment and decrement buttons to be completely transparent */
+#productScroll .scroll-bar .increment-button,
+#productScroll .scroll-bar .decrement-button {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+
+
+
+/* Set the track of the ScrollBar to be completely invisible */
+#exerciceScroll .scroll-bar .track {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-background-insets: 0; /* Set background insets to 0 */
+}
+
+/* Set the background of the ScrollPane to be completely transparent */
+#exerciceScroll .viewport {
+    -fx-background-color: transparent; /* Set background color to transparent */
+}
+
+/* Set the background of the ScrollPane content to be completely transparent */
+#exerciceScroll .content {
+    -fx-background-color: transparent; /* Set background color to transparent */
+}
+
+/* Set the border of the ScrollPane to be completely transparent */
+#exerciceScroll .scroll-pane {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+/* Set the border of the ScrollBar to be completely transparent */
+#exerciceScroll .scroll-bar {
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+/* Set the border of the ScrollBar increment and decrement buttons to be completely transparent */
+#exerciceScroll .scroll-bar .increment-button,
+#exerciceScroll .scroll-bar .decrement-button {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+
+
+
+
+
+
+
+#exerciceScrolldetails{
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+#exerciceGriddetails{
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+/* Set the track of the ScrollBar to be completely invisible */
+#exerciceScrolldetails .scroll-bar .track {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-background-insets: 0; /* Set background insets to 0 */
+}
+
+/* Set the background of the ScrollPane to be completely transparent */
+#exerciceScrolldetails .viewport {
+    -fx-background-color: transparent; /* Set background color to transparent */
+}
+
+/* Set the background of the ScrollPane content to be completely transparent */
+#exerciceScrolldetails .content {
+    -fx-background-color: transparent; /* Set background color to transparent */
+}
+
+/* Set the border of the ScrollPane to be completely transparent */
+#exerciceScrolldetails .scroll-pane {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+/* Set the border of the ScrollBar to be completely transparent */
+#exerciceScrolldetails .scroll-bar {
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+/* Set the border of the ScrollBar increment and decrement buttons to be completely transparent */
+#exerciceScrolldetails .scroll-bar .increment-button,
+#exerciceScrolldetails .scroll-bar .decrement-button {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+
+
+
+.scroll-pane .scroll-bar .thumb {
+    -fx-background-color: linear-gradient(to bottom, #ff4d00, #f16602);
+
+}
+
+
+#productname, #productprice {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px; /* Adjust the size as needed */
+}
+#productimg {
+    -fx-border-radius: 15; /* Adjust the radius as needed */
+    -fx-border-color: black;
+}
+
+
+#exercicename{
+    -fx-font-weight: bold;
+    -fx-font-size: 25px; /* Adjust the size as needed */
+}
+#type {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px; /* Adjust the size as needed */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* Set the track of the ScrollBar to be completely invisible */
+.scroll-pane .scroll-bar .track {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-background-insets: 0; /* Set background insets to 0 */
+}
+
+/* Set the background of the ScrollPane to be completely transparent */
+.scroll-pane .viewport {
+    -fx-background-color: transparent; /* Set background color to transparent */
+}
+
+/* Set the background of the ScrollPane content to be completely transparent */
+.scroll-pane .content {
+    -fx-background-color: transparent; /* Set background color to transparent */
+}
+
+/* Set the border of the ScrollPane to be completely transparent */
+.scroll-pane .scroll-pane {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+/* Set the border of the ScrollBar to be completely transparent */
+.scroll-pane .scroll-bar {
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+/* Set the border of the ScrollBar increment and decrement buttons to be completely transparent */
+.scroll-pane.scroll-bar .increment-button,
+.scroll-pane .scroll-bar .decrement-button {
+    -fx-background-color: transparent; /* Set background color to transparent */
+    -fx-border-color: transparent; /* Set border color to transparent */
+}
+
+TextArea {
+    -fx-pref-width: 200;
+    -fx-pref-height: 30;
+    -fx-font-size: 20;
+    -fx-border-radius: 4;
+
+    -fx-border-color: #fd7c2b ;
+
+    -fx-text-fill: rgb(253, 124, 43);
+
+
+
+}
+
+
+#Satistics{
+    -fx-text-fill: linear-gradient(to right, #c44e11, #fd7c2b);
+}
+.chart-pie-label { /*this is what you need for labels*/
+    -fx-fill: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-font-size: 1em;
+}
+
+
+#coachname{
+    -fx-font-weight: bold;
+    -fx-font-size: 25px; /* Adjust the size as needed */
+}
+#coachfirstname {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px; /* Adjust the size as needed */
+}
+
+#abonnementname{
+    -fx-font-weight: bold;
+    -fx-font-size: 25px; /* Adjust the size as needed */
+}
+#abonnementCategory {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px; /* Adjust the size as needed */
+}
+#shoppingcartitemcard {
+    -fx-background-color: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-padding: 10px; /* Adjust padding as needed */
+    -fx-margin: 10px; /* Add margin as needed */
+    -fx-background-radius: 20px; /* Optional: Add rounded corners */
+    -fx-border-radius: 20px;
+
+}
+
+
+#Productname,#quantity{
+    -fx-font-weight: bold;
+    -fx-font-size: 15px; /* Adjust the size as needed */
+}
+
+
+
+#eventname{
+    -fx-font-weight: bold;
+    -fx-font-size: 25px; /* Adjust the size as needed */
+}
+#eventtype {
+    -fx-font-weight: bold;
+    -fx-font-size: 20px; /* Adjust the size as needed */
+}
+
+
+.searchBtnStyle{
+    -fx-font-size: 18;
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-text-fill: #FF0000;
+    -fx-border-radius: 10;
+    -fx-background-radius: 20; /* Adjust the radius for the rounded corners */
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 2; /* Border width */
+    -fx-padding: 10 20; /* Padding */
+}

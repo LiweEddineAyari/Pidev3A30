@@ -1,0 +1,1106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="productInterfaces" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="7000.0" prefWidth="1331.0" stylesheets="@css/product.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.projet.ProductUserController">
+   <children>
+      <VBox fx:id="ProductsInterfaceuser" prefHeight="910.0" prefWidth="1331.0">
+         <children>
+            <Pane fx:id="UpperSection" prefHeight="215.0" prefWidth="1331.0" styleClass="UpperSection" stylesheets="@css/product.css">
+               <children>
+                  <TextField fx:id="searchProductfield" layoutX="159.0" layoutY="41.0" prefHeight="37.0" prefWidth="265.0" styleClass="search-field" stylesheets="@css/product.css" />
+                  <Button id="searchBtn" fx:id="productSearchBtn" layoutX="381.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="28.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css" />
+                  <Label layoutX="90.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="80.0" styleClass="label-style" stylesheets="@css/product.css" text="Searsh" />
+                  <Button layoutX="429.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#GotoExerciceInterface" prefHeight="46.0" prefWidth="182.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css" text="Exercises">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/product.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="364.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleSearchProduct" prefHeight="41.0" prefWidth="55.0" styleClass="searchBtnStyle">
+                     <graphic>
+                        <ImageView fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/search.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </Pane>
+            <Pane fx:id="ListContainer" prefHeight="734.0" prefWidth="1331.0" style="-fx-background-color: #1e1e1e;">
+               <children>
+                  <Label layoutX="61.0" layoutY="39.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="326.0" stylesheets="@css/product.css" text="Products List ">
+                     <styleClass>
+                        <String fx:value="label-style" />
+                        <String fx:value="title" />
+                     </styleClass>
+                  </Label>
+                  <ScrollPane fx:id="productScroll" layoutX="61.0" layoutY="119.0" prefHeight="554.0" prefWidth="1019.0" style="-fx-background-color: #1e1e1e;" stylesheets="@css/product.css">
+                     <content>
+                        <GridPane fx:id="productGrid" prefHeight="11.0" prefWidth="21.0" style="-fx-background-color: #1e1e1e;">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                        </GridPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <Pane fx:id="ProductDetailsInterfaceuser" prefHeight="910.0" prefWidth="1331.0">
+         <children>
+            <ImageView fx:id="productImgView" fitHeight="366.0" fitWidth="633.0" layoutX="68.0" layoutY="63.0" nodeOrientation="INHERIT" pickOnBounds="true" styleClass="img-view" />
+            <Label fx:id="productnameDetail" layoutX="784.0" layoutY="69.0" prefHeight="60.0" prefWidth="340.0" styleClass="title" text="Product Name ">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="31.0" />
+               </font>
+            </Label>
+            <HBox layoutX="70.0" layoutY="457.0" prefHeight="32.0" prefWidth="221.0" spacing="10" styleClass="input-field">
+               <children>
+                  <Label prefHeight="22.0" prefWidth="144.0" text="Description : " />
+               </children>
+            </HBox>
+            <Label fx:id="Description_area" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="74.0" layoutY="490.0" maxWidth="991.0" prefHeight="354.0" prefWidth="599.0" styleClass="valuelabel_productdetails" stylesheets="@css/product.css" />
+            <VBox layoutX="783.0" layoutY="165.0" prefHeight="220.0" prefWidth="423.0">
+               <children>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="112.0" text="Ref:" />
+                        <Label fx:id="refproductDetail" prefHeight="22.0" prefWidth="220.0" styleClass="label-value" stylesheets="@css/product.css" text="name">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="112.0" text="Price:" />
+                        <Label fx:id="priceproductDetail" prefHeight="22.0" prefWidth="215.0" styleClass="label-value" stylesheets="@css/product.css" text="name">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="112.0" text="Quantity:" />
+                        <Label fx:id="quantityproductDetail" prefHeight="22.0" prefWidth="209.0" styleClass="label-value" stylesheets="@css/product.css" text="213">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="112.0" text="Poids:" />
+                        <Label fx:id="poidsproductdetail" prefHeight="22.0" prefWidth="228.0" styleClass="label-value" stylesheets="@css/product.css" text="390 ">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button layoutX="1218.0" layoutY="29.0" mnemonicParsing="false" onAction="#GotoProducts" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <ScrollPane fx:id="exerciceScrolldetails" layoutX="756.0" layoutY="490.0" prefHeight="385.0" prefWidth="529.0" style="-fx-background-color: #1e1e1e;" stylesheets="@css/product.css">
+               <content>
+                  <GridPane fx:id="exerciceGriddetails" prefHeight="11.0" prefWidth="28.0" style="-fx-background-color: #1e1e1e;">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                  </GridPane>
+               </content>
+            </ScrollPane>
+            <HBox layoutX="752.0" layoutY="457.0" prefHeight="32.0" prefWidth="332.0" spacing="10" styleClass="input-field">
+               <children>
+                  <Label prefHeight="38.0" prefWidth="260.0" text="Recommended Exercices " />
+               </children>
+            </HBox>
+         </children>
+      </Pane>
+      <VBox fx:id="ExercicesInterfaceuser" prefHeight="910.0" prefWidth="1331.0">
+         <children>
+            <Pane fx:id="UpperSection1" prefHeight="380.0" prefWidth="1331.0" styleClass="UpperSection" stylesheets="@css/product.css">
+               <children>
+                  <TextField fx:id="searchExerciceField" layoutX="159.0" layoutY="41.0" prefHeight="37.0" prefWidth="265.0" styleClass="search-field" stylesheets="@css/product.css" />
+                  <Button id="searchBtn" fx:id="productSearchBtn1" layoutX="381.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="28.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css" />
+                  <Label layoutX="90.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="80.0" styleClass="label-style" stylesheets="@css/product.css" text="Searsh" />
+                  <Label layoutX="52.0" layoutY="104.0" prefHeight="27.0" prefWidth="216.0" styleClass="label-style" stylesheets="@css/product.css" text="Recommended System" />
+                  <HBox layoutX="61.0" layoutY="251.0" prefHeight="38.0" prefWidth="1208.0" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <RadioButton mnemonicParsing="false" text="Chest">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="targett1" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" prefHeight="27.0" prefWidth="126.0" text="Shoulder" toggleGroup="$targett1">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="98.0" text="Back" toggleGroup="$targett1">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="77.0" text="Leg" toggleGroup="$targett1">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton contentDisplay="CENTER" mnemonicParsing="false" prefHeight="28.0" prefWidth="138.0" text="Abs" toggleGroup="$targett1">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton contentDisplay="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="28.0" prefWidth="144.0" text="Arm" toggleGroup="$targett1">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <Label layoutX="53.0" layoutY="218.0" prefHeight="22.0" prefWidth="137.0" styleClass="label-style" stylesheets="@css/product.css" text="Target Muscle :" />
+                  <HBox layoutX="61.0" layoutY="173.0" prefHeight="38.0" prefWidth="920.0" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <RadioButton mnemonicParsing="false" text="Growth">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="type1" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" prefHeight="27.0" prefWidth="126.0" text="Strength" toggleGroup="$type1">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="98.0" text="Cardio" toggleGroup="$type1">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <Label layoutX="53.0" layoutY="144.0" prefHeight="22.0" prefWidth="137.0" styleClass="label-style" stylesheets="@css/product.css" text="Type :" />
+                  <Button layoutX="451.0" layoutY="37.0" mnemonicParsing="false" onAction="#GotoMyFavorite" prefHeight="46.0" prefWidth="162.0" text="My Favorite" />
+                  <Button layoutX="626.0" layoutY="38.0" mnemonicParsing="false" onAction="#GoToWorkoutPlanPage" prefHeight="46.0" prefWidth="182.0" text="WorkoutPlan " />
+                  <Button layoutX="364.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleSearchExercice" prefHeight="55.0" prefWidth="67.0" styleClass="searchBtnStyle">
+                     <graphic>
+                        <ImageView fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/search.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button layoutX="1193.0" layoutY="33.0" mnemonicParsing="false" onAction="#GotoProducts" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+                     <graphic>
+                        <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/back.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </Pane>
+            <Pane fx:id="ListContainer1" prefHeight="692.0" prefWidth="1331.0" style="-fx-background-color: #1e1e1e;">
+               <children>
+                  <Label layoutX="61.0" layoutY="39.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="326.0" stylesheets="@css/product.css" text="Exercises List ">
+                     <styleClass>
+                        <String fx:value="label-style" />
+                        <String fx:value="title" />
+                     </styleClass>
+                  </Label>
+                  <ScrollPane fx:id="exerciceScroll" layoutX="70.0" layoutY="101.0" prefHeight="466.0" prefWidth="1038.0" style="-fx-background-color: #1e1e1e;" stylesheets="@css/product.css">
+                     <content>
+                        <GridPane fx:id="exerciceGrid" prefHeight="11.0" prefWidth="21.0" style="-fx-background-color: #1e1e1e;">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                        </GridPane>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <Pane fx:id="ExerciceDetailsInterfaceuser" prefHeight="910.0" prefWidth="1331.0">
+         <children>
+            <ImageView fx:id="eximgview" fitHeight="366.0" fitWidth="633.0" layoutX="68.0" layoutY="63.0" nodeOrientation="INHERIT" pickOnBounds="true" styleClass="img-view" />
+            <Label fx:id="exercicenamedetail" layoutX="784.0" layoutY="69.0" prefHeight="60.0" prefWidth="340.0" styleClass="title" text="Exercise Name ">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="31.0" />
+               </font>
+            </Label>
+            <HBox layoutX="70.0" layoutY="482.0" prefHeight="32.0" prefWidth="221.0" spacing="10" styleClass="input-field">
+               <children>
+                  <Label prefHeight="22.0" prefWidth="144.0" text="Description : " />
+               </children>
+            </HBox>
+            <Label fx:id="descex" alignment="TOP_LEFT" contentDisplay="TOP" layoutX="75.0" layoutY="524.0" maxWidth="991.0" prefHeight="354.0" prefWidth="991.0" styleClass="valuelabel_productdetails" stylesheets="@css/product.css" />
+            <VBox layoutX="783.0" layoutY="165.0" prefHeight="220.0" prefWidth="423.0">
+               <children>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="112.0" text="Target:" />
+                        <Label fx:id="exercicetargetdetail" prefHeight="22.0" prefWidth="209.0" styleClass="label-value" stylesheets="@css/product.css" text="name">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="112.0" text="Type" />
+                        <Label fx:id="exercicetypedetail" prefHeight="22.0" prefWidth="187.0" styleClass="label-value" stylesheets="@css/product.css" text="name">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="112.0" text="Product :" />
+                        <Label fx:id="exerciceproductdetail" prefHeight="22.0" prefWidth="208.0" styleClass="label-value" stylesheets="@css/product.css" text="213">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="112.0" text="Intensity:" />
+                        <Label fx:id="exerciceintensitydetail" prefHeight="22.0" prefWidth="254.0" styleClass="label-value" stylesheets="@css/product.css" text="213">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="197.0" text="Equipment Needed :" />
+                        <Label fx:id="exerciceeqdetail" prefHeight="22.0" prefWidth="182.0" styleClass="label-value" stylesheets="@css/product.css" text="213">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button layoutX="1218.0" layoutY="29.0" mnemonicParsing="false" onAction="#GotoExercices" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+      <VBox fx:id="MyFavoriteExercicesPage" prefHeight="910.0" prefWidth="1331.0">
+         <children>
+            <Pane fx:id="ListContainer11" prefHeight="908.0" prefWidth="1331.0" style="-fx-background-color: #1e1e1e;">
+               <children>
+                  <Label layoutX="122.0" layoutY="72.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="462.0" stylesheets="@css/product.css" text="My Favorite Exercises List ">
+                     <styleClass>
+                        <String fx:value="label-style" />
+                        <String fx:value="title" />
+                     </styleClass>
+                  </Label>
+                  <ScrollPane fx:id="myfavoriteScroll" layoutX="123.0" layoutY="181.0" prefHeight="694.0" prefWidth="1075.0" style="-fx-background-color: #1e1e1e;" stylesheets="@css/product.css">
+                     <content>
+                        <GridPane fx:id="myFavoriteGrid" prefHeight="11.0" prefWidth="21.0" style="-fx-background-color: #1e1e1e;">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                        </GridPane>
+                     </content>
+                  </ScrollPane>
+                  <Button layoutX="1143.0" layoutY="64.0" mnemonicParsing="false" onAction="#GotoExercices" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+                     <graphic>
+                        <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/back.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <Pane fx:id="WorkoutPlanPage" prefHeight="910.0" prefWidth="1331.0">
+         <children>
+            <VBox fx:id="AddWorkoutPlan" alignment="CENTER" layoutX="342.0" layoutY="141.0" maxWidth="933.0" prefHeight="594.0" prefWidth="633.0" styleClass="add-product-card">
+               <children>
+                  <Label prefHeight="36.0" prefWidth="618.0" styleClass="title" text="Workout Plan Recommendation System :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <HBox spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="218.0" text="Choose Your Goal is :" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="1208.0" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <RadioButton mnemonicParsing="false" text="Growth">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="goal" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" prefHeight="27.0" prefWidth="126.0" text="Strength" toggleGroup="$goal">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="98.0" text="Cardio" toggleGroup="$goal">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <HBox spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="276.0" text="Choose Your Workout Type:" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="1208.0" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <RadioButton mnemonicParsing="false" text="Split">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="typeworkout" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" prefHeight="27.0" prefWidth="126.0" text="Push Pull Leg" toggleGroup="$typeworkout">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <HBox spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="274.0" text="Choose Your Fitness Level:" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="1208.0" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <RadioButton mnemonicParsing="false" text="Beginner">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="fitnesslevel" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" prefHeight="27.0" prefWidth="126.0" text="Intermediate" toggleGroup="$fitnesslevel">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </RadioButton>
+                        <RadioButton contentDisplay="CENTER" mnemonicParsing="false" prefHeight="27.0" prefWidth="98.0" text="Advanced" toggleGroup="$fitnesslevel">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <HBox spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="316.0" text="Where do you plan to exercise?" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="1208.0" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <RadioButton mnemonicParsing="false" text="Home">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="place" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" prefHeight="27.0" prefWidth="126.0" text="Gym" toggleGroup="$place">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <HBox spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="388.0" text="Do you have any serious back problems?" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="38.0" prefWidth="1208.0" styleClass="input-field" stylesheets="@css/product.css">
+                     <children>
+                        <RadioButton mnemonicParsing="false" text="Yes">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <toggleGroup>
+                              <ToggleGroup fx:id="problems" />
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton mnemonicParsing="false" prefHeight="27.0" prefWidth="126.0" text="No" toggleGroup="$problems">
+                           <font>
+                              <Font name="System Bold Italic" size="12.0" />
+                           </font>
+                        </RadioButton>
+                     </children>
+                  </HBox>
+                  <HBox id="submitField" alignment="CENTER" prefHeight="60.0" prefWidth="1290.0">
+                     <children>
+                        <Button fx:id="AddProductBtn1" mnemonicParsing="false" onAction="#handleWorkoutPlan" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Submit">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GotoExercices" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fx:id="returnExercices" fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+      <VBox fx:id="WorkoutPPLPage" prefHeight="910.0" prefWidth="1331.0">
+         <children>
+            <Pane fx:id="ListContainer111" prefHeight="908.0" prefWidth="1331.0" style="-fx-background-color: #1e1e1e;">
+               <children>
+                  <Label layoutX="215.0" layoutY="72.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="745.0" stylesheets="@css/product.css" text="This is Your WorkoutPlan : PUSH PULL LEG">
+                     <styleClass>
+                        <String fx:value="label-style" />
+                        <String fx:value="title" />
+                     </styleClass>
+                  </Label>
+                  <Button layoutX="1143.0" layoutY="64.0" mnemonicParsing="false" onAction="#GotoExercices" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+                     <graphic>
+                        <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/back.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Label fx:id="exercicenamedetail1" layoutX="76.0" layoutY="236.0" prefHeight="60.0" prefWidth="340.0" styleClass="title" text="Push Day :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <VBox layoutX="58.0" layoutY="330.0" prefHeight="289.0" prefWidth="380.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercice 1 :" />
+                              <Label fx:id="pushex1" prefHeight="22.0" prefWidth="244.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 2 :" />
+                              <Label fx:id="pushex2" prefHeight="22.0" prefWidth="246.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 3 :" />
+                              <Label fx:id="pushex3" prefHeight="22.0" prefWidth="241.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 4 :" />
+                              <Label fx:id="pushex4" prefHeight="22.0" prefWidth="244.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Product 5 :" />
+                              <Label fx:id="pushex5" prefHeight="22.0" prefWidth="244.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Product 6 :" />
+                              <Label fx:id="pushex6" prefHeight="22.0" prefWidth="245.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Product 7 :" />
+                              <Label fx:id="pushex7" prefHeight="22.0" prefWidth="249.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Label fx:id="exercicenamedetail11" layoutX="480.0" layoutY="236.0" prefHeight="60.0" prefWidth="249.0" styleClass="title" text="Pull Day :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <VBox layoutX="475.0" layoutY="330.0" prefHeight="289.0" prefWidth="388.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercice 1 :" />
+                              <Label fx:id="pullex1" prefHeight="22.0" prefWidth="256.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 2 :" />
+                              <Label fx:id="pullex2" prefHeight="22.0" prefWidth="251.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 3 :" />
+                              <Label fx:id="pullex3" prefHeight="22.0" prefWidth="254.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 4 :" />
+                              <Label fx:id="pullex4" prefHeight="22.0" prefWidth="245.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Product 5 :" />
+                              <Label fx:id="pullex5" prefHeight="22.0" prefWidth="246.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Product 6 :" />
+                              <Label fx:id="pullex6" prefHeight="22.0" prefWidth="260.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Label fx:id="exercicenamedetail111" layoutX="883.0" layoutY="236.0" prefHeight="60.0" prefWidth="267.0" styleClass="title" text="Leg Day :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <VBox layoutX="878.0" layoutY="330.0" prefHeight="289.0" prefWidth="423.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercice 1 :" />
+                              <Label fx:id="legpplex1" prefHeight="22.0" prefWidth="288.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 2 :" />
+                              <Label fx:id="legpplex2" prefHeight="22.0" prefWidth="285.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 3 :" />
+                              <Label fx:id="legpplex3" prefHeight="22.0" prefWidth="281.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Exercise 4 :" />
+                              <Label fx:id="legpplex4" prefHeight="22.0" prefWidth="279.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Product 5 :" />
+                              <Label fx:id="legpplex5" prefHeight="22.0" prefWidth="283.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="112.0" text="Product 6 :" />
+                              <Label fx:id="legpplex6" prefHeight="22.0" prefWidth="287.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+      <VBox fx:id="WorkoutSplitPage" prefHeight="910.0" prefWidth="1331.0">
+         <children>
+            <Pane fx:id="ListContainer112" prefHeight="908.0" prefWidth="1331.0" style="-fx-background-color: #1e1e1e;">
+               <children>
+                  <Button layoutX="1143.0" layoutY="64.0" mnemonicParsing="false" onAction="#GotoExercices" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+                     <graphic>
+                        <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/back.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Label layoutX="167.0" layoutY="73.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="745.0" stylesheets="@css/product.css" text="This is Your WorkoutPlan : 5 Days SPLIT ">
+                     <styleClass>
+                        <String fx:value="label-style" />
+                        <String fx:value="title" />
+                     </styleClass>
+                  </Label>
+                  <Label fx:id="exercicenamedetail12" layoutX="22.0" layoutY="201.0" prefHeight="60.0" prefWidth="195.0" styleClass="title" text="Chest Day :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <VBox layoutX="11.0" layoutY="295.0" prefHeight="289.0" prefWidth="294.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="54.0" text="Ex 1:" />
+                              <Label fx:id="chex1" prefHeight="22.0" prefWidth="218.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 2:" />
+                              <Label fx:id="chex2" prefHeight="22.0" prefWidth="216.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 3:" />
+                              <Label fx:id="chex3" prefHeight="22.0" prefWidth="215.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 4:" />
+                              <Label fx:id="chex4" prefHeight="22.0" prefWidth="216.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 5:" />
+                              <Label fx:id="chex5" prefHeight="22.0" prefWidth="215.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 6:" />
+                              <Label fx:id="chex6" prefHeight="22.0" prefWidth="214.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Label fx:id="exercicenamedetail121" layoutX="290.0" layoutY="201.0" prefHeight="60.0" prefWidth="195.0" styleClass="title" text="Back Day :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="exercicenamedetail1211" layoutX="548.0" layoutY="201.0" prefHeight="60.0" prefWidth="219.0" styleClass="title" text="Shoulder Day :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="exercicenamedetail1212" layoutX="912.0" layoutY="201.0" prefHeight="60.0" prefWidth="195.0" styleClass="title" text="Leg Day :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <VBox layoutX="320.0" layoutY="295.0" prefHeight="289.0" prefWidth="265.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="54.0" text="Ex 1:" />
+                              <Label fx:id="backex1" prefHeight="22.0" prefWidth="188.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 2:" />
+                              <Label fx:id="backex2" prefHeight="22.0" prefWidth="189.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 3:" />
+                              <Label fx:id="backex3" prefHeight="22.0" prefWidth="187.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 4:" />
+                              <Label fx:id="backex4" prefHeight="22.0" prefWidth="190.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 5:" />
+                              <Label fx:id="backex5" prefHeight="22.0" prefWidth="183.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 6:" />
+                              <Label fx:id="backex6" prefHeight="22.0" prefWidth="191.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="587.0" layoutY="295.0" prefHeight="289.0" prefWidth="340.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="54.0" text="Ex 1:" />
+                              <Label fx:id="shex1" prefHeight="22.0" prefWidth="248.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 2:" />
+                              <Label fx:id="shex2" prefHeight="22.0" prefWidth="256.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 3:" />
+                              <Label fx:id="shex3" prefHeight="22.0" prefWidth="250.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 4:" />
+                              <Label fx:id="shex4" prefHeight="22.0" prefWidth="267.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 5:" />
+                              <Label fx:id="shex5" prefHeight="22.0" prefWidth="249.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 6:" />
+                              <Label fx:id="shex6" prefHeight="22.0" prefWidth="251.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="958.0" layoutY="295.0" prefHeight="289.0" prefWidth="326.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="54.0" text="Ex 1:" />
+                              <Label fx:id="legex1" prefHeight="22.0" prefWidth="252.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 2:" />
+                              <Label fx:id="legex2" prefHeight="22.0" prefWidth="237.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 3:" />
+                              <Label fx:id="legex3" prefHeight="22.0" prefWidth="237.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 4:" />
+                              <Label fx:id="legex4" prefHeight="22.0" prefWidth="241.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 5:" />
+                              <Label fx:id="legex5" prefHeight="22.0" prefWidth="228.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 6:" />
+                              <Label fx:id="legex6" prefHeight="22.0" prefWidth="219.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="29.0" layoutY="671.0" prefHeight="164.0" prefWidth="380.0">
+                     <children>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="54.0" text="Ex 1:" />
+                              <Label fx:id="armex1" prefHeight="22.0" prefWidth="294.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field" stylesheets="@css/product.css">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 2:" />
+                              <Label fx:id="armex2" prefHeight="22.0" prefWidth="286.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="52.0" prefWidth="423.0" spacing="10" styleClass="input-field">
+                           <children>
+                              <Label prefHeight="22.0" prefWidth="55.0" text="Ex 3:" />
+                              <Label fx:id="armex3" prefHeight="22.0" prefWidth="300.0" styleClass="label-value" stylesheets="@css/product.css" text="none">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <Label fx:id="exercicenamedetail12121" layoutX="16.0" layoutY="599.0" prefHeight="60.0" prefWidth="195.0" styleClass="title" text="Arm Day :">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </VBox>
+   </children>
+</VBox>
