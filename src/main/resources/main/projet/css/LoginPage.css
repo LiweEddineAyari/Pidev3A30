@@ -1,0 +1,80 @@
+/* Apply styles to labels */
+Label {
+    -fx-font-size: 20; /* Larger font size */
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-font-family: 'Arial Rounded MT Bold'; /* Change font family */
+    -fx-text-fill: #ff0000; /* Dark Gray Text */
+}
+/* Apply styles to text fields */
+TextField {
+
+    -fx-font-size: 16;
+    -fx-padding: 5;
+    -fx-border-radius: 5;
+    -fx-border-color: #ccc; /* Light Gray Border */
+}
+
+/* Apply styles to buttons */
+Button {
+    -fx-font-size: 18;
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-text-fill: #FF0000;
+    -fx-border-radius: 10;
+    -fx-background-radius: 20; /* Adjust the radius for the rounded corners */
+    -fx-background-color: linear-gradient(to bottom, #2c2e31, #202124); /* Gradient background color */
+    -fx-border-color: linear-gradient(to bottom, #ff0000, #5e0505); /* Gradient border color */
+    -fx-border-width: 2; /* Border width */
+    -fx-padding: 10 20; /* Padding */
+}
+
+/* Apply styles to buttons on hover */
+Button:hover {
+    /* Change cursor on hover */
+
+    /* Apply scaling transition */
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
+    -fx-transition: scale 0.7s;
+    -fx-animation-name: translateXAnimation;
+    -fx-animation-duration: 0.3s; /* Set the animation duration */
+    -fx-animation-fill-mode: forwards; /* Set to forwards to retain final state after animation */
+
+}
+
+/* Apply styles to radio buttons */
+RadioButton {
+    -fx-font-size: 16;
+    -fx-text-fill: red; /* Dark Gray Text */
+}
+/* Apply styles to text fields */
+TextField {
+    -fx-background-color: transparent; /* Transparent background */
+    -fx-border-color: red ; /* Dark Gray border color */
+    -fx-border-width: 0 0 2 0; /* Only show the bottom border */
+    -fx-font-size: 19px; /* Set font size */
+    -fx-font-weight: bold; /* Set font weight */
+    -fx-text-fill: red;
+}
+
+/* Apply styles on text field focus */
+TextField:focused {
+    -fx-border-color: #bd0404; /* Change border color to black when focused */
+}
+.title {
+    -fx-font-size: 36px; /* Set font size */
+    -fx-font-weight: bolder; /* Set font weight to bolder */
+    -fx-font-family: 'Arial'; /* Set font family */
+    -fx-text-fill: #FF0000;
+}
+
+
+/* Define keyframes for the translation animation */
+@keyframes translateXAnimation {
+    from {
+        -fx-translate-x: 0;
+    }
+    to {
+        -fx-translate-x: 20; /* Adjust the translation distance as needed */
+    }
+}
+
