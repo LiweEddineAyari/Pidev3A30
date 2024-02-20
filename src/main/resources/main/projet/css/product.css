@@ -626,3 +626,47 @@ TextArea {
     -fx-border-width: 2; /* Border width */
     -fx-padding: 10 20; /* Padding */
 }
+
+.user-message {
+    -fx-text-fill: linear-gradient(to right, #c44e11, #fd7c2b);   /* White text color */
+
+    -fx-padding: 5px;               /* Add some padding */
+    -fx-min-height: 80px;           /* Minimum height */
+    -fx-max-width: 340px;           /* Maximum width */
+    -fx-alignment: center-left;    /* Align to the right */
+    -fx-font-size: 18;
+    -fx-wrap-text: true;            /* Enable text wrapping */
+}
+
+
+.coach-message {
+    -fx-text-fill: linear-gradient(to right, #fd7c2b, #c44e11);
+    /* White text color */
+    -fx-padding: 5px;              /* Add some padding */
+    -fx-min-height: 80px;          /* Minimum height */
+    -fx-alignment: center-left;   /* Align to the left */
+    -fx-font-size: 18;
+    -fx-max-width: 340px;           /* Maximum width */
+    -fx-wrap-text: true;            /* Enable text wrapping */
+
+
+}
+
+.user-message-hbox {
+    -fx-alignment: center-right;
+    -fx-padding: 5px;
+    -fx-pref-width:695 ;
+    -fx-min-width: 695;
+    -fx-max-height:695 ;
+    /* Add other styling properties as needed */
+}
+
+.coach-message-hbox {
+    -fx-alignment: center-left;
+    -fx-pref-width:695 ;
+    -fx-min-width: 695;
+    -fx-max-height:695 ;
+    -fx-padding: 5px;
+
+    /* Add other styling properties as needed */
+}

@@ -1,6 +1,6 @@
 package main.projet;
 
-import entity.Coach;
+import entity.Account;
 import entity.Exercice;
 import entity.Planning;
 import entity.Product;
@@ -8,31 +8,38 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import services.AccountService;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class CoachController implements Initializable {
+
+    private static CoachController instance =new CoachController();
+    public static CoachController getInstance() {
+        return instance;
+    }
+
+    private int SelectedCoachid;
 
      //coach interfaces
     @FXML
       VBox Coachaffichage,Planningaffichage;
     @FXML
-      Pane AddCoachtPage,AddPlanningtPage;
+      Pane AddCoachtPage,AddPlanningtPage,EditUserPage;
 
 
     //table view coach
     @FXML
-    TableView<Coach> coachTableView;
+    TableView<Account> coachTableView;
     @FXML
     TableColumn<?, ?> idColumn;
     @FXML
@@ -46,7 +53,7 @@ public class CoachController implements Initializable {
     @FXML
     TableColumn<?, ?> passwordColumn;
     @FXML
-    TableColumn<Coach,Void> actionsColumn;
+    TableColumn<Account,Void> actionsColumn;
 
     //table view planning
     @FXML
@@ -65,22 +72,22 @@ public class CoachController implements Initializable {
     TableColumn<Planning,Void> actionsColumnplanning;
 
 
-    ObservableList<Coach> coaches= FXCollections.observableArrayList(
-            new Coach(1, "Smith", "John", 35, "john.smith@email.com", 123456),
-            new Coach(2, "Doe", "Jane", 28, "jane.doe@email.com", 654321),
-            new Coach(3, "Williams", "Tom", 42, "tom.williams@email.com", 987654),
-            new Coach(4, "Johnson", "Alice", 30, "alice.johnson@email.com", 111222),
-            new Coach(5, "Brown", "Chris", 50, "chris.brown@email.com", 333444)
-    );
+    AccountService accountService =new AccountService();
+    ObservableList<Account> coaches;
+    {
+        try {
+            coaches = accountService.afficher();
+            coaches  =coaches.stream()
+                    .filter(account -> account.getTitle().equals(Account.Title.coach))
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+            coaches  =coaches.stream()
+                    .filter(account -> account.getTitle().equals(Account.Title.coach))
+                    .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-
-    ObservableList<Planning> plannings= FXCollections.observableArrayList(
-            new Planning(1, 1, "2024-02-01", "10:00 AM", "11:30 AM"),
-            new Planning(2, 2, "2024-02-02", "02:00 PM", "03:30 PM"),
-            new Planning(3, 3, "2024-02-03", "08:30 AM", "10:00 AM"),
-            new Planning(4, 4, "2024-02-04", "04:00 PM", "05:30 PM"),
-            new Planning(5, 5, "2024-02-05", "11:00 AM", "12:30 PM")
-    );
 
 
 
@@ -92,7 +99,8 @@ public class CoachController implements Initializable {
         Coachaffichage.setManaged(false);
         AddPlanningtPage.setVisible(false);
         AddPlanningtPage.setManaged(false);
-
+        EditUserPage.setVisible(false);
+        EditUserPage.setManaged(false);
 
         //show addCoachPage interface
 
@@ -107,6 +115,8 @@ public class CoachController implements Initializable {
         AddCoachtPage.setManaged(false);
         AddPlanningtPage.setVisible(false);
         AddPlanningtPage.setManaged(false);
+        EditUserPage.setVisible(false);
+        EditUserPage.setManaged(false);
 
         //show Coachaffichage interface
 
@@ -126,6 +136,8 @@ public class CoachController implements Initializable {
         AddCoachtPage.setManaged(false);
         AddPlanningtPage.setVisible(false);
         AddPlanningtPage.setManaged(false);
+        EditUserPage.setVisible(false);
+        EditUserPage.setManaged(false);
         //show addCoachPage interface
 
         Planningaffichage.setVisible(true);
@@ -141,6 +153,8 @@ public void addPlanningInterface(){
     AddCoachtPage.setManaged(false);
     Planningaffichage.setVisible(false);
     Planningaffichage.setManaged(false);
+    EditUserPage.setVisible(false);
+    EditUserPage.setManaged(false);
     //show addCoachPage interface
     AddPlanningtPage.setVisible(true);
     AddPlanningtPage.setManaged(true);
@@ -149,6 +163,22 @@ public void addPlanningInterface(){
 
 
 
+void GoToEditCoach(){
+
+    Coachaffichage.setVisible(false);
+    Coachaffichage.setManaged(false);
+    AddCoachtPage.setVisible(false);
+    AddCoachtPage.setManaged(false);
+    Planningaffichage.setVisible(false);
+    Planningaffichage.setManaged(false);
+    AddPlanningtPage.setVisible(false);
+    AddPlanningtPage.setManaged(false);
+    //show edit coach interface
+
+
+    EditUserPage.setVisible(true);
+    EditUserPage.setManaged(true);
+}
 
 
 
@@ -175,23 +205,25 @@ public void addPlanningInterface(){
         coachTableView.setItems(coaches);
 
         //initialisation de tableview planning
-        idplaningColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+       /* idplaningColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         idcoachColumn.setCellValueFactory(new PropertyValueFactory<>("id_coach"));
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
         heure_debutColumn.setCellValueFactory(new PropertyValueFactory<>("heure_debut"));
         heure_finColumn.setCellValueFactory(new PropertyValueFactory<>("heure_fin"));
         actionsColumnplanning.setCellFactory(createButtonCellFactoryPlanning());
         planningTableView.setItems(plannings);
+        */
+
 
 
     }
 
     //action column for product table
-    public Callback<TableColumn<Coach, Void>, TableCell<Coach, Void>> createButtonCellFactory() {
-        return new Callback<TableColumn<Coach, Void>, TableCell<Coach, Void>>() {
+    public Callback<TableColumn<Account, Void>, TableCell<Account, Void>> createButtonCellFactory() {
+        return new Callback<TableColumn<Account, Void>, TableCell<Account, Void>>() {
             @Override
-            public TableCell<Coach, Void> call(final TableColumn<Coach, Void> param) {
-                return new TableCell<Coach, Void>() {
+            public TableCell<Account, Void> call(final TableColumn<Account, Void> param) {
+                return new TableCell<Account, Void>() {
 
                     final Button deleteButton = createButton("Delete");
                     final Button editButton = createButton("Edit");
@@ -199,14 +231,23 @@ public void addPlanningInterface(){
                     {
                         // Set actions for the buttons
                         deleteButton.setOnAction(event -> {
-                            Coach coach = getTableView().getItems().get(getIndex());
-                            System.out.println("Delete: " + coach.getId());
+                            Account account = getTableView().getItems().get(getIndex());
+                            System.out.println("Delete: " + account.getId());
+                            try {
+                                accountService.supprimer(account.getId());
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            reload_page();
                             // Add your delete action here
                         });
 
                         editButton.setOnAction(event -> {
-                            Coach coach = getTableView().getItems().get(getIndex());
+                            Account coach = getTableView().getItems().get(getIndex());
                             System.out.println("Edit: " + coach.getId());
+                            instance.SelectedCoachid= coach.getId();
+                            GoToEditCoach();
+                            fillUsnputs(coach);
                             // Add your edit action here
                         });
 
@@ -241,6 +282,67 @@ public void addPlanningInterface(){
     }
 
 
+
+
+
+    @FXML
+    TextField coachNameField,coachFirstNameField,coachAgeField,coachMailField,coachPasswordField;
+    @FXML
+    TextField coachNameField1,coachFirstNameField1,coachAgeField1,coachMailField1,coachPasswordField1;
+
+    void fillUsnputs(Account account){
+        coachNameField1.setText(account.getNom());
+        coachFirstNameField1.setText(account.getPrenom());
+        coachAgeField1.setText(String.valueOf(account.getAge()));
+        coachMailField1.setText(account.getMail());
+        coachPasswordField1.setText(account.getPassword());
+
+    }
+    @FXML
+    public void handleEditCoach(){
+
+        String name = coachNameField1.getText();
+        String prenom =  coachFirstNameField1.getText();
+        int age =  Integer.parseInt(coachAgeField1.getText());
+        String mail = coachMailField1.getText();
+        String password =  coachPasswordField1.getText();
+
+        Account account = new Account(instance.SelectedCoachid, name, prenom, age, mail, password,Account.Title.coach);
+        AccountService accountService =new AccountService();
+
+        try {
+            accountService.modifier(account);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        initAdminInputs();
+        reload_page();
+    }
+
+
+
+    @FXML
+    public void handleAddCoach(){
+
+        String name = coachNameField.getText();
+        String prenom =  coachFirstNameField.getText();
+        int age =  Integer.parseInt(coachAgeField.getText());
+        String mail = coachMailField.getText();
+        String password =  coachPasswordField.getText();
+
+        Account account = new Account(-1, name, prenom, age, mail, password,Account.Title.coach);
+        AccountService accountService =new AccountService();
+
+        try {
+            accountService.ajouter(account);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        initAdminInputs();
+        reload_page();
+    }
 
 
 
@@ -298,6 +400,71 @@ public void addPlanningInterface(){
             }
         };
     }
+
+
+
+
+
+
+
+
+    @FXML
+    public void reload_page(){
+
+        {
+            try {
+                coaches = accountService.afficher();
+                coaches  =coaches.stream()
+                        .filter(account -> account.getTitle().equals(Account.Title.coach))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+                coachTableView.setItems(null);
+                coachTableView.setItems(coaches);
+                coachTableView.refresh();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+        AddCoachtPage.setVisible(false);
+        AddCoachtPage.setManaged(false);
+        AddPlanningtPage.setVisible(false);
+        AddPlanningtPage.setManaged(false);
+
+        //show Coachaffichage interface
+
+        Coachaffichage.setVisible(true);
+        AddCoachtPage.setManaged(true);
+
+    }
+
+
+
+
+
+
+
+
+    void initAdminInputs(){
+        coachNameField.setText("");
+        coachFirstNameField.setText("");
+        coachAgeField.setText("");
+        coachMailField.setText("");
+        coachPasswordField.setText("");
+
+
+       /* userNameField1.setText("");
+        userFirstNameField1.setText("");
+        userAgeField1.setText("");
+        userMailField1.setText("");
+        userPasswordField1.setText("");*/
+
+    }
+
+
+
+
+
 
 
 }

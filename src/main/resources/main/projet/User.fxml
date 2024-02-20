@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="UserInterfaces" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1945.0" prefWidth="1331.0" stylesheets="@css/product.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.projet.UserController">
+<VBox fx:id="UserInterfaces" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2750.0" prefWidth="1331.0" stylesheets="@css/product.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.projet.UserController">
     <children>
         <VBox fx:id="UserAffichage" prefHeight="907.0" prefWidth="1331.0">
             <children>
@@ -73,36 +73,36 @@
                         <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                             <children>
                                 <Label prefHeight="22.0" prefWidth="113.0" text="Nom:" />
-                                <TextField fx:id="productNameField" prefHeight="37.0" prefWidth="196.0" />
+                                <TextField fx:id="userNameField" prefHeight="37.0" prefWidth="196.0" />
                             </children>
                         </HBox>
                         <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                             <children>
                                 <Label prefHeight="22.0" prefWidth="111.0" text="Prenom: " />
-                                <TextField fx:id="productRefField" prefHeight="71.0" />
+                                <TextField fx:id="userFirstNameField" prefHeight="71.0" />
                             </children>
                         </HBox>
                         <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                             <children>
                                 <Label prefHeight="22.0" prefWidth="111.0" text="Age:         " />
-                                <TextField fx:id="productPriceField" />
+                                <TextField fx:id="userAgeField" />
                             </children>
                         </HBox>
                         <HBox prefHeight="70.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                             <children>
                                 <Label prefHeight="22.0" prefWidth="111.0" text="Mail:" />
-                                <TextField fx:id="productPriceField1" />
+                                <TextField fx:id="userMailField" />
                             </children>
                         </HBox>
                         <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                             <children>
                                 <Label prefHeight="22.0" prefWidth="113.0" text="Password:" />
-                                <TextField fx:id="productWeightField" />
+                                <TextField fx:id="userPasswordField" />
                             </children>
                         </HBox>
                         <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
                             <children>
-                                <Button fx:id="AddProductBtn" mnemonicParsing="false" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
+                                <Button fx:id="AddProductBtn" mnemonicParsing="false" onAction="#handleAddUser" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
                                     <HBox.margin>
                                         <Insets left="50.0" />
                                     </HBox.margin>
@@ -122,5 +122,66 @@
                 </Button>
             </children>
         </Pane>
+      <Pane fx:id="EditUserPage" prefHeight="907.0" prefWidth="1331.0">
+         <children>
+            <VBox fx:id="AddUserCard1" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="588.0" prefWidth="376.0" styleClass="add-product-card">
+               <children>
+                  <Label prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Edit a new User">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="113.0" text="Nom:" />
+                        <TextField fx:id="userNameField1" prefHeight="37.0" prefWidth="196.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="Prenom: " />
+                        <TextField fx:id="userFirstNameField1" prefHeight="71.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="Age:         " />
+                        <TextField fx:id="userAgeField1" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="70.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="Mail:" />
+                        <TextField fx:id="userMailField1" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="113.0" text="Password:" />
+                        <TextField fx:id="userPasswordField1" />
+                     </children>
+                  </HBox>
+                  <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
+                     <children>
+                        <Button fx:id="AddProductBtn1" mnemonicParsing="false" onAction="#handleEditUser" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Edit">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToUserAffichagePage" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="32.0" onDragDetected="#GoToUserAffichagePage" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
     </children>
 </VBox>

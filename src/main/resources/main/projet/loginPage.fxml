@@ -3,13 +3,10 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -27,9 +24,9 @@
                         <String fx:value="title" />
                         <String fx:value="label" />
                      </styleClass></Label>
-                  <Label layoutX="91.0" layoutY="143.0" styleClass="text-style" stylesheets="@css/LoginPage.css" text="Firstname" />
-                  <TextField layoutX="91.0" layoutY="177.0" />
-                  <TextField layoutX="91.0" layoutY="270.0" />
+                  <Label layoutX="119.0" layoutY="143.0" prefHeight="23.0" prefWidth="96.0" styleClass="text-style" stylesheets="@css/LoginPage.css" text="mail" />
+                  <TextField fx:id="maillogin" layoutX="119.0" layoutY="177.0" />
+                  <TextField fx:id="passwordlogin" layoutX="119.0" layoutY="270.0" />
                   <Button fx:id="login" layoutX="107.0" layoutY="367.0" mnemonicParsing="false" onAction="#login" prefHeight="44.0" prefWidth="96.0" style="-fx-font-family: Archivor Black;" stylesheets="@css/LoginPage.css" text="Login">
                      <styleClass>
                         <String fx:value="btn" />
@@ -37,22 +34,7 @@
                      </styleClass></Button>
                   <Button fx:id="signupswitch" layoutX="240.0" layoutY="367.0" mnemonicParsing="false" onAction="#switchToSignUp" prefHeight="51.0" prefWidth="111.0" styleClass="btn" stylesheets="@css/LoginPage.css" text="Sign Up" />
                   <Button fx:id="signinemail" layoutX="371.0" layoutY="367.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="213.0" styleClass="btn" stylesheets="@css/LoginPage.css" text="Sign In with email" />
-                  <Label layoutX="89.0" layoutY="247.0" styleClass="text-style" stylesheets="@css/LoginPage.css" text="Password" />
-                  <Label layoutX="391.0" layoutY="197.0" prefHeight="23.0" prefWidth="135.0" text="Sign In As :" />
-                  <HBox layoutX="394.0" layoutY="252.0" prefHeight="37.0" prefWidth="240.0" stylesheets="@css/product.css">
-                     <children>
-                        <RadioButton fx:id="adminradioBtn" mnemonicParsing="false" text="Admin">
-                           <toggleGroup>
-                              <ToggleGroup fx:id="role1" />
-                           </toggleGroup>
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </RadioButton>
-                        <RadioButton fx:id="userradioBtn" mnemonicParsing="false" text="User" toggleGroup="$role1" />
-                        <RadioButton fx:id="coachradioBtn" mnemonicParsing="false" text="Coach" toggleGroup="$role1" />
-                     </children>
-                  </HBox>
+                  <Label layoutX="117.0" layoutY="247.0" styleClass="text-style" stylesheets="@css/LoginPage.css" text="Password" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="signuppane" prefHeight="540.0" prefWidth="661.0" style="-fx-background-color: #1e1e1e;" stylesheets="@css/LoginPage.css">
@@ -67,14 +49,14 @@
                   <Label layoutX="93.0" layoutY="341.0" text="Age" />
                   <Label layoutX="331.0" layoutY="147.0" text="Mail" />
                   <Label layoutX="331.0" layoutY="265.0" text="Password" />
-                  <Button fx:id="signup" layoutX="97.0" layoutY="437.0" mnemonicParsing="false" prefHeight="44.0" text="Sign Up" />
+                  <Button fx:id="signup" layoutX="97.0" layoutY="437.0" mnemonicParsing="false" onAction="#handleSignUp" prefHeight="44.0" text="Sign Up" />
                   <Button fx:id="loginswitch" layoutX="221.0" layoutY="437.0" mnemonicParsing="false" onAction="#switchToLogin" prefHeight="51.0" prefWidth="151.0" text="Go To Login" />
                   <Button fx:id="signupemail" layoutX="384.0" layoutY="437.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="213.0" text="Sign Up with email" />
-                  <TextField layoutX="86.0" layoutY="191.0" prefHeight="37.0" prefWidth="204.0" />
-                  <TextField layoutX="86.0" layoutY="289.0" prefHeight="37.0" prefWidth="204.0" />
-                  <TextField layoutX="331.0" layoutY="191.0" prefHeight="40.0" prefWidth="253.0" />
-                  <TextField layoutX="86.0" layoutY="360.0" prefHeight="40.0" prefWidth="204.0" />
-                  <TextField layoutX="342.0" layoutY="288.0" />
+                  <TextField fx:id="firstnameSignup" layoutX="86.0" layoutY="191.0" prefHeight="37.0" prefWidth="204.0" />
+                  <TextField fx:id="nameSignup" layoutX="86.0" layoutY="289.0" prefHeight="37.0" prefWidth="204.0" />
+                  <TextField fx:id="mailSignup" layoutX="331.0" layoutY="191.0" prefHeight="40.0" prefWidth="253.0" />
+                  <TextField fx:id="ageSignup" layoutX="86.0" layoutY="360.0" prefHeight="40.0" prefWidth="204.0" />
+                  <TextField fx:id="passwordSignup" layoutX="342.0" layoutY="288.0" />
                </children>
             </AnchorPane>
          </children>

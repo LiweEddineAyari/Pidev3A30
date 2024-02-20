@@ -5,20 +5,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import services.CommandeService;
+import services.PaimentService;
 
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class PaimentController implements Initializable {
+
 
 
     //interfaces
@@ -27,7 +30,12 @@ public class PaimentController implements Initializable {
     @FXML
     Pane EditCommandePage,EditPaimentPage;
 
+    private static PaimentController instance = new PaimentController();
+    public  static PaimentController getInstance(){return  instance;};
+     int selectedPaimentId;
+     int iduser= AppController.getInstance().account.getId();
 
+     Commande selectedCommande;
 
     //Paiment Table view
     @FXML
@@ -61,29 +69,56 @@ public class PaimentController implements Initializable {
     @FXML
     TableColumn<Commande,Void> actionsColumnC;
 
-    ObservableList<Paiment> paiments= FXCollections.observableArrayList(
-            new Paiment(1, 101, 50.0f, "Credit Card", "1234-5678-9012-3456"),
-            new Paiment(2, 102, 30.5f, "PayPal", "1234-5678-9012-3456"),
-            new Paiment(3, 103, 75.25f, "Bank Transfer", "1234-5678-9012-3456"),
-            new Paiment(4, 104, 20.0f, "Cash", "1234-5678-9012-3456"),
-            new Paiment(5, 105, 42.8f, "Credit Card", "1234-5678-9012-3456")
-    );
-    ObservableList<Commande> commandes= FXCollections.observableArrayList(
-             new Commande(1, 101, 201, 75.0f, "Pending"),
-             new Commande(2, 102, 202, 120.5f, "Processing"),
-             new Commande(3, 103, 203, 50.75f, "Shipped"),
-             new Commande(4, 104, 204, 90.0f, "Delivered"),
-             new Commande(5, 105, 205, 30.8f, "Cancelled")
-    );
+
+   PaimentService paimentService = new PaimentService();
+   CommandeService commandeService = new CommandeService();
+    ObservableList<Paiment> paiments;
+
+    {
+        try {
+            paiments = paimentService.afficher();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
+    TextField cardcodePaimentField,cardnamePaimentField,montantPaimentField;
 
 
 
+
+    @FXML
+     TextField montantCommandeField;
+    @FXML
+     ToggleGroup type1;
+
+    ObservableList<Commande> commandes;
+
+    {
+        try {
+            commandes = commandeService.afficher();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 // navigation methods
 
     @FXML
     void paimentinterfaceload(){
+
+        {
+            try {
+                paiments = paimentService.afficher();
+                paimentTableView.setItems(null);
+                paimentTableView.setItems(paiments);
+                paimentTableView.refresh();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         EditPaimentPage.setVisible(false);
         EditPaimentPage.setManaged(false);
@@ -100,6 +135,17 @@ public class PaimentController implements Initializable {
 
     @FXML
     void commandeinterfaceload(){
+        {
+            try {
+                commandes = commandeService.afficher();
+                commandeTableView.setItems(null);
+                commandeTableView.setItems(commandes);
+                commandeTableView.refresh();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         Paimentaffichage.setVisible(false);
         Paimentaffichage.setManaged(false);
         EditCommandePage.setVisible(false);
@@ -180,13 +226,23 @@ public class PaimentController implements Initializable {
                         deleteButton.setOnAction(event -> {
                             Paiment paiment = getTableView().getItems().get(getIndex());
                             System.out.println("Delete: " + paiment.getId());
+
+                            try {
+                                paimentService.supprimer(paiment.getId());
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            paimentinterfaceload();
                             // Add your delete action here
                         });
 
                         editButton.setOnAction(event -> {
                             Paiment paiment = getTableView().getItems().get(getIndex());
                             System.out.println("Edit: " + paiment.getId());
+
+                            instance.selectedPaimentId=paiment.getId();
                             editpaimentInerfaceLoad();
+                            fillAdminInputs(paiment);
                             // Add your edit action here
                         });
 
@@ -230,28 +286,62 @@ public class PaimentController implements Initializable {
 
                     final Button deleteButton = createButton("Delete");
                     final Button editButton = createButton("Edit");
-                    final Button PanierDetails = createButton("PanierDetails");
+                  //  final Button PanierDetails = createButton("PanierDetails");
 
                     {
                         // Set actions for the buttons
                         deleteButton.setOnAction(event -> {
                             Commande commande = getTableView().getItems().get(getIndex());
                             System.out.println("Delete: " + commande.getId());
-                            // Add your delete action here
+                            try {
+                                // Supprimer commande
+                                commandeService.supprimerCommande(commande.getId());
+
+                                // Supprimer PanierProducts associés à la commande
+                                ObservableList<PanierProduct> panierProductsList = commandeService.afficherPanierProductList();
+
+                                // Filtrer PanierProducts qui ont le même idpanier que la commande
+                                List<PanierProduct> filteredList = panierProductsList.stream()
+                                        .filter(panierProduct -> panierProduct.getIdpanier() == commande.getIdpanier())
+                                        .collect(Collectors.toList());
+
+                                // Supprimer chaque PanierProduct filtré
+                                filteredList.forEach(panierProduct -> {
+                                    try {
+                                        commandeService.supprimerPanierProduit(panierProduct.getId());
+                                    } catch (SQLException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                });
+
+                                // Enfin, supprimer le Panier associé à la commande
+                                commandeService.supprimerPanier(commande.getIdpanier());
+
+                            } catch (SQLException e) {
+                                e.printStackTrace(); // Handle the exception appropriately in your application
+                            }
+                            commandeinterfaceload();
+
+
                         });
+
 
                         editButton.setOnAction(event -> {
                             Commande commande = getTableView().getItems().get(getIndex());
                             System.out.println("Edit: " + commande.getId());
+                            initAdminInputs();
                             editcommandeInerfaceLoad();
+                            fillCAdminInputs(commande);
                             // Add your edit action here
+                            instance.selectedCommande=commande;
+
                         });
 
-                        PanierDetails.setOnAction(event -> {
+                      /*  PanierDetails.setOnAction(event -> {
                             Commande commande = getTableView().getItems().get(getIndex());
                             System.out.println("PanierDetails: " + commande.getId());
                             // Add your edit action here
-                        });
+                        });*/
 
 
                     }
@@ -274,15 +364,96 @@ public class PaimentController implements Initializable {
                         return button;
                     }
 
-                    private HBox createButtonPane() {
+                  private HBox createButtonPane() {
                         HBox buttonPane = new HBox(5); // spacing between buttons
-                        buttonPane.getChildren().addAll(deleteButton, editButton,PanierDetails);
+                        buttonPane.getChildren().addAll(deleteButton, editButton/*,PanierDetails*/);
                         return buttonPane;
                     }
                 };
             }
         };
     }
+
+
+
+    void initAdminInputs(){
+        montantPaimentField.setText("");
+        cardnamePaimentField.setText("");
+        cardcodePaimentField.setText("");
+        montantCommandeField.setText("");
+    }
+
+    void fillAdminInputs(Paiment paiment){
+        montantPaimentField.setText(String.valueOf(paiment.getMontant()));
+        cardnamePaimentField.setText(paiment.getCartname());
+        cardcodePaimentField.setText(paiment.getCartCode());
+    }
+
+
+    @FXML
+    public void handleEditPaiment() {
+
+            // Retrieve values from the text fields
+            String cardcode = cardcodePaimentField.getText();
+            String cardname = cardnamePaimentField.getText();
+            String montantString = montantPaimentField.getText().replaceAll("[^0-9.]+", "");
+            // Parse the float
+            float montant = Float.parseFloat(montantString);
+
+
+            Paiment selectedPaiment = new Paiment(instance.selectedPaimentId, instance.iduser,montant,cardname,cardcode);
+
+            try {
+                // Update the Paiment record in the database
+                paimentService.modifier(selectedPaiment);
+            } catch (SQLException e) {
+                // Handle the exception (e.g., show an error message)
+                e.printStackTrace();
+            }
+
+            initAdminInputs();
+            paimentinterfaceload();
+
+
+    }
+
+
+
+
+
+    public String getSelectedValue(ToggleGroup group) {
+        if (group.getSelectedToggle() != null) {
+            RadioButton selectedRadio = (RadioButton) group.getSelectedToggle();
+            return selectedRadio.getText();
+        }
+        return "";
+    }
+
+
+    void fillCAdminInputs(Commande commande){
+        montantCommandeField.setText(String.valueOf(commande.getMontant()));
+    }
+    @FXML
+    public void handleEditcommande() {
+
+        float montant = Float.parseFloat(montantCommandeField.getText());
+        String status = getSelectedValue(type1);
+
+        Commande selectedcommande= new Commande(instance.selectedCommande.getId(),instance.selectedCommande.getIduser(),instance.selectedCommande.getIdpanier(),montant,status);
+        try {
+            // Update the Paiment record in the database
+            commandeService.modifier(selectedcommande);
+        } catch (SQLException e) {
+            // Handle the exception (e.g., show an error message)
+            e.printStackTrace();
+        }
+
+        initAdminInputs();
+        commandeinterfaceload();
+
+    }
+
+
 
 
 }

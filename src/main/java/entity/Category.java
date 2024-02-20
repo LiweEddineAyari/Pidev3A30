@@ -16,4 +16,12 @@ public class Category {
     public String getNom() {
         return nom;
     }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                '}';
+    }
 }

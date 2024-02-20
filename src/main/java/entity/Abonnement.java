@@ -47,4 +47,17 @@ public class Abonnement {
     public boolean isFidelite() {
         return fidelite;
     }
+
+    @Override
+    public String toString() {
+        return "Abonnement{" +
+                "id=" + id +
+                ", iduser=" + iduser +
+                ", idcategory=" + idcategory +
+                ", nom='" + nom + '\'' +
+                ", duree=" + duree +
+                ", prix=" + prix +
+                ", fidelite=" + fidelite +
+                '}';
+    }
 }

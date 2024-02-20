@@ -84,36 +84,36 @@
                   <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="113.0" text="Nom:" />
-                        <TextField fx:id="productNameField" prefHeight="37.0" prefWidth="196.0" />
+                        <TextField fx:id="coachNameField" prefHeight="37.0" prefWidth="196.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="111.0" text="Prenom: " />
-                        <TextField fx:id="productRefField" prefHeight="71.0" />
+                        <TextField fx:id="coachFirstNameField" prefHeight="71.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="111.0" text="Age:         " />
-                        <TextField fx:id="productPriceField" />
+                        <TextField fx:id="coachAgeField" />
                      </children>
                   </HBox>
                   <HBox prefHeight="70.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="111.0" text="Mail:" />
-                        <TextField fx:id="productPriceField1" />
+                        <TextField fx:id="coachMailField" />
                      </children>
                   </HBox>
                   <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="113.0" text="Password:" />
-                        <TextField fx:id="productWeightField" />
+                        <TextField fx:id="coachPasswordField" />
                      </children>
                   </HBox>
                   <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
                      <children>
-                        <Button fx:id="AddProductBtn" mnemonicParsing="false" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
+                        <Button fx:id="AddProductBtn" mnemonicParsing="false" onAction="#handleAddCoach" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
                            <HBox.margin>
                               <Insets left="50.0" />
                            </HBox.margin>
@@ -225,6 +225,67 @@
             <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToPlanning" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
                <graphic>
                   <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+      <Pane fx:id="EditUserPage" prefHeight="907.0" prefWidth="1331.0">
+         <children>
+            <VBox fx:id="AddUserCard1" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="588.0" prefWidth="376.0" styleClass="add-product-card">
+               <children>
+                  <Label prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Edit a new Coach">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="113.0" text="Nom:" />
+                        <TextField fx:id="coachNameField1" prefHeight="37.0" prefWidth="196.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="Prenom: " />
+                        <TextField fx:id="coachFirstNameField1" prefHeight="71.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="Age:         " />
+                        <TextField fx:id="coachAgeField1" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="70.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="Mail:" />
+                        <TextField fx:id="coachMailField1" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="113.0" text="Password:" />
+                        <TextField fx:id="coachPasswordField1" />
+                     </children>
+                  </HBox>
+                  <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
+                     <children>
+                        <Button fx:id="AddProductBtn11" mnemonicParsing="false" onAction="#handleEditCoach" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Edit">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToCoachAffichagePage" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="32.0" onDragDetected="#GoToCoachAffichagePage" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons/back.png" />
                      </image>

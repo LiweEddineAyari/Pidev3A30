@@ -1,7 +1,6 @@
 package main.projet;
 
 import entity.Abonnement;
-import entity.Coach;
 import interfaces.AbonnementListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

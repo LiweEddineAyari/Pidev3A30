@@ -1,24 +1,30 @@
 package main.projet;
 
 import entity.Abonnement;
+import entity.Account;
 import entity.Category;
-import entity.Coach;
-import entity.Planning;
+import entity.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import services.AbonnementService;
+import services.categoryService;
 
+import services.AccountService;
+import services.ProductService;
+
+import java.lang.reflect.Field;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class AbonnementController implements Initializable {
@@ -47,9 +53,9 @@ public class AbonnementController implements Initializable {
 
     //interfaces
     @FXML
-    VBox AbonnementsPage;
+    VBox AbonnementsPage,CategoryPage;
     @FXML
-    Pane CategoryPage,AddCategoryPage;
+    Pane AddAbonnementPagee,AddCategoryPage;
 
 
 
@@ -65,26 +71,56 @@ public class AbonnementController implements Initializable {
     TableColumn<Category,Void> actionsColumncategory;
 
 
+    AbonnementService abonnementService =new AbonnementService();
+    categoryService categoryService = new categoryService();
 
-     ObservableList<Abonnement> Abonnements= FXCollections.observableArrayList(
-            new Abonnement(1, 1, 101, "Gold Membership", 3, 49.99f, true),
-            new Abonnement(2, 2, 102, "Silver Membership", 6, 29.99f, false),
-            new Abonnement(3, 3, 103, "Bronze Membership", 12, 19.99f, true),
-            new Abonnement(4, 4, 104, "Platinum Membership", 1, 99.99f, false),
-            new Abonnement(5, 5, 105, "Basic Membership", 24, 9.99f, true)
-    );
 
-    ObservableList<Category> categories= FXCollections.observableArrayList(
-            new Category(1, "Fitness"),
-            new Category(2, "Cardio"),
-            new Category(3, "Weightlifting")
-    );
+    ObservableList<Abonnement> abonnements;
+    {
+        try {
+            abonnements = abonnementService.afficher();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
+
+
+    ObservableList<Category> categories;
+    {
+        try {
+            categories = categoryService.afficher();
+            System.out.println(categories);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 
 
 
 // navigation Abonnement
+@FXML
+public void GoToabonnementPage(){
+    AbonnementsPage.setVisible(true);
+    AbonnementsPage.setManaged(true);
+
+    AddCategoryPage.setVisible(false);
+    AddCategoryPage.setManaged(false);
+
+    CategoryPage.setVisible(false);
+    CategoryPage.setManaged(false);
+
+    AddAbonnementPagee.setVisible(false);
+    AddAbonnementPagee.setManaged(false);
+
+
+}
+
+
     @FXML
     public void GoToCategoriesPage(){
         AbonnementsPage.setVisible(false);
@@ -96,12 +132,25 @@ public class AbonnementController implements Initializable {
         CategoryPage.setVisible(true);
         CategoryPage.setManaged(true);
 
+        AddAbonnementPagee.setVisible(false);
+        AddAbonnementPagee.setManaged(false);
+
+
+
 
     }
 
 
      @FXML
      public  void GoToAddCategoryPaage(){
+         addcattitle.setText("Add cat page");
+         AddcattBtn.setVisible(true);
+         AddcattBtn.setManaged(true);
+
+         EditCatBtn1.setVisible(false);
+         EditCatBtn1.setManaged(false);
+
+
          CategoryPage.setVisible(false);
          CategoryPage.setManaged(false);
 
@@ -111,9 +160,85 @@ public class AbonnementController implements Initializable {
          AddCategoryPage.setVisible(true);
          AddCategoryPage.setManaged(true);
 
+         AddAbonnementPagee.setVisible(false);
+         AddAbonnementPagee.setManaged(false);
+
+
+
      }
 
+     @FXML
+     Button addSubbtn,EditSubBtn,EditCatBtn1,AddcattBtn;
+      @FXML
+      Label addsubtitle,addcattitle;
 
+    @FXML
+    public  void GoToAddabonnementPaage(){
+        addsubtitle.setText("add sub page");
+        addSubbtn.setVisible(true);
+        addSubbtn.setManaged(true);
+        EditSubBtn.setVisible(false);
+        EditSubBtn.setManaged(false);
+
+
+        CategoryPage.setVisible(false);
+        CategoryPage.setManaged(false);
+
+        AbonnementsPage.setVisible(false);
+        AbonnementsPage.setManaged(false);
+
+        AddCategoryPage.setVisible(false);
+        AddCategoryPage.setManaged(false);
+
+        AddAbonnementPagee.setVisible(true);
+        AddAbonnementPagee.setManaged(true);
+
+    }
+
+    public void showEditAbonnementbtn(){
+        addsubtitle.setText("Edit sub page");
+        addSubbtn.setVisible(false);
+        addSubbtn.setManaged(false);
+
+        EditSubBtn.setVisible(true);
+        EditSubBtn.setManaged(true);
+
+        AbonnementsPage.setVisible(false);
+        AbonnementsPage.setManaged(false);
+
+        CategoryPage.setVisible(false);
+        CategoryPage.setManaged(false);
+
+        AddCategoryPage.setVisible(false);
+        AddCategoryPage.setManaged(false);
+
+        AddAbonnementPagee.setVisible(true);
+        AddAbonnementPagee.setManaged(true);
+
+    }
+
+    public void showEditcatbtn(){
+        addcattitle.setText("Edit cat page");
+        AddcattBtn.setVisible(false);
+        AddcattBtn.setManaged(false);
+
+        EditCatBtn1.setVisible(true);
+        EditCatBtn1.setManaged(true);
+
+        AbonnementsPage.setVisible(false);
+        AbonnementsPage.setManaged(false);
+
+        CategoryPage.setVisible(false);
+        CategoryPage.setManaged(false);
+
+
+        AddCategoryPage.setVisible(true);
+        AddCategoryPage.setManaged(true);
+
+        AddAbonnementPagee.setVisible(false);
+        AddAbonnementPagee.setManaged(false);
+
+    }
 
 
 
@@ -131,7 +256,7 @@ public class AbonnementController implements Initializable {
         prixColumn.setCellValueFactory(new PropertyValueFactory<>("prix"));
         fideliteColumn.setCellValueFactory(new PropertyValueFactory<>("fidelite"));
         actionsColumn.setCellFactory(createButtonCellFactory());
-        abonnementTableView.setItems(Abonnements);
+        abonnementTableView.setItems(abonnements);
 
 
         //initialisation de tableview category
@@ -144,6 +269,17 @@ public class AbonnementController implements Initializable {
 
     }
 
+
+    private static AbonnementController instance =new AbonnementController();
+    public static AbonnementController getInstance() {
+        return instance;
+    }
+
+
+    private int SelectedSub;
+
+
+    private int Selectedcategory;
 
 
 
@@ -162,12 +298,25 @@ public class AbonnementController implements Initializable {
                         deleteButton.setOnAction(event -> {
                             Abonnement abonnement = getTableView().getItems().get(getIndex());
                             System.out.println("Delete: " + abonnement.getId());
+                            try {
+                                abonnementService.supprimer(abonnement.getId());
+                               // reload_page();
+
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+
+
+
                             // Add your delete action here
                         });
 
                         editButton.setOnAction(event -> {
                             Abonnement abonnement = getTableView().getItems().get(getIndex());
                             System.out.println("Edit: " + abonnement.getId());
+                            showEditAbonnementbtn();
+                            instance.SelectedSub=abonnement.getId();
+                            fillSubinputs(abonnement);
                             // Add your edit action here
                         });
 
@@ -217,12 +366,23 @@ public class AbonnementController implements Initializable {
                             Category category = getTableView().getItems().get(getIndex());
                             System.out.println("Delete: " + category.getId());
                             // Add your delete action here
+                            try {
+                                categoryService.supprimer(category.getId());
+                                // reload_page();
+
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
 
                         });
 
                         editButton.setOnAction(event -> {
                             Category category = getTableView().getItems().get(getIndex());
                             System.out.println("Edit: " + category.getId());
+
+                            showEditcatbtn();
+                            instance.Selectedcategory=category.getId();
+                            fillcatinputs(category);
                             // Add your edit action here
                         });
 
@@ -257,4 +417,146 @@ public class AbonnementController implements Initializable {
     }
 
 
+    @FXML
+    TextField id_userField,id_categoryField,nomField,dureeField,prixField;
+
+    @FXML
+    public void handleAddAbonnement(){
+
+        int iduser = Integer.parseInt(id_userField.getText());
+        int idcategory =Integer.parseInt(id_categoryField.getText());
+        String nom =  nomField.getText();
+        int duree = Integer.parseInt(dureeField.getText());
+        float prix = Float.parseFloat(prixField.getText()) ;
+
+        Abonnement abonnement = new Abonnement(-1, iduser, idcategory, nom, duree, prix,false);
+        AbonnementService abonnementService =new AbonnementService();
+        System.out.println(abonnement);
+
+        try {
+            abonnementService.ajouter(abonnement);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        initAbonnementInputs();
+        //reload_page();
+    }
+
+    @FXML
+    public void handleAddCategory(){
+
+
+        String nom = nomcField.getText();
+
+
+        Category category = new Category(-1, nom);
+        categoryService categoryService =new categoryService();
+
+        try {
+            categoryService.ajouter(category);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        initcategoryInputs();
+        //reload_page();
+    }
+    @FXML
+   TextField nomcField;
+
+
+    private void initcategoryInputs() {
+        nomcField.setText("");
+        idColumncategory.setCellValueFactory(new PropertyValueFactory<>("id"));
+        nomColumncategory.setCellValueFactory(new PropertyValueFactory<>("nom"));
+
+
+    }
+
+    @FXML
+    public void handleEditAbonnement(){
+        int iduser = Integer.parseInt(id_userField.getText());
+        int idcategory =Integer.parseInt(id_categoryField.getText());
+        String nom =  nomField.getText();
+        int duree = Integer.parseInt(dureeField.getText());
+        float prix = Float.parseFloat(prixField.getText()) ;
+        boolean fidelite = true ;
+
+        Abonnement abonnement = new Abonnement( instance.SelectedSub, iduser, idcategory, nom, duree, prix,fidelite);
+        AbonnementService abonnementService =new AbonnementService();
+        System.out.println(abonnement);
+
+        try {
+            abonnementService.modifier(abonnement);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        initAbonnementInputs();
+        //reload_page();
+
+    }
+
+
+
+    @FXML
+    public void handleEditCat(){
+
+        String nom =  nomField.getText();
+
+
+        Category category = new Category( instance.Selectedcategory, nom);
+
+        categoryService cat =new categoryService();
+
+        try {
+            System.out.println(category);
+           cat.modifier(category);
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        initcategoryInputs();
+        //reload_page();
+
+    }
+
+    void initAbonnementInputs(){
+        id_userField.setText("");
+        id_categoryField.setText("");
+        nomField.setText("");
+        dureeField.setText("");
+        prixField.setText("");
+
+        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        iduserColumn.setCellValueFactory(new PropertyValueFactory<>("id_user"));
+        idcategoryColumn.setCellValueFactory(new PropertyValueFactory<>("id_category"));
+        nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
+        dureeColumn.setCellValueFactory(new PropertyValueFactory<>("duree"));
+        prixColumn.setCellValueFactory(new PropertyValueFactory<>("prix"));
+        fideliteColumn.setCellValueFactory(new PropertyValueFactory<>("fidelite"));
+
+
+    }
+
+    public void GoToAccountAbonnementPagee(MouseEvent mouseEvent) {
+    }
+    void fillSubinputs(Abonnement abonnement){
+        id_userField.setText(String.valueOf(abonnement.getId()));
+        id_categoryField.setText(String.valueOf(abonnement.getIdcategory()));
+        nomField.setText(abonnement.getNom());
+        dureeField.setText(String.valueOf(abonnement.getDuree()));
+        prixField.setText(String.valueOf(abonnement.getPrix()));
+       // prixField.setText(String.valueOf(abonnement.getPrix()));
+
+
+    }
+    void fillcatinputs(Category category){
+        id_userField.setText(String.valueOf(category.getId()));
+        nomField.setText(category.getNom());
+
+
+    }
 }

@@ -1,8 +1,6 @@
 package main.projet;
 
-import entity.Coach;
 import entity.Evennement;
-import interfaces.CoachListener;
 import interfaces.EvennementListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

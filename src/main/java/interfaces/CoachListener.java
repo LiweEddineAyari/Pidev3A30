@@ -1,8 +1,8 @@
 package interfaces;
 
-import entity.Coach;
+import entity.Account;
 
 public interface CoachListener {
-    void onChatView(Coach coach);
+    void onChatView(Account account);
 
 }

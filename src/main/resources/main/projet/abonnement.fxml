@@ -3,6 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -28,11 +29,20 @@
                         <Image url="@icons/search.png" />
                      </image>
                   </ImageView>
-                  <Button layoutX="431.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#GoToCategoriesPage" prefHeight="46.0" prefWidth="152.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css" text="Category">
+                  <Button layoutX="514.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#GoToCategoriesPage" prefHeight="46.0" prefWidth="152.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css" text="Category">
                      <graphic>
                         <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@icons/product.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="addSubbtn" layoutX="441.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#GoToAddabonnementPaage" prefHeight="46.0" prefWidth="64.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/plus.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -109,7 +119,7 @@
          <children>
             <VBox fx:id="AddProductCard" layoutX="492.0" layoutY="322.0" maxWidth="1361.0" prefHeight="244.0" prefWidth="347.0" styleClass="add-product-card">
                <children>
-                  <Label prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Add a new Category">
+                  <Label fx:id="addcattitle" prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Add a new Category">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="31.0" />
                      </font>
@@ -117,16 +127,17 @@
                   <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="113.0" text="Nom:" />
-                        <TextField fx:id="productNameField" prefHeight="37.0" prefWidth="196.0" />
+                        <TextField fx:id="nomcField" prefHeight="37.0" prefWidth="196.0" />
                      </children>
                   </HBox>
                   <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
                      <children>
-                        <Button fx:id="AddProductBtn" mnemonicParsing="false" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
+                        <Button fx:id="AddcattBtn" mnemonicParsing="false" onAction="#handleAddCategory" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
                            <HBox.margin>
                               <Insets left="50.0" />
                            </HBox.margin>
                         </Button>
+                        <Button fx:id="EditCatBtn1" mnemonicParsing="false" onAction="#handleEditCat" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Edit" />
                      </children>
                   </HBox>
                </children>
@@ -134,6 +145,74 @@
             <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToCategoriesPage" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
                <graphic>
                   <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+      <Pane fx:id="AddAbonnementPagee" prefHeight="907.0" prefWidth="1331.0">
+         <children>
+            <VBox fx:id="AddAdminCard" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="588.0" prefWidth="376.0" styleClass="add-product-card">
+               <children>
+                  <Label fx:id="addsubtitle" prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Add a new sub">
+                     <font>
+                        <Font name="Arial Rounded MT Bold" size="31.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="113.0" text="id user" />
+                        <TextField fx:id="id_userField" prefHeight="37.0" prefWidth="196.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="id category" />
+                        <TextField fx:id="id_categoryField" prefHeight="71.0" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="nom" />
+                        <TextField fx:id="nomField" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="70.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="111.0" text="duree" />
+                        <TextField fx:id="dureeField" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="113.0" text="prix" />
+                        <TextField fx:id="prixField" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="113.0" text="fidelite" />
+                        <CheckBox mnemonicParsing="false" prefHeight="37.0" prefWidth="125.0" text="CheckBox" />
+                     </children>
+                  </HBox>
+                  <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
+                     <children>
+                        <Button fx:id="addSubbtn" mnemonicParsing="false" onAction="#handleAddAbonnement" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
+                           <HBox.margin>
+                              <Insets left="50.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button fx:id="EditSubBtn" mnemonicParsing="false" onAction="#handleEditAbonnement" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Edit" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToabonnementPage" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="32.0" onDragDetected="#GoToAccountAbonnementPagee" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons/back.png" />
                      </image>

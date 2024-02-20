@@ -47,36 +47,36 @@
                                 <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                                     <children>
                                         <Label prefHeight="22.0" prefWidth="113.0" text="Nom:" />
-                                        <TextField fx:id="productNameField" prefHeight="37.0" prefWidth="196.0" />
+                                        <TextField fx:id="adminENameField" prefHeight="37.0" prefWidth="196.0" />
                                     </children>
                                 </HBox>
                                 <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                                     <children>
                                         <Label prefHeight="22.0" prefWidth="111.0" text="Prenom: " />
-                                        <TextField fx:id="productRefField" prefHeight="71.0" />
+                                        <TextField fx:id="adminEPrenomField" prefHeight="71.0" />
                                     </children>
                                 </HBox>
                                 <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                                     <children>
                                         <Label prefHeight="22.0" prefWidth="111.0" text="Age:         " />
-                                        <TextField fx:id="productPriceField" />
+                                        <TextField fx:id="adminEAgeField" />
                                     </children>
                                 </HBox>
                                 <HBox prefHeight="70.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                                     <children>
                                         <Label prefHeight="22.0" prefWidth="111.0" text="Mail:" />
-                                        <TextField fx:id="productPriceField1" />
+                                        <TextField fx:id="adminEMailField1" />
                                     </children>
                                 </HBox>
                                 <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                                     <children>
                                         <Label prefHeight="22.0" prefWidth="113.0" text="Password:" />
-                                        <TextField fx:id="productWeightField" />
+                                        <TextField fx:id="adminEPasswordField" />
                                     </children>
                                 </HBox>
                                 <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
                                     <children>
-                                        <Button fx:id="valider" mnemonicParsing="false" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="edit">
+                                        <Button fx:id="valider" mnemonicParsing="false" onAction="#handleEditProduct" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="edit">
                                             <HBox.margin>
                                                 <Insets left="50.0" />
                                             </HBox.margin>

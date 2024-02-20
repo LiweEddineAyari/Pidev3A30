@@ -1,24 +1,18 @@
 package main.projet;
 
-import entity.Product;
-import entity.User;
+import entity.Account;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import services.AccountService;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 public class AppController  {
     @FXML
@@ -26,8 +20,19 @@ public class AppController  {
     @FXML
     VBox adminMenu,userMenu,coachMenu;
 
-    public void sentUserData(String role) {
-        if(role.equals("Admin")){
+    private static AppController instance =new AppController();
+    public static AppController getInstance() {
+        return instance;
+    }
+
+     Account account;
+
+    public void sentUserData(String role, Account account) {
+        instance.account=account;
+        System.out.println("id : "+account.getId());
+        System.out.println("role : "+account.getTitle().toString());
+
+        if(role.equals("admin")){
             adminMenu.setVisible(true);
             adminMenu.setManaged(true);
 
@@ -37,7 +42,7 @@ public class AppController  {
             coachMenu.setVisible(false);
             coachMenu.setManaged(false);
         }
-        if(role.equals("User")){
+        if(role.equals("user")){
             adminMenu.setVisible(false);
             adminMenu.setManaged(false);
 
@@ -47,7 +52,7 @@ public class AppController  {
             coachMenu.setVisible(false);
             coachMenu.setManaged(false);
         }
-        if(role.equals("Coach")){
+        if(role.equals("coach")){
             adminMenu.setVisible(false);
             adminMenu.setManaged(false);
 
@@ -73,9 +78,9 @@ public class AppController  {
     @FXML
     public void adminInterfaceLoad() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("admin.fxml"));
-        Parent adminRoot = loader.load();
+        Parent accountRoot = loader.load();
         // Set the loaded FXML as a child of mainContainer
-        mainContainer.getChildren().setAll(adminRoot);
+        mainContainer.getChildren().setAll(accountRoot);
     }
 
     @FXML
@@ -139,7 +144,7 @@ public class AppController  {
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root, 1202, 535);
-        scene.getStylesheets().add("file:/C:/Users/JAXIM/IdeaProjects/projet/src/main/resources/main/projet/css/LoginPage.css");
+        scene.getStylesheets().add("file:/C:/Users/21690/IdeaProjects/projet/src/main/resources/main/projet/css/LoginPage.css");
         stage.setScene(scene);
         stage.setTitle("FitHub Pro");
         stage.setResizable(false);
@@ -186,6 +191,15 @@ public class AppController  {
         Parent evennementRoot = loader.load();
         // Set the loaded FXML as a child of mainContainer
         mainContainer.getChildren().setAll(evennementRoot);
+    }
+
+
+    @FXML
+    public void UserCoachInterfaceLoad() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("userInCoachInterface.fxml"));
+        Parent userRoot = loader.load();
+        // Set the loaded FXML as a child of mainContainer
+        mainContainer.getChildren().setAll(userRoot);
     }
 
 

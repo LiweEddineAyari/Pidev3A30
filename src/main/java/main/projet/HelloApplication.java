@@ -17,7 +17,7 @@ public class HelloApplication extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("loginPage.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1202, 535);
         stage.setTitle("FitHub Pro");
-        scene.getStylesheets().add("file:/C:/Users/JAXIM/IdeaProjects/projet/src/main/resources/main/projet/css/LoginPage.css");
+        scene.getStylesheets().add("file:/C:/Users/21690/IdeaProjects/projet/src/main/resources/main/projet/css/LoginPage.css");
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

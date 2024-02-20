@@ -12,7 +12,7 @@ public class Commande {
   ObservableList<Product> productspanier;
 
     public Commande(int id, int iduser, int idpanier, float montant,String statut) {
-        this.id = id;
+        this.id = id;  //Auto inc
         this.iduser = iduser;
         this.idpanier = idpanier;
         this.montant = montant;

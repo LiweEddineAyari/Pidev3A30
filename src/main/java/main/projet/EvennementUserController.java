@@ -1,6 +1,5 @@
 package main.projet;
 
-import entity.Coach;
 import entity.Evennement;
 import interfaces.EvennementListener;
 import javafx.collections.FXCollections;
@@ -9,8 +8,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;

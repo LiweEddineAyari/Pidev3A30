@@ -9,6 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
@@ -51,14 +52,27 @@
       </VBox>
       <Pane fx:id="chatPage" prefHeight="907.0" prefWidth="1331.0" stylesheets="@css/product.css">
          <children>
-            <VBox fx:id="SatisticsVbox" layoutX="259.0" layoutY="141.0" maxWidth="1361.0" prefHeight="674.0" prefWidth="742.0" styleClass="add-product-card">
+            <VBox layoutX="259.0" layoutY="141.0" maxWidth="1361.0" prefHeight="674.0" prefWidth="742.0" styleClass="add-product-card">
                <children>
-                  <Label fx:id="ChatTitle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="683.0" stylesheets="@css/product.css" text="Chat With ">
+                  <Label fx:id="ChatTitle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="693.0" stylesheets="@css/product.css" text="Chat With ">
                      <styleClass>
                         <String fx:value="label-style" />
                         <String fx:value="title" />
                      </styleClass>
                   </Label>
+                  <ScrollPane fx:id="CoachChatScrollPane" prefHeight="498.0" prefWidth="702.0">
+                     <content>
+                        <VBox fx:id="messagesContainer" alignment="CENTER_LEFT" prefWidth="695.0" />
+                     </content>
+                  </ScrollPane>
+                  <HBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <TextField fx:id="messageField" maxWidth="-Infinity" prefHeight="37.0" prefWidth="590.0" />
+                        <Button mnemonicParsing="false" onAction="#handleModifierMessage" styleClass="orangebtn" text="Edit" />
+                        <Button mnemonicParsing="false" onAction="#handleSendMessage" styleClass="orangebtn" text="Send" />
+                        <Button mnemonicParsing="false" onAction="#handleClearConversation" styleClass="orangebtn" text="Clear Conversation" />
+                     </children>
+                  </HBox>
                </children>
             </VBox>
             <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToCoaches" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">

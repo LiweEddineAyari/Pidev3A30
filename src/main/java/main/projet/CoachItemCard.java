@@ -1,9 +1,7 @@
 package main.projet;
 
-import entity.Coach;
-import entity.Product;
+import entity.Account;
 import interfaces.CoachListener;
-import interfaces.ProductListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -13,9 +11,9 @@ public class CoachItemCard {
 
     @FXML
      Label coachname;
-    Coach coach;
+    Account coach;
      private CoachListener listener;
-    public void setData(Coach coach,CoachListener listener) {
+    public void setData(Account coach,CoachListener listener) {
         this.listener=listener;
         this.coach = coach;
         coachname.setText(coach.getNom());

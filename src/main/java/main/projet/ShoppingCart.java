@@ -1,12 +1,13 @@
 package main.projet;
 
-import entity.Product;
+import entity.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -14,9 +15,12 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 
 import main.projet.ShoppingCartItemCard;
+import services.CommandeService;
+import services.PaimentService;
 
 public class ShoppingCart implements Initializable {
 
@@ -29,8 +33,21 @@ public class ShoppingCart implements Initializable {
     GridPane shoppingcartGrid;
     @FXML
     Label totallabel,totalPaymentPage;
+    @FXML
+    TextField cardNameField,cardCodeField;
 
     private static ShoppingCart instance = new ShoppingCart();
+
+    AppController appControllerinstance=AppController.getInstance();
+
+    Account user=appControllerinstance.account;
+    float montantPaiment;
+
+    CommandeService commandeService = new CommandeService();
+    PaimentService paimentService = new PaimentService();
+
+
+
     private List<Product> cartItems = new ArrayList<>();
 
 
@@ -120,8 +137,16 @@ public class ShoppingCart implements Initializable {
         ShopPage.setManaged(true);
     }
 
-@FXML
- public  void handleSubmitShoppingCart(){
+
+
+
+
+
+
+
+
+@FXML// ajouter(panier,panierproduit,commande)
+ public  void handleSubmitShoppingCart() throws SQLException {
     GoToPaymentPage();
 
     float total = 0f;
@@ -133,9 +158,56 @@ public class ShoppingCart implements Initializable {
         total += quantity * product.getPrice();
     }
 
+    //Add f table panier
+
+    Panier panier= new Panier(-1,instance.user.getId());
+
+    int idpanier=  commandeService.ajouterPanier(panier);
+
+    //Add f table panierproduit produit mtaek
+
+    PanierProduct panierProduct ;
+    Product product;
+    int quantite=1;
+
+    if(!productQuantityMap.isEmpty()){
+        for (Map.Entry<Integer,Product> entry : productQuantityMap.entrySet()){
+
+            quantite = entry.getKey();
+            product = entry.getValue();
+
+            panierProduct = new PanierProduct(-1,idpanier,product.getId(),quantite,product.getPrice());
+
+            commandeService.ajouterPanierProduit(panierProduct);
+        }
+    }
+
+    //add f table commande
+
+    Commande commande = new Commande(-1,instance.user.getId(),idpanier,total,"Encours");
+    commandeService.ajouterCommande(commande);
+
+
+
     totalPaymentPage.setText(String.valueOf(total)+" TND");
+    instance.montantPaiment=total;
 
 }
+
+
+
+     @FXML  //ajouter ll paiment
+     public void handleSubmitPaiment() throws SQLException {
+       String cardName = cardNameField.getText();
+       String cardCode = cardCodeField.getText();
+
+       Paiment paiment = new Paiment(-1,instance.user.getId(),instance.montantPaiment,cardName,cardCode);
+       paimentService.ajouter(paiment);//ajout
+         GoToShopPage();
+
+     }
+
+
 
 
     @Override
