@@ -1,15 +1,13 @@
 package services;
 
 import entity.Exercice;
-import entity.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import utils.MyDataBase;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExerciseService implements IExerciceService<Exercice>{
 
@@ -80,8 +78,10 @@ public class ExerciseService implements IExerciceService<Exercice>{
     public ObservableList<Exercice> afficher() throws SQLException {
         ObservableList<Exercice> exerciceList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM `exercises`";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
+
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(sql);
+
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 int productId = resultSet.getInt("productid");
@@ -99,6 +99,7 @@ public class ExerciseService implements IExerciceService<Exercice>{
         }
         return exerciceList;
     }
+
 
 
     @Override
@@ -238,5 +239,82 @@ public class ExerciseService implements IExerciceService<Exercice>{
         }
     }
 
+    @Override
+    public void ajouterFavoriteExercice(int idUser, int idExercice, String type) throws SQLException {
+        String query = "INSERT INTO favoriteexercices (iduser, idexercice, type) VALUES (?, ?, ?)";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, idUser);
+            preparedStatement.setInt(2, idExercice);
+            preparedStatement.setString(3, type);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error adding favorite exercice: " + e.getMessage());
+        }
+    }
+    @Override
+    public int getAidFromFavoriteEx(int idExercice, int iduser) throws SQLException {
+        String query = "SELECT idexercice FROM favoriteexercices WHERE idexercice = ? and iduser = ? ";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, idExercice);
+            preparedStatement.setInt(2, iduser);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("idexercice");
+
+
+                }
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error getting aid from favoriteexercices: " + e.getMessage());
+        }
+
+        return -1; // Return -1 if no matching record is found
+    }
+
+    @Override
+    public void supprimerFavoriteExercice(int idUser, int idExercice) throws SQLException {
+        String query = "DELETE FROM favoriteexercices WHERE iduser = ? AND idexercice = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, idUser);
+            preparedStatement.setInt(2, idExercice);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error deleting favorite exercice: " + e.getMessage());
+        }
+    }
+    @Override
+    public void updateScore(String type, int delta) throws SQLException {
+        String query = "UPDATE exercicesastistics SET score = score + ? WHERE type = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, delta);
+            preparedStatement.setString(2, type);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error updating score: " + e.getMessage());
+        }
+    }
+   @Override
+    public Map<String, Integer> getExercicesWithGreatestScoret() throws SQLException {
+        Map<String, Integer> exerciceStatistics = new HashMap<>();
+        String query = "SELECT type, score FROM exercicesastistics";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query);
+             ResultSet resultSet = preparedStatement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String type = resultSet.getString("type");
+                int score = resultSet.getInt("score");
+
+                exerciceStatistics.put(type, score);
+            }
+        }
+
+        return exerciceStatistics;
+    }
 
 }

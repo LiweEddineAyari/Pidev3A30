@@ -78,7 +78,7 @@
                         <String fx:value="title" />
                      </styleClass>
                   </Label>
-                  <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="142.0" styleClass="orangebtn" stylesheets="@css/product.css" text="Submit" />
+                  <Button mnemonicParsing="false" onAction="#handleAbonner" prefHeight="46.0" prefWidth="142.0" styleClass="orangebtn" stylesheets="@css/product.css" text="Submit" />
                </children>
             </VBox>
             <Button layoutX="29.0" layoutY="43.0" mnemonicParsing="false" onAction="#GoToAbonnement" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">

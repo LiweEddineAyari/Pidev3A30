@@ -626,6 +626,20 @@ TextArea {
     -fx-border-width: 2; /* Border width */
     -fx-padding: 10 20; /* Padding */
 }
+.editmsgBtnStyle{
+    -fx-font-size: 18;
+    -fx-font-weight: bold; /* Bold font weight */
+    -fx-text-fill: #FF0000;
+    -fx-border-radius: 10;
+    -fx-background-radius: 20; /* Adjust the radius for the rounded corners */
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-border-width: 2; /* Border width */
+    -fx-padding: 10 20; /* Padding */
+    -fx-graphic: url('../icons/editmsg.png');
+    -fx-pref-width: 60px ;
+    -fx-pref-height:60px ;
+}
 
 .user-message {
     -fx-text-fill: linear-gradient(to right, #c44e11, #fd7c2b);   /* White text color */
@@ -636,6 +650,9 @@ TextArea {
     -fx-alignment: center-left;    /* Align to the right */
     -fx-font-size: 18;
     -fx-wrap-text: true;            /* Enable text wrapping */
+    -fx-background-color: black;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
 }
 
 
@@ -669,4 +686,22 @@ TextArea {
     -fx-padding: 5px;
 
     /* Add other styling properties as needed */
+}
+
+.errorlabel{
+    -fx-font-size: 19;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to right, #da0101, #b60101);
+
+}
+
+.messagesContainer {
+    -fx-padding: 2px;
+}
+.like {
+    -fx-graphic: url('../icons/like.png');}
+
+
+.liked {
+    -fx-graphic: url('../icons/liked.png');
 }

@@ -67,8 +67,10 @@ public class ProductService implements IProductService<Product>{
     public ObservableList<Product> afficher() throws SQLException {
         ObservableList<Product> productList = FXCollections.observableArrayList();
         String sql = "SELECT * FROM `product`";
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
+
+        try (Statement statement = connection.createStatement()) {
+            ResultSet resultSet = statement.executeQuery(sql);
+
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String name = resultSet.getString("name");
@@ -85,6 +87,8 @@ public class ProductService implements IProductService<Product>{
         }
         return productList;
     }
+
+
 
     @Override
     public ObservableList<Product> search(String name) throws SQLException {

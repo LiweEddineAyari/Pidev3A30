@@ -5,8 +5,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -76,7 +78,7 @@
          <children>
             <VBox fx:id="AddProductCard" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="588.0" prefWidth="376.0" styleClass="add-product-card">
                <children>
-                  <Label prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Add a new Coach">
+                  <Label fx:id="addLabel" prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Add a new Coach">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="31.0" />
                      </font>
@@ -164,14 +166,16 @@
                         <String fx:value="title" />
                      </styleClass>
                   </Label>
-                  <TableView fx:id="planningTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="976.0" stylesheets="@css/product.css">
+                  <TableView fx:id="planningTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="1236.0" stylesheets="@css/product.css">
                      <columns>
                         <TableColumn fx:id="idplaningColumn" prefWidth="75.0" text="Id" />
-                        <TableColumn fx:id="idcoachColumn" prefWidth="100.0" text="id_coach" />
-                        <TableColumn fx:id="dateColumn" prefWidth="170.0" text="date" />
-                        <TableColumn fx:id="heure_debutColumn" prefWidth="195.0" text="heure_debut" />
-                        <TableColumn fx:id="heure_finColumn" prefWidth="171.0" text="heure_fin" />
-                        <TableColumn fx:id="actionsColumnplanning" prefWidth="254.0" text="Actions" />
+                        <TableColumn fx:id="idcoachColumn" prefWidth="115.0" text="id_coach" />
+                        <TableColumn fx:id="titreColumn" prefWidth="144.0" text="titre" />
+                        <TableColumn fx:id="dateDColumn" prefWidth="135.0" text="date debut" />
+                        <TableColumn fx:id="dateFColumn" prefWidth="164.0" text="date fin" />
+                        <TableColumn fx:id="heure_debutColumn" prefWidth="142.0" text="heure_debut" />
+                        <TableColumn fx:id="heure_finColumn" prefWidth="153.0" text="heure_fin" />
+                        <TableColumn fx:id="actionsColumnplanning" prefWidth="292.0" text="Actions" />
                      </columns>
                   </TableView>
                </children>
@@ -180,9 +184,9 @@
       </VBox>
       <Pane fx:id="AddPlanningtPage" prefHeight="907.0" prefWidth="1331.0">
          <children>
-            <VBox fx:id="AddProductCard1" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="499.0" prefWidth="460.0" styleClass="add-product-card">
+            <VBox fx:id="AddProductCard1" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="632.0" prefWidth="460.0" styleClass="add-product-card">
                <children>
-                  <Label prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Add a new Planning">
+                  <Label fx:id="addLabel" prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Add a new Planning">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="31.0" />
                      </font>
@@ -190,34 +194,53 @@
                   <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="127.0" text="idCoach:" />
-                        <TextField fx:id="productRefField1" prefHeight="71.0" />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
-                     <children>
-                        <Label prefHeight="22.0" prefWidth="127.0" text="heure_debut:" />
-                        <DatePicker />
+                        <TextField fx:id="idcoachField" prefHeight="71.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="70.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
-                        <Label prefHeight="22.0" prefWidth="127.0" text="Mail:" />
-                        <TextField fx:id="productPriceField11" />
+                        <Label prefHeight="22.0" prefWidth="127.0" text="Titre:" />
+                        <TextField fx:id="titreField" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="127.0" text="Date debut:" />
+                        <DatePicker fx:id="dateDField" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="127.0" text="Date fin:" />
+                        <DatePicker fx:id="dateFField" />
                      </children>
                   </HBox>
                   <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
-                        <Label prefHeight="22.0" prefWidth="127.0" text="Password:" />
-                        <TextField fx:id="productWeightField1" />
+                        <Label prefHeight="22.0" prefWidth="127.0" text="Heure debut :" />
+                        <TextField fx:id="heureDField" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="127.0" text="Heure fin :" />
+                        <TextField fx:id="heureFField" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="72.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <Label prefHeight="22.0" prefWidth="127.0" text="Description:" />
+                        <TextArea fx:id="descField" prefHeight="200.0" prefWidth="200.0" />
                      </children>
                   </HBox>
                   <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
                      <children>
-                        <Button fx:id="AddProductBtn1" mnemonicParsing="false" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
+                        <Button fx:id="AddPlanningBtn" mnemonicParsing="false" onAction="#handleAddPlanning" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
                            <HBox.margin>
                               <Insets left="50.0" />
                            </HBox.margin>
                         </Button>
+                        <Button fx:id="EditPlanningBtn" mnemonicParsing="false" onAction="#handleModifyPlanning" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Edit" />
                      </children>
                   </HBox>
                </children>
@@ -286,6 +309,42 @@
             <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToCoachAffichagePage" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
                <graphic>
                   <ImageView fitHeight="34.0" fitWidth="32.0" onDragDetected="#GoToCoachAffichagePage" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@icons/back.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+      <Pane fx:id="chatPage" prefHeight="907.0" prefWidth="1331.0" stylesheets="@css/product.css">
+         <children>
+            <VBox layoutX="259.0" layoutY="141.0" maxWidth="1361.0" prefHeight="674.0" prefWidth="742.0" styleClass="add-product-card">
+               <children>
+                  <Label fx:id="ChatTitle" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="693.0" stylesheets="@css/product.css" text="Chat With ">
+                     <styleClass>
+                        <String fx:value="label-style" />
+                        <String fx:value="title" />
+                     </styleClass>
+                  </Label>
+                  <ScrollPane fx:id="ChatScrollPane" prefHeight="498.0" prefWidth="702.0">
+                     <content>
+                        <VBox fx:id="messagesContainer" alignment="CENTER_LEFT" prefWidth="695.0" styleClass="messagesContainer" />
+                     </content>
+                  </ScrollPane>
+                  <HBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <TextField fx:id="messageField" maxWidth="-Infinity" prefHeight="37.0" prefWidth="590.0" />
+                        <Button fx:id="editMsgbtn" mnemonicParsing="false" onAction="#handleModifierMessage" styleClass="orangebtn" text="Edit" />
+                        <Button mnemonicParsing="false" onAction="#handleSendMessage" styleClass="orangebtn" text="Send" />
+                        <Button mnemonicParsing="false" onAction="#handleClearConversation" styleClass="orangebtn" text="Clear Conversation" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToPlanning" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+               <graphic>
+                  <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons/back.png" />
                      </image>

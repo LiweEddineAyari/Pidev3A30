@@ -1,5 +1,6 @@
 package main.projet;
 
+import entity.Account;
 import entity.Exercice;
 import entity.Product;
 import interfaces.ExerciceListener;
@@ -39,6 +40,11 @@ public class ProductUserController implements Initializable, ProductListener, Ex
     Pane ProductDetailsInterfaceuser,ExerciceDetailsInterfaceuser,WorkoutPlanPage;
     @FXML
     TextField searchProductfield,searchExerciceField;
+    @FXML
+    Label shopcounter;
+
+    private static ProductUserController productUserControllerinstance = new ProductUserController();
+    public static ProductUserController getInstance(){return  productUserControllerinstance;}
 
 
     //list container
@@ -198,6 +204,7 @@ public class ProductUserController implements Initializable, ProductListener, Ex
 
         ExercicesInterfaceuser.setVisible(true);
         ExercicesInterfaceuser.setManaged(true);
+        intitialisationExerciceList();
     }
     @FXML
     public  void GoToWorkoutPlanPage(){
@@ -314,6 +321,10 @@ public class ProductUserController implements Initializable, ProductListener, Ex
         Image image = new Image(product.getImageUrl());
         productImgView.setImage(image);
     }
+    @Override
+    public void onPressShopAdd(int counter) {
+        shopcounter.setText(String.valueOf(counter));
+    }
 
     @Override
     public void onViewDetailsExercice(Exercice exercice) {
@@ -345,12 +356,21 @@ public class ProductUserController implements Initializable, ProductListener, Ex
     @Override
     public void onLikeExercice(Exercice exercice) {
         System.out.println(exercice);
+        Account user = AppController.getInstance().account;
+
+        try {
+            System.out.println(exercice.getType());
+            if(exerciseService.getAidFromFavoriteEx(exercice.getId(), user.getId())!=exercice.getId()){
+                exerciseService.ajouterFavoriteExercice(user.getId(), exercice.getId(),exercice.getType());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     @FXML
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         intitialisationProductList();
         if (exerciceList != null) {
             intitialisationExerciceList();
@@ -399,32 +419,43 @@ public class ProductUserController implements Initializable, ProductListener, Ex
             e.printStackTrace();
         }
     }
-    void intitialisationExerciceList(){
+    void intitialisationExerciceList() {
             int column = 0, row = 0;
+        Account user = AppController.getInstance().account;
 
             try {
                 for (Exercice exercice : exerciceList) {
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("exerciceItemCard.fxml"));
-                    VBox exerciceCard = loader.load();
 
-                    if (column == 5) {
-                        row++;
-                        column = 0;
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("exerciceItemCard.fxml"));
+                        VBox exerciceCard = loader.load();
+
+                        if (column == 5) {
+                            row++;
+                            column = 0;
+                        }
+
+                        ExerciceItemCard itemCardController = loader.getController();
+                    try {
+                        if (exerciseService.getAidFromFavoriteEx( exercice.getId(), user.getId() )!=exercice.getId()) {
+                            itemCardController.setDataa(exercice, this, false);
+                        }
+                        else {
+                            itemCardController.setDataa(exercice, this, true);
+                        }
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    exerciceGrid.add(exerciceCard, column++, row);
+                        GridPane.setMargin(exerciceCard, new Insets(15));
                     }
 
-                    ExerciceItemCard itemCardController = loader.getController();
-                    itemCardController.setDataa(exercice,this);
-
-                    exerciceGrid.add(exerciceCard, column++, row);
-                    GridPane.setMargin(exerciceCard, new Insets(15));
-                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     void intitialisationExerciceListDetails(ObservableList<Exercice> list){
         int column = 0, row = 0;
-
+        Account user = AppController.getInstance().account;
         try {
             for (Exercice exercice : list) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("exerciceItemCard.fxml"));
@@ -435,8 +466,16 @@ public class ProductUserController implements Initializable, ProductListener, Ex
                 }
 
                 ExerciceItemCard itemCardController = loader.getController();
-                itemCardController.setDataa(exercice,this);
-
+                try {
+                    if (exerciseService.getAidFromFavoriteEx(exercice.getId() , user.getId())!=exercice.getId()) {
+                        itemCardController.setDataa(exercice, this, false);
+                    }
+                    else {
+                        itemCardController.setDataa(exercice, this, true);
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 exerciceGriddetails.add(exerciceCard,column++, row);
                 GridPane.setMargin(exerciceCard, new Insets(15));
             }
@@ -445,23 +484,30 @@ public class ProductUserController implements Initializable, ProductListener, Ex
         }
     }
     void intitialisationMyFavoriteExerciceList(){
-        int column = 0, row = 0;
-
+        int column = 1, row = 0;
+        Account user = AppController.getInstance().account;
+        myFavoriteGrid.getChildren().clear();
         try {
             for (Exercice exercice : exerciceList) {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("exerciceItemCard.fxml"));
-                VBox exerciceCard = loader.load();
+                try {
+                    if (exerciseService.getAidFromFavoriteEx(exercice.getId() , user.getId())==exercice.getId()){
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("exerciceItemCard.fxml"));
+                        VBox exerciceCard = loader.load();
 
-                if (column == 5) {
-                    row++;
-                    column = 0;
+                        if (column == 5) {
+                            row++;
+                            column = 0;
+                        }
+
+                        ExerciceItemCard itemCardController = loader.getController();
+                        itemCardController.setDataa(exercice,this,true);
+
+                        myFavoriteGrid.add(exerciceCard, column++, row);
+                        GridPane.setMargin(exerciceCard, new Insets(15));
+                    }
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
-
-                ExerciceItemCard itemCardController = loader.getController();
-                itemCardController.setDataa(exercice,this);
-
-                myFavoriteGrid.add(exerciceCard, column++, row);
-                GridPane.setMargin(exerciceCard, new Insets(15));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -678,38 +724,6 @@ public class ProductUserController implements Initializable, ProductListener, Ex
     }
 
 
-
-    public String getSplitWorkoutDetails() {
-
-        String pdf="This is Your WorkoutPlan : 5 Days SPLIT \n";
-
-        pdf+="Chest Day : \n";
-        for (int i = 0; i < chestLabels.length  ; i++) {
-            pdf+="Exercise "+ i+1 +" : "+chestLabels[i].getText()+" 3 X 12\n";
-        }
-
-        pdf+="Back Day : \n";
-        for (int i = 0; i < chestLabels.length  ; i++) {
-            pdf+="Exercise "+ i+1 +" : "+chestLabels[i].getText()+" 3 X 12\n";
-        }
-
-        pdf+="Shoulder Day : \n";
-        for (int i = 0; i < shoulderLabels.length  ; i++) {
-            pdf+="Exercise "+ i+1 +" : "+shoulderLabels[i].getText()+" 3 X 12\n";
-        }
-
-        pdf+="Leg Day : \n";
-        for (int i = 0; i < legLabels.length  ; i++) {
-            pdf+="Exercise "+ i+1 +" : "+legLabels[i].getText()+" 3 X 12\n";
-        }
-
-        pdf+="Arm Day : \n";
-        for (int i = 0; i < armLabels.length  ; i++) {
-            pdf+="Exercise "+ i+1 +" : "+armLabels[i].getText()+" 3 X 12\n";
-        }
-
-     return  pdf;
-    }
 
 
 }

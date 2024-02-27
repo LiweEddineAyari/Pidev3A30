@@ -44,11 +44,25 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <Label fx:id="shopcounter" layoutX="681.0" layoutY="23.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="27.0" prefWidth="40.0" stylesheets="@css/product.css" text="0" textFill="RED">
+                     <font>
+                        <Font size="19.0" />
+                     </font>
+                  </Label>
+                  <Button layoutX="624.0" layoutY="24.0" mnemonicParsing="false" prefHeight="48.0" prefWidth="55.0" styleClass="searchBtnStyle">
+                     <graphic>
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/orders.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </Pane>
             <Pane fx:id="ListContainer" prefHeight="734.0" prefWidth="1331.0" style="-fx-background-color: #1e1e1e;">
                <children>
-                  <Label layoutX="61.0" layoutY="39.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="326.0" stylesheets="@css/product.css" text="Products List ">
+                  <Label layoutX="61.0" layoutY="39.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="215.0" stylesheets="@css/product.css" text="Products List ">
                      <styleClass>
                         <String fx:value="label-style" />
                         <String fx:value="title" />
@@ -63,6 +77,12 @@
                         </GridPane>
                      </content>
                   </ScrollPane>
+                  <Label layoutX="328.0" layoutY="39.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="40.0" stylesheets="@css/product.css">
+                     <styleClass>
+                        <String fx:value="label-style" />
+                        <String fx:value="title" />
+                     </styleClass>
+                  </Label>
                </children>
             </Pane>
          </children>

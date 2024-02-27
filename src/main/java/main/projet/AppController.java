@@ -136,9 +136,7 @@ public class AppController  {
 
     @FXML
     public void LogOut(ActionEvent event) throws IOException {
-
-
-
+        instance.account=null;
         FXMLLoader loader=new FXMLLoader(getClass().getResource("loginPage.fxml"));
         Parent root=loader.load();
 
@@ -197,6 +195,14 @@ public class AppController  {
     @FXML
     public void UserCoachInterfaceLoad() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("userInCoachInterface.fxml"));
+        Parent userRoot = loader.load();
+        // Set the loaded FXML as a child of mainContainer
+        mainContainer.getChildren().setAll(userRoot);
+    }
+
+    @FXML
+    public void PlanningPageLoad()throws IOException{
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("planning.fxml"));
         Parent userRoot = loader.load();
         // Set the loaded FXML as a child of mainContainer
         mainContainer.getChildren().setAll(userRoot);

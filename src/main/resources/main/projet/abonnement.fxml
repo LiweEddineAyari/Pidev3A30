@@ -60,7 +60,6 @@
                   <TableView fx:id="abonnementTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="1139.0" stylesheets="@css/product.css">
                      <columns>
                         <TableColumn fx:id="idColumn" prefWidth="75.0" text="Id" />
-                        <TableColumn fx:id="iduserColumn" prefWidth="95.0" text="iduser" />
                         <TableColumn fx:id="idcategoryColumn" prefWidth="96.0" text="idcategory" />
                         <TableColumn fx:id="nomColumn" prefWidth="147.0" text="nom" />
                         <TableColumn fx:id="dureeColumn" prefWidth="116.0" text="duree" />
@@ -155,19 +154,13 @@
       </Pane>
       <Pane fx:id="AddAbonnementPagee" prefHeight="907.0" prefWidth="1331.0">
          <children>
-            <VBox fx:id="AddAdminCard" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="588.0" prefWidth="376.0" styleClass="add-product-card">
+            <VBox fx:id="AddAdminCard" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="544.0" prefWidth="376.0" styleClass="add-product-card">
                <children>
                   <Label fx:id="addsubtitle" prefHeight="56.0" prefWidth="307.0" styleClass="title" text="Add a new sub">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="31.0" />
                      </font>
                   </Label>
-                  <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
-                     <children>
-                        <Label prefHeight="22.0" prefWidth="113.0" text="id user" />
-                        <TextField fx:id="id_userField" prefHeight="37.0" prefWidth="196.0" />
-                     </children>
-                  </HBox>
                   <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="111.0" text="id category" />

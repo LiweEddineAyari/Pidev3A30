@@ -74,13 +74,12 @@
                      <String fx:value="title" />
                   </styleClass>
                </Label>
-               <TableView fx:id="productTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="942.0" stylesheets="@css/product.css">
+               <TableView fx:id="productTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="848.0" stylesheets="@css/product.css">
                  <columns>
-                   <TableColumn fx:id="idColumn" prefWidth="75.0" text="Id" />
-                     <TableColumn fx:id="nameColumn" prefWidth="220.0" text="Name" />
-                     <TableColumn fx:id="refColumn" prefWidth="115.0" text="Ref" />
-                     <TableColumn fx:id="priceColumn" prefWidth="139.0" text="Price" />
-                     <TableColumn fx:id="actionsColumn" prefWidth="376.0" text="Actions" />
+                     <TableColumn fx:id="nameColumn" prefWidth="166.0" text="Name" />
+                     <TableColumn fx:id="refColumn" prefWidth="141.0" text="Ref" />
+                     <TableColumn fx:id="priceColumn" prefWidth="167.0" text="Price" />
+                     <TableColumn fx:id="actionsColumn" prefWidth="357.0" text="Actions" />
                  </columns>
                </TableView>
             </children></Pane>
@@ -92,7 +91,7 @@
       
       
          <!-- Add Product Card -->
-         <VBox fx:id="AddProductCard" alignment="TOP_CENTER" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="572.0" prefWidth="390.0" styleClass="add-product-card">
+         <VBox fx:id="AddProductCard" alignment="TOP_CENTER" layoutX="228.0" layoutY="113.0" maxWidth="1361.0" prefHeight="681.0" prefWidth="876.0" styleClass="add-product-card">
             <Label fx:id="addproductintTitle" prefHeight="31.0" prefWidth="307.0" styleClass="title" text="Add a new Product">
                <font>
                   <Font name="Arial Rounded MT Bold" size="31.0" />
@@ -100,29 +99,44 @@
             <HBox prefHeight="42.0" prefWidth="1231.0" spacing="10" styleClass="input-field">
                <Label prefHeight="22.0" prefWidth="113.0" text="Name:    " />
                <TextField fx:id="productNameField" prefHeight="37.0" prefWidth="196.0" />
+               <Label fx:id="pnameError" prefHeight="22.0" prefWidth="523.0" styleClass="errorlabel" textFill="RED" />
             </HBox>
             <HBox spacing="10" styleClass="input-field">
                <Label prefHeight="22.0" prefWidth="111.0" text="Ref:               " />
                <TextField fx:id="productRefField" />
+               <Label fx:id="prefError" prefHeight="22.0" prefWidth="523.0" styleClass="errorlabel" textFill="RED" />
             </HBox>
             <HBox spacing="10" styleClass="input-field">
                <Label prefHeight="22.0" prefWidth="111.0" text="Price:         " />
                <TextField fx:id="productPriceField" />
+               <Label fx:id="ppriceError" prefHeight="22.0" prefWidth="523.0" styleClass="errorlabel" textFill="RED" />
             </HBox>
             <HBox spacing="10" styleClass="input-field">
                <children>
                   <Label prefHeight="22.0" prefWidth="111.0" text="Quantity:" />
                   <TextField fx:id="productQuantityField" />
+                  <Label fx:id="pquantError" prefHeight="22.0" prefWidth="523.0" styleClass="errorlabel" textFill="RED" />
                </children>
             </HBox>
             <HBox spacing="10" styleClass="input-field">
                <Label prefHeight="22.0" prefWidth="113.0" text="Weight:" />
                <TextField fx:id="productWeightField" />
+               <Label fx:id="pweightError" prefHeight="22.0" prefWidth="523.0" styleClass="errorlabel" textFill="RED" />
             </HBox>
-            <HBox spacing="10" styleClass="input-field">
+            <HBox alignment="BASELINE_LEFT" prefHeight="99.0" prefWidth="350.0" spacing="10" styleClass="input-field">
                <children>
-                  <Label prefHeight="22.0" prefWidth="111.0" text="Image:" />
-                  <TextField fx:id="productImgField" />
+                  <Label prefHeight="22.0" prefWidth="103.0" text="Image:" />
+                  <TextField fx:id="productImgField" prefHeight="37.0" prefWidth="249.0" />
+                  <Button mnemonicParsing="false" onAction="#browseImage" prefHeight="37.0" prefWidth="62.0" styleClass="searchBtnStyle">
+                     <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/upload.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Label fx:id="pimgError" prefHeight="22.0" prefWidth="388.0" styleClass="errorlabel" textFill="RED" />
                </children>
             </HBox>
             <HBox prefHeight="121.0" prefWidth="350.0" spacing="10" styleClass="input-field">
@@ -259,12 +273,11 @@
                      <String fx:value="title" />
                   </styleClass>
                </Label>
-               <TableView fx:id="exerciceTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="942.0" stylesheets="@css/product.css">
+               <TableView fx:id="exerciceTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="876.0" stylesheets="@css/product.css">
                   <columns>
-                     <TableColumn fx:id="idexerciceColumn" prefWidth="75.0" text="Id" />
-                     <TableColumn fx:id="nameexerciceColumn" prefWidth="220.0" text="Name" />
-                     <TableColumn fx:id="productnColumn" prefWidth="175.00003051757812" text="Product" />
-                     <TableColumn fx:id="actionsColumnex" prefWidth="453.66668701171875" text="Actions" />
+                     <TableColumn fx:id="nameexerciceColumn" prefWidth="250.0" text="Name" />
+                     <TableColumn fx:id="productnColumn" prefWidth="268.0" text="Product" />
+                     <TableColumn fx:id="actionsColumnex" prefWidth="342.0" text="Actions" />
                   </columns>
                </TableView>
             </children>
@@ -284,18 +297,30 @@
                   <children>
                      <Label prefHeight="22.0" prefWidth="113.0" text="Name:    " />
                      <TextField fx:id="exercicenamefield" prefHeight="37.0" prefWidth="196.0" />
+                     <Label fx:id="exerciceNameError" prefHeight="37.0" prefWidth="600.0" styleClass="errorlabel" textFill="RED" />
                   </children>
                </HBox>
                <HBox spacing="10" styleClass="input-field">
                   <children>
                      <Label prefHeight="22.0" prefWidth="112.0" text="Product Id:" />
                      <TextField fx:id="exerciceproductidfield" />
+                     <Label fx:id="exerciceproductError" prefHeight="37.0" prefWidth="600.0" styleClass="errorlabel" textFill="RED" />
                   </children>
                </HBox>
-               <HBox spacing="10" styleClass="input-field">
+               <HBox alignment="BASELINE_LEFT" spacing="10" styleClass="input-field">
                   <children>
                      <Label prefHeight="22.0" prefWidth="112.0" text="Image :" />
                      <TextField fx:id="exerciceimgfield" />
+                     <Button mnemonicParsing="false" onAction="#browseImageExercice" prefHeight="37.0" prefWidth="62.0" styleClass="searchBtnStyle">
+                        <graphic>
+                           <ImageView fitHeight="32.0" fitWidth="34.0" pickOnBounds="true" preserveRatio="true">
+                              <image>
+                                 <Image url="@icons/upload.png" />
+                              </image>
+                           </ImageView>
+                        </graphic>
+                     </Button>
+                     <Label fx:id="exerciceimageError" prefHeight="22.0" prefWidth="523.0" styleClass="errorlabel" textFill="RED" />
                   </children>
                </HBox>
                <HBox spacing="10" styleClass="input-field">

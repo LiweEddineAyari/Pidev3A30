@@ -2,17 +2,16 @@ package entity;
 
 public class Abonnement {
     int id ;
-    int iduser;
 
     int idcategory;
     String nom;
     int duree;
     float prix;
     boolean fidelite;
+    String 	membres;
 
-    public Abonnement(int id, int iduser, int idcategory, String nom, int duree, float prix, boolean fidelite) {
+    public Abonnement(int id,  int idcategory, String nom, int duree, float prix, boolean fidelite) {
         this.id = id;
-        this.iduser = iduser;
         this.idcategory = idcategory;
         this.nom = nom;
         this.duree = duree;
@@ -20,13 +19,28 @@ public class Abonnement {
         this.fidelite = fidelite;
     }
 
+    public Abonnement(int id,  int idcategory, String nom, int duree, float prix, boolean fidelite, String membres) {
+        this.id = id;
+        this.idcategory = idcategory;
+        this.nom = nom;
+        this.duree = duree;
+        this.prix = prix;
+        this.fidelite = fidelite;
+        this.membres = membres;
+    }
+
+    public void setMembres(String membres) {
+        this.membres = membres;
+    }
+
+    public String getMembres() {
+        return membres;
+    }
+
     public int getId() {
         return id;
     }
 
-    public int getIduser() {
-        return iduser;
-    }
 
     public int getIdcategory() {
         return idcategory;
@@ -52,7 +66,6 @@ public class Abonnement {
     public String toString() {
         return "Abonnement{" +
                 "id=" + id +
-                ", iduser=" + iduser +
                 ", idcategory=" + idcategory +
                 ", nom='" + nom + '\'' +
                 ", duree=" + duree +

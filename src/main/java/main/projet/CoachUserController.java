@@ -37,12 +37,12 @@ public class CoachUserController implements Initializable, CoachListener {
 
     AppController appControllerinstance=AppController.getInstance();
 
-    Account user=appControllerinstance.account;// user
+    Account user;// user
     Account coach;//coach null
 
 
     ChatSessionService chatSessionService = new ChatSessionService(); //controller crud
-    chatSession chatSession = new chatSession(-1, user.getId(), -1);
+    chatSession chatSession = new chatSession(-1, -1 , -1);
 
     ChatConversationService chatConversationService = new ChatConversationService();//
 
@@ -50,6 +50,8 @@ public class CoachUserController implements Initializable, CoachListener {
     ChatConversation selectedMessage ;
     ObservableList<ChatConversation> chatConversationsList;
 
+    @FXML
+    Button editMsgbtn;
 
 
     @FXML
@@ -90,12 +92,14 @@ public class CoachUserController implements Initializable, CoachListener {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        editMsgbtn.setVisible(false);
+        editMsgbtn.setManaged(false);
         intitialisationCoachesList();
         CoachChatScrollPane.setContent(messagesContainer);
     }
 
     void intitialisationCoachesList(){
-        int column = 0, row = 0;
+        int column = 1, row = 0;
 
         try {
             for (Account coach : coaches) {
@@ -144,24 +148,28 @@ public class CoachUserController implements Initializable, CoachListener {
 
     @Override
     public void onChatView(Account coach) {
+        messagesContainer.getChildren().clear();
         ChatTitle.setText("Chat With "+coach.getNom()+" "+coach.getPrenom());
 
-
+        //coach set id
         instance.coach=coach;
-
         instance.chatSession.setId_user2(instance.coach.getId());
+        //user set id
+        instance.user=AppController.getInstance().account;
+        instance.chatSession.setId_user(instance.user.getId());
+        //taw session wallet haka session={-1,user.id,coach.id}
 
         CoachChatScrollPane.setContent(messagesContainer);
 
 
         try {
-            int idSession= chatSessionService.getChatSession(instance.chatSession,"user interface");
+            int idSession= chatSessionService.getChatSession(instance.chatSession);
 
             if(idSession==-1){
                 // if chatsession doesnt exist add a new chat session between the sender(user) and reciever (coach)
                 chatSessionService.ajouter(instance.chatSession);
                 // after adding the new chat session , get the session id from data base
-                idSession= chatSessionService.getChatSession(instance.chatSession,"user interface");
+                idSession= chatSessionService.getChatSession(instance.chatSession);
                 instance.chatSession.setId(idSession);
                 System.out.println(chatSession);
 
@@ -171,6 +179,7 @@ public class CoachUserController implements Initializable, CoachListener {
               //if chatsession exist get the id of the session
                 instance.chatSession.setId(idSession);
                 System.out.println(instance.chatSession);
+
             }
 
 
@@ -198,7 +207,7 @@ public class CoachUserController implements Initializable, CoachListener {
     @FXML
     void handleSendMessage() {
         String message = messageField.getText();
-        ChatConversation chatConversation = new ChatConversation(-1,instance.chatSession.getId(),instance.user.getId(),instance.coach.getId(),message);
+        ChatConversation chatConversation = new ChatConversation(-1,instance.chatSession.getId(),instance.user.getId(),instance.coach.getId(),-1,message);
 
         try {
             chatConversationService.ajouter(chatConversation);
@@ -235,7 +244,13 @@ public class CoachUserController implements Initializable, CoachListener {
 
                     // button
                     Button actionButton = new Button("");
-                    actionButton.setOnAction(event -> handleButtonAction(chatConversation)); // Replace handleButtonAction with your actual method
+
+                    actionButton.setOnAction( event -> {
+                        handleButtonAction(chatConversation);
+                        editMsgbtn.setVisible(true);
+                        editMsgbtn.setManaged(true);
+                    }); // Replace handleButtonAction with your actual method
+
 
                     // Add label and button to hbox
                     messageHBox.getChildren().addAll(actionButton,messageLabel);
@@ -262,8 +277,9 @@ public class CoachUserController implements Initializable, CoachListener {
     }
 
     void handleButtonAction(ChatConversation chatConversation){
-       instance.selectedMessage=chatConversation;
+        instance.selectedMessage=chatConversation;
         messageField.setText(instance.selectedMessage.getMessage());
+
     }
 
 
@@ -286,7 +302,8 @@ public class CoachUserController implements Initializable, CoachListener {
         messagesContainer.getChildren().clear();
         loadConversation(chatConversationsList);
 
-
+        editMsgbtn.setVisible(false);
+        editMsgbtn.setManaged(false);
     }
 
 

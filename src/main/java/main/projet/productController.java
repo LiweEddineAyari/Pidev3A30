@@ -14,12 +14,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import services.ExerciseService;
 import services.ProductService;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -40,7 +43,7 @@ public class productController implements Initializable {
 
     //detailproduct page
     @FXML
-     Label productnameDetail,refproductDetail,quantityproductDetail,poidsproductdetail,priceproductDetail,Description_area;
+     Label productnameDetail,refproductDetail,quantityproductDetail,poidsproductdetail,priceproductDetail,Description_area,exerciceNameError,exerciceproductError,exerciceimageError,pnameError,prefError,ppriceError,pquantError,pweightError,pimgError;
     @FXML
     ImageView productImgView;
 
@@ -53,8 +56,6 @@ public class productController implements Initializable {
 // table view product
     @FXML
     TableView<Product> productTableView;
-    @FXML
-    TableColumn<?, ?> idColumn;
     @FXML
     TableColumn<?, ?> imageColumn;
     @FXML
@@ -70,12 +71,11 @@ public class productController implements Initializable {
     //table view exercice
     @FXML
     TableView <Exercice> exerciceTableView;
-    @FXML
-    TableColumn<?, ?> idexerciceColumn;
+
     @FXML
     TableColumn<?, ?> nameexerciceColumn;
     @FXML
-    TableColumn<?, ?> productnColumn;
+    TableColumn<Exercice, Integer> productnColumn;
     @FXML
     TableColumn<Exercice,Void> actionsColumnex;
 
@@ -370,12 +370,18 @@ public class productController implements Initializable {
        {
            try {
                if(productService!=null){
-                   productnamedet = productService.getProductById(exercice.getProductid()).getName();
+                   if(productService.getProductById(exercice.getProductid())!=null){
+                       productnamedet = productService.getProductById(exercice.getProductid()).getName();
+                   }
+                   else{
+                       productnamedet = "none";
+                   }
                }
            } catch (SQLException e) {
                throw new RuntimeException(e);
            }
        }
+
        exerciceproductdetail.setText(productnamedet);
 
        descex.setText(exercice.getDescription());
@@ -387,12 +393,24 @@ public class productController implements Initializable {
    }
 
     public void handleSatistics(){
+        ObservableList<PieChart.Data> pieChartData= FXCollections.observableArrayList();
 
-        ObservableList<PieChart.Data> pieChartData= FXCollections.observableArrayList(
-                new PieChart.Data("Growth",3000),
-                new PieChart.Data("Strength",1500),
-                new PieChart.Data("Resilience",400)
-        );
+        try {
+            Map<String, Integer> exerciceStatistics = exerciseService.getExercicesWithGreatestScoret();
+
+            // Now you can iterate over the map entries and use the data
+            for (Map.Entry<String, Integer> entry : exerciceStatistics.entrySet()) {
+                String type = entry.getKey();
+                int score = entry.getValue();
+                pieChartData.add(new PieChart.Data(type,score));
+
+                System.out.println("Type: " + type + ", Score: " + score);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately in your application
+        }
+
+
 
         PieChart pieChart = new PieChart(pieChartData);
         pieChart.setClockwise(true);
@@ -401,6 +419,14 @@ public class productController implements Initializable {
         pieChart.setStartAngle(180);
         pieChart.setStyle("-fx-font-size: 20px; -fx-text-fill: #f16602;");
 
+
+        // Create a label
+        Label titleLabel = new Label("Most Liked Types Of Exercises");
+        titleLabel.getStyleClass().add("label-style");
+        titleLabel.getStyleClass().add("title");
+
+        SatisticsVbox.getChildren().clear();
+        SatisticsVbox.getChildren().add(titleLabel);
         SatisticsVbox.getChildren().add(pieChart);
 
 
@@ -409,7 +435,6 @@ public class productController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //tableview product
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         refColumn.setCellValueFactory(new PropertyValueFactory<>("ref"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
@@ -417,9 +442,37 @@ public class productController implements Initializable {
         productTableView.setItems(products);
 
         //tableview exercice
-        idexerciceColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameexerciceColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         productnColumn.setCellValueFactory(new PropertyValueFactory<>("productid"));
+
+        productnColumn.setCellFactory(column -> new TableCell<Exercice, Integer>() {
+            @Override
+            protected void updateItem(Integer productId, boolean empty) {
+                super.updateItem(productId, empty);
+                if (empty || productId == null) {
+                    setText(null);
+                } else {
+                    // Assuming you have a method getProductById in your data layer
+                    String productName = "none";
+                   if(productId!=-1){
+                       try {
+                           if(productService.getProductById(productId)!=null){
+                               productName = productService.getProductById(productId).getName();
+                           }
+                           else{
+                               productName = "none";
+                           }
+
+                       } catch (SQLException e) {
+                           throw new RuntimeException(e);
+
+                       }
+                   }
+                    setText(productName);
+                }
+            }
+        });
+
         actionsColumnex.setCellFactory(createButtonCellFactoryEX());
         exerciceTableView.setItems(exercices);
 
@@ -599,6 +652,17 @@ public class productController implements Initializable {
         productImgField.setText("");
         productDescField.setText("");
     }
+    private void initErrorLabels() {
+        exerciceNameError.setText("");
+        exerciceproductError.setText("");
+        exerciceimageError.setText("");
+        pnameError.setText("");
+        prefError.setText("");
+        ppriceError.setText("");
+        pquantError.setText("");
+        pweightError.setText("");
+        pimgError.setText("");
+    }
 
     void fillProductinputs(Product product){
         productNameField.setText(product.getName());
@@ -610,51 +674,151 @@ public class productController implements Initializable {
         productDescField.setText(product.getDescription());
     }
 
+
+
+    @FXML
+    private void browseImage() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image File");
+
+        // Set extension filters if needed
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show open file dialog
+        Stage stage = (Stage) productImgField.getScene().getWindow();
+        java.io.File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            // Convert the absolute file path to a URL
+            String absolutePath = file.getAbsolutePath();
+            String urlPath = "file:/" + absolutePath.replace("\\", "/");
+
+            // Set the URL path to the text field
+            productImgField.setText(urlPath);
+        }
+    }
+
+
+
     @FXML
     public void handleAddProduct(){
+        initErrorLabels();
 
-        String name = productNameField.getText();
-        String ref =  productRefField.getText();
-        float price =  Float.parseFloat(productPriceField.getText());
-        int quantity = Integer.parseInt(productQuantityField.getText());
-        int weight = Integer.parseInt(productWeightField.getText());
-        String imageUrl = productImgField.getText();
-        String description =  productDescField.getText();
+        if(controleDeSaisiForProduct()){
+            String name = productNameField.getText();
+            String ref =  productRefField.getText();
+            float price =  Float.parseFloat(productPriceField.getText());
+            int quantity = Integer.parseInt(productQuantityField.getText());
+            int weight = Integer.parseInt(productWeightField.getText());
+            String imageUrl = productImgField.getText();
+            String description =  productDescField.getText();
 
-        Product product = new Product(-1, name, ref, price, quantity, weight, imageUrl, description);
-        ProductService productService =new ProductService();
+            Product product = new Product(-1, name, ref, price, quantity, weight, imageUrl, description);
+            ProductService productService =new ProductService();
 
-        try {
-            productService.ajouter(product);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            try {
+                productService.ajouter(product);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            initProductinputs();
+            initErrorLabels();
+            prodpageload();
         }
 
-        initProductinputs();
-        prodpageload();
+    }
+
+    private boolean controleDeSaisiForProduct() {
+        // Validate product name
+        String name = productNameField.getText();
+        if (name.isEmpty()) {
+            // Display an error message or handle the empty name case
+            pnameError.setText("Product name is required.");
+            return false;
+        }
+
+        // Validate product reference
+        String ref = productRefField.getText();
+        if (ref.isEmpty()) {
+            // Display an error message or handle the empty reference case
+            prefError.setText("Product reference is required.");
+
+            return false;
+        }
+
+        // Validate product price
+        float price;
+        try {
+            price = Float.parseFloat(productPriceField.getText());
+        } catch (NumberFormatException e) {
+            // Handle the case where the input is not a valid float
+            ppriceError.setText("Product price must be a valid number.");
+
+            return false;
+        }
+
+        // Validate product quantity
+        int quantity;
+        try {
+            quantity = Integer.parseInt(productQuantityField.getText());
+        } catch (NumberFormatException e) {
+            // Handle the case where the input is not a valid integer
+            pquantError.setText("Product quantity must be a valid number.");
+
+            return false;
+        }
+
+        // Validate product weight
+        int weight;
+        try {
+            weight = Integer.parseInt(productWeightField.getText());
+        } catch (NumberFormatException e) {
+            // Handle the case where the input is not a valid integer
+            pweightError.setText("Product weight must be a valid number.");
+
+            return false;
+        }
+
+        // Validate product image URL
+        String imageUrl = productImgField.getText();
+        if (imageUrl.isEmpty()) {
+            // Display an error message or handle the empty image URL case
+            pimgError.setText("Product image URL is required.");
+            return false;
+        }
+
+        return true;
     }
 
     @FXML
     public void handleEditProduct(){
-        String name = productNameField.getText();
-        String ref =  productRefField.getText();
-        float price =  Float.parseFloat(productPriceField.getText());
-        int quantity = Integer.parseInt(productQuantityField.getText());
-        int weight = Integer.parseInt(productWeightField.getText());
-        String imageUrl = productImgField.getText();
-        String description =  productDescField.getText();
+        initErrorLabels();
+        if(controleDeSaisiForProduct()){
+            String name = productNameField.getText();
+            String ref =  productRefField.getText();
+            float price =  Float.parseFloat(productPriceField.getText());
+            int quantity = Integer.parseInt(productQuantityField.getText());
+            int weight = Integer.parseInt(productWeightField.getText());
+            String imageUrl = productImgField.getText();
+            String description =  productDescField.getText();
 
-        Product product = new Product( instance.SelectedProductid, name, ref, price, quantity, weight, imageUrl, description);
-        ProductService productService =new ProductService();
+            Product product = new Product( instance.SelectedProductid, name, ref, price, quantity, weight, imageUrl, description);
+            ProductService productService =new ProductService();
 
-        try {
-            productService.modifier(product);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            try {
+                productService.modifier(product);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            initProductinputs();
+            initErrorLabels();
+            prodpageload();
         }
 
-        initProductinputs();
-        prodpageload();
 
     }
 
@@ -722,53 +886,113 @@ public class productController implements Initializable {
     }
 
     @FXML
-    public void handleExerciceAdd(){
+    private void browseImageExercice() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Image File");
 
+        // Set extension filters if needed
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show open file dialog
+        Stage stage = (Stage) exerciceimgfield.getScene().getWindow();
+        java.io.File file = fileChooser.showOpenDialog(stage);
+
+        if (file != null) {
+            // Convert the absolute file path to a URL
+            String absolutePath = file.getAbsolutePath();
+            String urlPath = "file:/" + absolutePath.replace("\\", "/");
+
+            // Set the URL path to the text field
+            exerciceimgfield.setText(urlPath);
+        }
+    }
+    private boolean controleDeSaisi() {
+        // Validate exercise name
         String exerciseName = exercicenamefield.getText();
-        int exerciseProductID = Integer.parseInt(exerciceproductidfield.getText());
-        String exerciseDescription = exercicedescfield.getText();
-        String targetValue = getSelectedValue(target);
-        String typeValue = getSelectedValue(type);
-        String intensityValue = getSelectedValue(intensity);
-        String equipmentNeededValue = getSelectedValue(equipmentneeded);
-        String exerciceimgfieldText=exerciceimgfield.getText();
-
-        Exercice exercice =new Exercice(-1,exerciseProductID,exerciseName,targetValue,typeValue,exerciseDescription,exerciceimgfieldText,intensityValue,equipmentNeededValue);
-
-        try {
-            exerciseService.ajouter(exercice);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (exerciseName.isEmpty()) {
+            // Display an error message or handle the empty name case
+            exerciceNameError.setText("Exercise name is required.");
+            return false;
         }
 
-        initExerciseinputs();
-        GoToExerices();
+        // Validate exercise product ID
+        int exerciseProductID;
+        try {
+            exerciseProductID = Integer.parseInt(exerciceproductidfield.getText());
+        } catch (NumberFormatException e) {
+            // Handle the case where the input is not a valid integer
+            exerciceproductError.setText("Exercise product ID must be a valid number.");
+            return false;
+        }
 
+
+        // Validate exercise image field
+        String exerciceimgfieldText = exerciceimgfield.getText();
+        if (exerciceimgfieldText.isEmpty()) {
+            // Display an error message or handle the empty image field case
+            System.out.println("Exercise image is required.");
+            exerciceimageError.setText("Exercise image is required.");
+
+            return false;
+        }
+
+        // If the code reaches here, all input is valid
+        return true;
+    }
+
+    @FXML
+    public void handleExerciceAdd(){
+        initErrorLabels();
+        if (controleDeSaisi()) {
+            String exerciseName = exercicenamefield.getText();
+            int exerciseProductID = Integer.parseInt(exerciceproductidfield.getText());
+            String exerciseDescription = exercicedescfield.getText();
+            String targetValue = getSelectedValue(target);
+            String typeValue = getSelectedValue(type);
+            String intensityValue = getSelectedValue(intensity);
+            String equipmentNeededValue = getSelectedValue(equipmentneeded);
+            String exerciceimgfieldText=exerciceimgfield.getText();
+
+            Exercice exercice =new Exercice(-1,exerciseProductID,exerciseName,targetValue,typeValue,exerciseDescription,exerciceimgfieldText,intensityValue,equipmentNeededValue);
+
+                try {
+                    exerciseService.ajouter(exercice);
+                    initExerciseinputs();
+                    initErrorLabels();
+                    GoToExerices();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+        }
     }
 
     @FXML
     public void handleExerciceEdit(){
+        initErrorLabels();
+        if (controleDeSaisi()) {
+            String exerciseName = exercicenamefield.getText();
+            int exerciseProductID = Integer.parseInt(exerciceproductidfield.getText());
+            String exerciseDescription = exercicedescfield.getText();
+            String targetValue = getSelectedValue(target);
+            String typeValue = getSelectedValue(type);
+            String intensityValue = getSelectedValue(intensity);
+            String equipmentNeededValue = getSelectedValue(equipmentneeded);
+            String exerciceimgfieldText = exerciceimgfield.getText();
 
-        String exerciseName = exercicenamefield.getText();
-        int exerciseProductID = Integer.parseInt(exerciceproductidfield.getText());
-        String exerciseDescription = exercicedescfield.getText();
-        String targetValue = getSelectedValue(target);
-        String typeValue = getSelectedValue(type);
-        String intensityValue = getSelectedValue(intensity);
-        String equipmentNeededValue = getSelectedValue(equipmentneeded);
-        String exerciceimgfieldText=exerciceimgfield.getText();
+            Exercice exercice = new Exercice(instance.SelectedExerciceid, exerciseProductID, exerciseName, targetValue, typeValue, exerciseDescription, exerciceimgfieldText, intensityValue, equipmentNeededValue);
 
-        Exercice exercice =new Exercice(instance.SelectedExerciceid,exerciseProductID,exerciseName,targetValue,typeValue,exerciseDescription,exerciceimgfieldText,intensityValue,equipmentNeededValue);
+            try {
+                exerciseService.modifier(exercice);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
-        try {
-            exerciseService.modifier(exercice);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            initExerciseinputs();
+            initErrorLabels();
+            GoToExerices();
         }
-
-        initExerciseinputs();
-        GoToExerices();
-
     }
 
     @FXML

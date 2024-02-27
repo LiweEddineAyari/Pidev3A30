@@ -12,6 +12,8 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 
 public class ProductItemCard {
+    private static ProductItemCard instance = new ProductItemCard();
+    public static ProductItemCard getInstance(){return  instance ;}
 
     @FXML
     private VBox productCardItem;
@@ -29,7 +31,7 @@ public class ProductItemCard {
     Product product;
     private ProductListener listener;
     private ShoppingCart shoppingCart;
-
+    int counter=0;
 
 
     public void setData(Product product, ProductListener listener) {
@@ -43,12 +45,14 @@ public class ProductItemCard {
     private void handleViewDetailsButton() {
         if (listener != null) {
             listener.onViewDetails(product);
+
         }
     }
 
 
 
     public void setShoppingCart(ShoppingCart shoppingCart) {
+
         this.shoppingCart = shoppingCart;
     }
 
@@ -56,6 +60,13 @@ public class ProductItemCard {
     private void handleShopButton() {
         if (shoppingCart != null && product != null) {
             shoppingCart.addToCart(product);
+            instance.counter++;
+
+            if (listener != null) {
+                System.out.println("counter : "+instance.counter);
+                listener.onPressShopAdd(instance.counter);
+            }
+
         }
     }
 

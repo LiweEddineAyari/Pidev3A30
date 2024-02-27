@@ -288,7 +288,7 @@
                         </Button>
                      </children>
                   </Pane>
-                  <Button fx:id="productPageBtn11" mnemonicParsing="false" prefHeight="44.0" prefWidth="269.0" text="    Planning" textFill="RED">
+                  <Button fx:id="productPageBtn11" mnemonicParsing="false" onAction="#PlanningPageLoad" prefHeight="44.0" prefWidth="269.0" text="    Planning" textFill="RED">
                      <font>
                         <Font name="Arial Rounded MT Bold" size="20.0" />
                      </font>

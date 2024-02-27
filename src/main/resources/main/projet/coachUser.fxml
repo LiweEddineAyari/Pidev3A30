@@ -62,13 +62,13 @@
                   </Label>
                   <ScrollPane fx:id="CoachChatScrollPane" prefHeight="498.0" prefWidth="702.0">
                      <content>
-                        <VBox fx:id="messagesContainer" alignment="CENTER_LEFT" prefWidth="695.0" />
+                        <VBox fx:id="messagesContainer" alignment="CENTER_LEFT" prefWidth="695.0" styleClass="messagesContainer" />
                      </content>
                   </ScrollPane>
                   <HBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <TextField fx:id="messageField" maxWidth="-Infinity" prefHeight="37.0" prefWidth="590.0" />
-                        <Button mnemonicParsing="false" onAction="#handleModifierMessage" styleClass="orangebtn" text="Edit" />
+                        <Button fx:id="editMsgbtn" mnemonicParsing="false" onAction="#handleModifierMessage" styleClass="orangebtn" text="Edit" />
                         <Button mnemonicParsing="false" onAction="#handleSendMessage" styleClass="orangebtn" text="Send" />
                         <Button mnemonicParsing="false" onAction="#handleClearConversation" styleClass="orangebtn" text="Clear Conversation" />
                      </children>

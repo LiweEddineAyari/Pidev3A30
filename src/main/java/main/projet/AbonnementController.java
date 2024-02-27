@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class AbonnementController implements Initializable {
 
@@ -249,7 +250,6 @@ public void GoToabonnementPage(){
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //initialisation de tableview abonnement
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        iduserColumn.setCellValueFactory(new PropertyValueFactory<>("iduser"));
         idcategoryColumn.setCellValueFactory(new PropertyValueFactory<>("idcategory"));
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
         dureeColumn.setCellValueFactory(new PropertyValueFactory<>("duree"));
@@ -306,7 +306,7 @@ public void GoToabonnementPage(){
                                 throw new RuntimeException(e);
                             }
 
-
+                            reload_page();
 
                             // Add your delete action here
                         });
@@ -373,7 +373,7 @@ public void GoToabonnementPage(){
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
-
+                            reload_pageC();
                         });
 
                         editButton.setOnAction(event -> {
@@ -418,29 +418,30 @@ public void GoToabonnementPage(){
 
 
     @FXML
-    TextField id_userField,id_categoryField,nomField,dureeField,prixField;
+    TextField id_categoryField,nomField,dureeField,prixField;
 
     @FXML
     public void handleAddAbonnement(){
 
-        int iduser = Integer.parseInt(id_userField.getText());
         int idcategory =Integer.parseInt(id_categoryField.getText());
         String nom =  nomField.getText();
         int duree = Integer.parseInt(dureeField.getText());
         float prix = Float.parseFloat(prixField.getText()) ;
 
-        Abonnement abonnement = new Abonnement(-1, iduser, idcategory, nom, duree, prix,false);
+        Abonnement abonnement = new Abonnement(-1, idcategory, nom, duree, prix,false);
         AbonnementService abonnementService =new AbonnementService();
         System.out.println(abonnement);
 
         try {
             abonnementService.ajouter(abonnement);
+            System.out.println("check A handle add");
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         initAbonnementInputs();
-        //reload_page();
+        reload_page();
     }
 
     @FXML
@@ -460,7 +461,7 @@ public void GoToabonnementPage(){
         }
 
         initcategoryInputs();
-        //reload_page();
+        reload_pageC();
     }
     @FXML
    TextField nomcField;
@@ -476,14 +477,13 @@ public void GoToabonnementPage(){
 
     @FXML
     public void handleEditAbonnement(){
-        int iduser = Integer.parseInt(id_userField.getText());
         int idcategory =Integer.parseInt(id_categoryField.getText());
         String nom =  nomField.getText();
         int duree = Integer.parseInt(dureeField.getText());
         float prix = Float.parseFloat(prixField.getText()) ;
         boolean fidelite = true ;
 
-        Abonnement abonnement = new Abonnement( instance.SelectedSub, iduser, idcategory, nom, duree, prix,fidelite);
+        Abonnement abonnement = new Abonnement( instance.SelectedSub,  idcategory, nom, duree, prix,fidelite);
         AbonnementService abonnementService =new AbonnementService();
         System.out.println(abonnement);
 
@@ -494,7 +494,7 @@ public void GoToabonnementPage(){
         }
 
         initAbonnementInputs();
-        //reload_page();
+        reload_page();
 
     }
 
@@ -503,8 +503,7 @@ public void GoToabonnementPage(){
     @FXML
     public void handleEditCat(){
 
-        String nom =  nomField.getText();
-
+        String nom =  nomcField.getText();
 
         Category category = new Category( instance.Selectedcategory, nom);
 
@@ -519,24 +518,16 @@ public void GoToabonnementPage(){
         }
 
         initcategoryInputs();
-        //reload_page();
+        reload_pageC();
 
     }
 
     void initAbonnementInputs(){
-        id_userField.setText("");
         id_categoryField.setText("");
         nomField.setText("");
         dureeField.setText("");
         prixField.setText("");
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        iduserColumn.setCellValueFactory(new PropertyValueFactory<>("id_user"));
-        idcategoryColumn.setCellValueFactory(new PropertyValueFactory<>("id_category"));
-        nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
-        dureeColumn.setCellValueFactory(new PropertyValueFactory<>("duree"));
-        prixColumn.setCellValueFactory(new PropertyValueFactory<>("prix"));
-        fideliteColumn.setCellValueFactory(new PropertyValueFactory<>("fidelite"));
 
 
     }
@@ -544,7 +535,6 @@ public void GoToabonnementPage(){
     public void GoToAccountAbonnementPagee(MouseEvent mouseEvent) {
     }
     void fillSubinputs(Abonnement abonnement){
-        id_userField.setText(String.valueOf(abonnement.getId()));
         id_categoryField.setText(String.valueOf(abonnement.getIdcategory()));
         nomField.setText(abonnement.getNom());
         dureeField.setText(String.valueOf(abonnement.getDuree()));
@@ -554,9 +544,42 @@ public void GoToabonnementPage(){
 
     }
     void fillcatinputs(Category category){
-        id_userField.setText(String.valueOf(category.getId()));
         nomField.setText(category.getNom());
 
 
     }
+
+    @FXML
+    public void reload_page(){
+
+        {
+            try {
+                abonnements = abonnementService.afficher();
+                abonnementTableView.setItems(null);
+                abonnementTableView.setItems(abonnements);
+                abonnementTableView.refresh();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        GoToabonnementPage();
+
+    }
+    @FXML
+    public void reload_pageC(){
+
+        {
+            try {
+               categories = categoryService.afficher();
+                CategoryTableView.setItems(null);
+                CategoryTableView.setItems(categories);
+                CategoryTableView.refresh();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        GoToCategoriesPage();
+
+    }
+
 }

@@ -30,9 +30,9 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleLikeButton" prefHeight="46.0" prefWidth="61.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+            <Button fx:id="likebtn" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#handleLikeButton" prefHeight="46.0" prefWidth="61.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
                <graphic>
-                  <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="likebtnimg" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@icons/like.png" />
                      </image>

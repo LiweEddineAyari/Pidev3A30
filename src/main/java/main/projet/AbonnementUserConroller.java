@@ -1,6 +1,7 @@
 package main.projet;
 
 import entity.Abonnement;
+import entity.Account;
 import interfaces.AbonnementListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,12 +14,28 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import services.AbonnementService;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class AbonnementUserConroller implements Initializable, AbonnementListener {
+    private static AbonnementUserConroller instance = new AbonnementUserConroller();
+    public static AbonnementUserConroller getInstance() {
+        return instance;
+    }
+
+    public  Abonnement selectedAbonnement;
+    AbonnementService abonnementService = new AbonnementService();
+
+    AppController appControllerinstance=AppController.getInstance();
+
+    Account user;// user
+
+
 
     @FXML
     Pane PaymentPage;
@@ -35,18 +52,25 @@ public class AbonnementUserConroller implements Initializable, AbonnementListene
     Label totalPaymentPage;
 
 
-
-    ObservableList<Abonnement> Abonnements= FXCollections.observableArrayList(
-            new Abonnement(1, 1, 101, "Gold Membership", 3, 49.99f, true),
-            new Abonnement(2, 2, 102, "Silver Membership", 6, 29.99f, false),
-            new Abonnement(3, 3, 103, "Bronze Membership", 12, 19.99f, true),
-            new Abonnement(4, 4, 104, "Platinum Membership", 1, 99.99f, false),
-            new Abonnement(5, 5, 105, "Basic Membership", 24, 9.99f, true)
-    );
-
+    ObservableList<Abonnement> Abonnements;
+    {
+        try {
+            Abonnements = abonnementService.afficher();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        instance.user = appControllerinstance.account;
+        {
+            try {
+                Abonnements = abonnementService.afficher();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
         intitialisationAbonnementList();
     }
 
@@ -97,7 +121,27 @@ public class AbonnementUserConroller implements Initializable, AbonnementListene
     public void onViewPaymentAbonnement(Abonnement abonnement) {
         GoToPayment();
         totalPaymentPage.setText(String.valueOf(abonnement.getPrix()) + " TND");
-
+        instance.selectedAbonnement=abonnement;
 
     }
+
+
+
+
+    @FXML
+    void handleAbonner() throws SQLException {
+
+
+        System.out.println("check uno");
+        System.out.println("members:"+instance.selectedAbonnement.getMembres());
+        System.out.println("id:"+instance.user.getId());
+      abonnementService.addnewMember(instance.selectedAbonnement,instance.user.getId());
+
+    }
+
+
+
+
+
+
 }
