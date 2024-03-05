@@ -24,7 +24,7 @@ public class ExerciceItemCard {
      Label type;
 
     @FXML
-    Button likebtn;
+    Button liknebtn;
     @FXML
     ImageView likebtnimg;
 
