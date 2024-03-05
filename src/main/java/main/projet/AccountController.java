@@ -251,6 +251,7 @@ public class AccountController implements Initializable {
 
         AddAdminPagee.setVisible(false);
         AddAdminPagee.setManaged(false);
+        AddAdminPagee.setManaged(false);
 
     }
 }
