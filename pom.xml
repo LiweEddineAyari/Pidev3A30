@@ -69,7 +69,7 @@
                 <executions>
                     <execution>
                         <!-- Default configuration for running with: mvn clean javafx:run -->
-                        <id>default-cli</id>
+                        <id>dnefault-cli</id>
                         <configuration>
                             <mainClass>main.projet/main.projet.HelloApplication</mainClass>
                             <launcher>app</launcher>
