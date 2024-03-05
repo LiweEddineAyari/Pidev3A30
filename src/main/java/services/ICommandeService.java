@@ -1,6 +1,7 @@
 package services;
 
 import entity.Commande;
+import entity.Paiment;
 import javafx.collections.ObservableList;
 
 import java.sql.SQLException;
@@ -28,6 +29,5 @@ public interface ICommandeService<Commande,Panier,PanierProduct> {
     void modifier(Commande commande)throws SQLException;
 
 
-
-
+    ObservableList<entity.Commande> searchCommande(String status, String minMontantText, String maxMontantText) throws SQLException;
 }

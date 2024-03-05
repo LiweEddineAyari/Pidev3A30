@@ -76,7 +76,7 @@
                                 </HBox>
                                 <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
                                     <children>
-                                        <Button fx:id="valider" mnemonicParsing="false" onAction="#handleEditProduct" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="edit">
+                                        <Button fx:id="valider" mnemonicParsing="false" onAction="#handleEditAccount" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="edit">
                                             <HBox.margin>
                                                 <Insets left="50.0" />
                                             </HBox.margin>

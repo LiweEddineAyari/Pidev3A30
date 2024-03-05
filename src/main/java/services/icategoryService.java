@@ -11,6 +11,11 @@ public interface icategoryService<Category> {
     void modifier(Category category) throws SQLException;
     void supprimer(int id) throws SQLException;
     ObservableList<entity.Category> afficher() throws SQLException;
+
+    ObservableList<String> GetCategoriesNames() throws SQLException;
+
+    int getCategoryIdByName(String categoryName) throws SQLException;
+
     ObservableList<entity.Category> search(String name) throws SQLException;
     public ObservableList<entity.Category> searchU(String name) throws SQLException;
     public ObservableList<entity.Category> getAccountByAccountId(int AccountId) throws SQLException ;

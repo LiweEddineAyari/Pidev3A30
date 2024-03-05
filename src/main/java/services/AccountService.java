@@ -2,7 +2,7 @@
 package services;
 
 import entity.Account;
-import entity.Exercice;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import utils.MyDataBase;
@@ -12,8 +12,10 @@ import java.sql.PreparedStatement;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
-public class AccountService implements InterfaceAccount <Account>{
+public class AccountService implements InterfaceAccount<Account> {
 
     private Connection connection;
 
@@ -58,6 +60,19 @@ public class AccountService implements InterfaceAccount <Account>{
             throw new SQLException("Error editing account: " + e.getMessage());
         }
     }
+    @Override
+    public void modifierP(String mail, String newPassword) throws SQLException {
+        String query = "UPDATE account SET  motpasse=? WHERE mail=?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1,newPassword );
+            preparedStatement.setString(2,mail);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLException("Error editing account: " + e.getMessage());
+        }
+    }
 
 
     @Override
@@ -91,14 +106,15 @@ public class AccountService implements InterfaceAccount <Account>{
 
                 Account account= new Account();
                 if(titleString.equals("user")){
-                     account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.user);
+                    account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.user);
                 }
                 if(titleString.equals("admin")){
-                     account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.admin);
+                    account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.admin);
 
                 }
                 if(titleString.equals("coach")){
-                     account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.coach);
+                    account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.coach);
+                    System.out.println("titleString : "+titleString);
                 }
 
                 accountList.add(account);
@@ -108,30 +124,52 @@ public class AccountService implements InterfaceAccount <Account>{
     }
 
     @Override
-    public ObservableList<Account> search(String name) throws SQLException {
+    public ObservableList<Account> search(String name, int minage, int maxage) throws SQLException {
         ObservableList<Account> accounts = FXCollections.observableArrayList();
-        String query = "SELECT * FROM account WHERE name LIKE ?";
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM account WHERE name LIKE ?");
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setString(1, name + "%");
+        if (minage >= 0) {
+            queryBuilder.append(" AND age >= ?");
+        }
+
+        if (maxage >= 0) {
+            queryBuilder.append(" AND age <= ?");
+        }
+
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(queryBuilder.toString())) {
+            preparedStatement.setString(1, "%" + name + "%");
+
+            int parameterIndex = 2;
+
+            if (minage >= 0) {
+                preparedStatement.setInt(parameterIndex++, minage);
+            }
+
+            if (maxage >= 0) {
+                preparedStatement.setInt(parameterIndex, maxage);
+            }
+
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
+                String nom = resultSet.getString("name");
                 String prenom = resultSet.getString("prenom");
                 int age = resultSet.getInt("age");
+
                 String mail = resultSet.getString("mail");
                 String motpasse = resultSet.getString("motpasse");
-                String titleString= resultSet.getString("title"); // Retrieve the title as a String
+                String titleString = resultSet.getString("title");
 
                 // Convert the String to the Title enum using a method in your Title enum
                 Account.Title title = Account.Title.fromString(titleString);
 
-                Account account = new Account(id, name, prenom, age, mail, motpasse,title );
+                Account account = new Account(id, nom, prenom, age, mail, motpasse, title);
                 accounts.add(account);
             }
         } catch (SQLException e) {
-            throw new SQLException("Error searching for exercise: " + e.getMessage());
+            throw new SQLException("Error searching for account: " + e.getMessage());
         }
 
         return accounts;
@@ -143,9 +181,54 @@ public class AccountService implements InterfaceAccount <Account>{
     }
 
     @Override
-    public ObservableList<Account> getAccountByAccountId(int AccountId) throws SQLException {
+    public Map<String, Integer> getUserTypeStatistics() throws SQLException {
+        Map<String, Integer> userTypeStatistics = new HashMap<>();
+
+        String query = "SELECT title, COUNT(*) AS count FROM account GROUP BY title";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String userType = resultSet.getString("title");
+                int count = resultSet.getInt("count");
+                userTypeStatistics.put(userType, count);
+            }
+        }
+
+        return userTypeStatistics;
+    }
+
+    public Account getAccountByAccountId(int accountId) throws SQLException {
+        String query = "SELECT * FROM account WHERE id = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, accountId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String prenom = resultSet.getString("prenom");
+                int age = resultSet.getInt("age");
+                String mail = resultSet.getString("mail");
+                String motpasse = resultSet.getString("motpasse");
+                String titleString = resultSet.getString("title"); // Retrieve the title as a String
+
+                // Convert the String to the Title enum using a method in your Title enum
+                Account.Title title = Account.Title.fromString(titleString);
+
+                return new Account(accountId, name, prenom, age, mail, motpasse, title);
+            }
+        } catch (SQLException e) {
+            throw new SQLException("Error searching for account: " + e.getMessage());
+        }
+
+        // Return null if no account is found
         return null;
     }
+
+
+
 
     @Override
     public ObservableList<Account> getAccountByRole(Enum role, int count) throws SQLException {
@@ -166,18 +249,21 @@ public class AccountService implements InterfaceAccount <Account>{
                 int age = resultSet.getInt("age");
                 String mail = resultSet.getString("mail");
                 String motpasse = resultSet.getString("motpasse");
-                String titleString = resultSet.getString("title"); // Retrieve the title as a String
+                String titleString = resultSet.getString("title");
 
                 Account account;
                 switch (titleString) {
                     case "user":
                         account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.user);
+                        Account.setCurrentid(id);
                         break;
                     case "admin":
                         account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.admin);
+                        Account.setCurrentid(id);
                         break;
                     case "coach":
                         account = new Account(id, name, prenom, age, mail, motpasse, Account.Title.coach);
+                        Account.setCurrentid(id);
                         break;
                     default:
                         throw new IllegalArgumentException("Invalid account title: " + titleString);

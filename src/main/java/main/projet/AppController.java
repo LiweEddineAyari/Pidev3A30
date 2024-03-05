@@ -208,5 +208,48 @@ public class AppController  {
         mainContainer.getChildren().setAll(userRoot);
     }
 
+    @FXML
+    public void gymnterfaceLoad() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gym.fxml"));
+        Parent userRoot = loader.load();
+        // Set the loaded FXML as a child of mainContainer
+        mainContainer.getChildren().setAll(userRoot);
+    }
+
+    @FXML
+    public void gymuserinterfaceLoad() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("gym_user.fxml"));
+        Parent userRoot = loader.load();
+        // Set the loaded FXML as a child of mainContainer
+        mainContainer.getChildren().setAll(userRoot);
+    }
+
+
+    @FXML
+    public void gymcoachinterfaceLoad() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("gymcoach.fxml"));
+        Parent userRoot = loader.load();
+        // Set the loaded FXML as a child of mainContainer
+        mainContainer.getChildren().setAll(userRoot);
+    }
+
+    @FXML
+    public void notifAdmin() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("notif.fxml"));
+        Parent userRoot = loader.load();
+        // Set the loaded FXML as a child of mainContainer
+        mainContainer.getChildren().setAll(userRoot);
+    }
+
+
+    @FXML
+    public void ReservationUserInterfaceLoad(ActionEvent actionEvent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("listereservations.fxml"));
+        Parent userRoot = loader.load();
+        mainContainer.getChildren().setAll(userRoot);
+
+
+    }
 
 }

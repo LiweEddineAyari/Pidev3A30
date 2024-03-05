@@ -16,13 +16,14 @@ public class PaimentService implements IPaimentService<Paiment>{
 
     @Override
     public void ajouter(Paiment paiment) throws SQLException {
-        String sql = "INSERT INTO Paiment (iduser, montant, cartname, CartCode) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Paiment (iduser, montant, cartname, CartCode,date) VALUES (?, ?, ?, ?,?)";
 
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, paiment.getIduser());
             statement.setFloat(2, paiment.getMontant());
             statement.setString(3, paiment.getCartname());
             statement.setString(4, paiment.getCartCode());
+            statement.setDate(5, paiment.getDate());
 
             statement.executeUpdate();
 
@@ -54,8 +55,9 @@ public class PaimentService implements IPaimentService<Paiment>{
                     float montant = resultSet.getFloat("montant");
                     String cartname = resultSet.getString("cartname");
                     String cartCode = resultSet.getString("CartCode");
+                    Date date = resultSet.getDate("date");
 
-                    Paiment paiment = new Paiment(id, iduser, montant, cartname, cartCode);
+                    Paiment paiment = new Paiment(id, iduser, montant, cartname, cartCode,date);
                     paiments.add(paiment);
                 }
             }
@@ -77,6 +79,8 @@ public class PaimentService implements IPaimentService<Paiment>{
             statement.executeUpdate();
         }
     }
+
+
 
 
 

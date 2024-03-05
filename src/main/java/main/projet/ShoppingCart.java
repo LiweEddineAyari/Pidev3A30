@@ -201,9 +201,15 @@ public class ShoppingCart implements Initializable {
        String cardName = cardNameField.getText();
        String cardCode = cardCodeField.getText();
 
-       Paiment paiment = new Paiment(-1,instance.user.getId(),instance.montantPaiment,cardName,cardCode);
+       Paiment paiment = new Paiment(-1,instance.user.getId(),instance.montantPaiment,cardName,cardCode,getCurrentDate());
        paimentService.ajouter(paiment);//ajout
          GoToShopPage();
+
+         instance.cartItems.clear();
+         shoppingcartGrid.getChildren().clear();
+         ProductItemCard.getInstance().counter=0;
+
+
 
      }
 
@@ -215,5 +221,11 @@ public class ShoppingCart implements Initializable {
         return "ShoppingCart{" +
                 "cartItems=" + cartItems +
                 '}';
+    }
+
+
+    private java.sql.Date getCurrentDate() {
+        java.util.Date today = Calendar.getInstance().getTime();
+        return new java.sql.Date(today.getTime());
     }
 }

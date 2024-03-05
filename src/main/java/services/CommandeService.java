@@ -1,6 +1,7 @@
 package services;
 
 import entity.Commande;
+import entity.Paiment;
 import entity.Panier;
 import entity.PanierProduct;
 import javafx.collections.FXCollections;
@@ -57,15 +58,6 @@ public class CommandeService implements ICommandeService<Commande, Panier,Panier
            statement.executeUpdate();
         }
     }
-
-
-
-
-
-
-
-
-
 
 
     //panier produit
@@ -173,5 +165,50 @@ public class CommandeService implements ICommandeService<Commande, Panier,Panier
         }
     }
 
+
+
+
+
+
+    @Override
+
+    public ObservableList<Commande> searchCommande(String status, String minMontantText, String maxMontantText) throws SQLException {
+        ObservableList<Commande> commandes = FXCollections.observableArrayList();
+
+        StringBuilder queryBuilder = new StringBuilder("SELECT * FROM `commande` WHERE 1");
+
+        if (!status.isEmpty()) {
+            queryBuilder.append(" AND status = '").append(status).append("'");
+        }
+
+        if (!minMontantText.isEmpty()) {
+            float minMontant = Float.parseFloat(minMontantText);
+            queryBuilder.append(" AND montant >= ").append(minMontant);
+        }
+
+        if (!maxMontantText.isEmpty()) {
+            float maxMontant = Float.parseFloat(maxMontantText);
+            queryBuilder.append(" AND montant <= ").append(maxMontant);
+        }
+
+        // Use the dynamic query in your SQL statement
+        String sql = queryBuilder.toString();
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int iduser = resultSet.getInt("iduser");
+                int idpanier = resultSet.getInt("idpanier");
+                float montant = resultSet.getFloat("montant");
+                String statut = resultSet.getString("statut");
+
+                Commande commande = new Commande(id, iduser, idpanier, montant, statut);
+                commandes.add(commande);
+            }
+        }
+
+        return commandes;
+    }
 
 }

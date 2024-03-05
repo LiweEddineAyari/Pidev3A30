@@ -2,6 +2,7 @@ package main.projet;
 
 import entity.Account;
 
+import entity.notif;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import services.AccountService;
+import services.notifService;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -36,7 +38,11 @@ public class UserController implements Initializable {
     @FXML
     Pane AddUserPage,EditUserPage;
 
+    services.notifService notifService = new notifService();
+    AccountService accountService = new AccountService();
 
+
+    private Account currentAccount;
 
 
 
@@ -62,7 +68,7 @@ public class UserController implements Initializable {
 
 
 
-    AccountService accountService =new AccountService();
+
     ObservableList<Account> users;
     {
         try {
@@ -139,6 +145,11 @@ public class UserController implements Initializable {
         mailColumn.setCellValueFactory(new PropertyValueFactory<>("mail"));
         actionsColumn.setCellFactory(createButtonCellFactory());
         userTableView.setItems(users);
+        try {
+            currentAccount = accountService.getAccountByAccountId(Account.getCurrentid());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
     public Callback<TableColumn<Account, Void>, TableCell<Account, Void>> createButtonCellFactory() {
@@ -157,6 +168,12 @@ public class UserController implements Initializable {
                             System.out.println("Delete: " + user.getId());
                             try {
                                 accountService.supprimer(user.getId());
+                                notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has deleted a user ","admin");
+                                try {
+                                    notifService.ajouter(n);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 reload_page();
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
@@ -254,6 +271,12 @@ public class UserController implements Initializable {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has added a user ","admin");
+        try {
+            notifService.ajouter(n);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         initAdminInputs();
         reload_page();
@@ -307,6 +330,12 @@ public class UserController implements Initializable {
             accountService.modifier(account);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+        notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has edited a user ","admin");
+        try {
+            notifService.ajouter(n);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
         initAdminInputs();

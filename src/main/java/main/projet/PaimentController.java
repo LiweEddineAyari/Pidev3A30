@@ -5,6 +5,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -15,9 +19,11 @@ import services.CommandeService;
 import services.PaimentService;
 
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PaimentController implements Initializable {
@@ -401,7 +407,7 @@ public class PaimentController implements Initializable {
             float montant = Float.parseFloat(montantString);
 
 
-            Paiment selectedPaiment = new Paiment(instance.selectedPaimentId, instance.iduser,montant,cardname,cardcode);
+            Paiment selectedPaiment = new Paiment(instance.selectedPaimentId, instance.iduser,montant,cardname,cardcode,getCurrentDate());
 
             try {
                 // Update the Paiment record in the database
@@ -419,6 +425,41 @@ public class PaimentController implements Initializable {
 
 
 
+
+    @FXML
+    TextField paimentSearchField,minmontant,maxmontant;
+    @FXML
+    ToggleGroup type11;
+
+    @FXML
+    public void handleSearchCommande(){
+
+        String status = getSelectedValue(type1);
+        String minmontantText = minmontant.getText();
+        String maxmontantText = maxmontant.getText();
+
+        try {
+            commandes =commandeService.searchCommande(status,minmontantText,maxmontantText);
+            commandeTableView.setItems(null);
+            commandeTableView.setItems(commandes);
+            commandeTableView.refresh();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+
+
+
+
+
+    private Date getCurrentDate() {
+        java.util.Date today = Calendar.getInstance().getTime();
+        return new Date(today.getTime());
+    }
 
 
     public String getSelectedValue(ToggleGroup group) {
@@ -455,5 +496,76 @@ public class PaimentController implements Initializable {
 
 
 
+    @FXML
+    VBox SatisticsVbox;
+    @FXML
+    Pane Satistics;
+
+    @FXML
+    void StaisticsPage(){
+        System.out.println("stat");
+        //graphic
+        Paimentaffichage.setVisible(false);
+        Paimentaffichage.setManaged(false);
+        EditPaimentPage.setVisible(false);
+        EditPaimentPage.setManaged(false);
+        Commandeaffichage.setVisible(false);
+        Commandeaffichage.setManaged(false);
+        EditCommandePage.setVisible(false);
+        EditCommandePage.setManaged(false);
+
+        Satistics.setVisible(true);
+        Satistics.setManaged(true);
+
+        SatisticsVbox.getChildren().clear();
+        Label titleLabel = new Label("Income of every month");
+        titleLabel.getStyleClass().add("label-style");
+        titleLabel.getStyleClass().add("title");
+
+
+
+        Map<String,Float> map = getIncomeDataByMonth();
+
+
+        // Create BarChart Data
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+
+        for (Map.Entry<String, Float> entry : map.entrySet()) {
+            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
+
+        ObservableList<XYChart.Series<String, Number>> barChartData = FXCollections.observableArrayList();
+        barChartData.add(series);
+
+        barChart.setData(barChartData);
+        SatisticsVbox.getChildren().add(titleLabel);
+        SatisticsVbox.getChildren().add(barChart);
+
+    }
+
+    private Map<String, Float> getIncomeDataByMonth() {
+        Map<String, Float> incomeData = new TreeMap<>(Comparator.comparing(this::getMonthOrder));
+
+        // Replace this with actual logic to fetch payment data from your database or service
+
+        for (Paiment payment : paiments) {
+            LocalDate paymentDate = payment.getDate().toLocalDate(); // Assuming you have a method to get payment date
+            Month month = paymentDate.getMonth();
+            String monthName = month.toString();
+
+            // Update the income for the corresponding month
+            incomeData.put(monthName, incomeData.getOrDefault(monthName, 0.f) + payment.getMontant());
+        }
+
+        return incomeData;
+    }
+
+
+    private int getMonthOrder(String monthName) {
+        return Month.valueOf(monthName.toUpperCase()).getValue();
+    }
 
 }

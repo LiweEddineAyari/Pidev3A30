@@ -3,12 +3,16 @@ package main.projet;
 import entity.Abonnement;
 import entity.Account;
 import entity.Category;
-import entity.Product;
+import entity.notif;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -16,21 +20,21 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
-import services.AbonnementService;
-import services.categoryService;
-
-import services.AccountService;
-import services.ProductService;
+import services.*;
 
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class AbonnementController implements Initializable {
 
     //table view Abonnement
+    private Account currentAccount; // added by firas used for notif
 
     @FXML
     TableView<Abonnement> abonnementTableView;
@@ -56,7 +60,14 @@ public class AbonnementController implements Initializable {
     @FXML
     VBox AbonnementsPage,CategoryPage;
     @FXML
-    Pane AddAbonnementPagee,AddCategoryPage;
+    Pane AddAbonnementPagee,AddCategoryPage,Satistics,Ban;
+    services.notifService notifService = new notifService();
+    AccountService accountService = new AccountService();
+    AbonnementService abonnementService =new AbonnementService();
+
+     @FXML
+     ComboBox abonnementCombo,userCombo;
+
 
 
 
@@ -72,8 +83,9 @@ public class AbonnementController implements Initializable {
     TableColumn<Category,Void> actionsColumncategory;
 
 
-    AbonnementService abonnementService =new AbonnementService();
+
     categoryService categoryService = new categoryService();
+
 
 
     ObservableList<Abonnement> abonnements;
@@ -99,11 +111,35 @@ public class AbonnementController implements Initializable {
         }
     }
 
+    ObservableList<String> categoriesnames;
 
 
 
 
 // navigation Abonnement
+
+
+    @FXML
+    public void banPage(){
+        AbonnementsPage.setVisible(false);
+        AbonnementsPage.setManaged(false);
+
+        AddCategoryPage.setVisible(false);
+        AddCategoryPage.setManaged(false);
+
+        CategoryPage.setVisible(false);
+        CategoryPage.setManaged(false);
+
+        AddAbonnementPagee.setVisible(false);
+        AddAbonnementPagee.setManaged(false);
+
+        Satistics.setVisible(false);
+        Satistics.setManaged(false);
+
+        Ban.setVisible(true);
+        Ban.setManaged(true);
+
+    }
 @FXML
 public void GoToabonnementPage(){
     AbonnementsPage.setVisible(true);
@@ -117,6 +153,12 @@ public void GoToabonnementPage(){
 
     AddAbonnementPagee.setVisible(false);
     AddAbonnementPagee.setManaged(false);
+
+    Satistics.setVisible(false);
+    Satistics.setManaged(false);
+
+    Ban.setVisible(false);
+    Ban.setManaged(false);
 
 
 }
@@ -136,7 +178,11 @@ public void GoToabonnementPage(){
         AddAbonnementPagee.setVisible(false);
         AddAbonnementPagee.setManaged(false);
 
+        Satistics.setVisible(false);
+        Satistics.setManaged(false);
 
+        Ban.setVisible(false);
+        Ban.setManaged(false);
 
 
     }
@@ -164,6 +210,10 @@ public void GoToabonnementPage(){
          AddAbonnementPagee.setVisible(false);
          AddAbonnementPagee.setManaged(false);
 
+         Satistics.setVisible(false);
+         Satistics.setManaged(false);
+         Ban.setVisible(false);
+         Ban.setManaged(false);
 
 
      }
@@ -193,6 +243,8 @@ public void GoToabonnementPage(){
 
         AddAbonnementPagee.setVisible(true);
         AddAbonnementPagee.setManaged(true);
+        Ban.setVisible(false);
+        Ban.setManaged(false);
 
     }
 
@@ -215,7 +267,8 @@ public void GoToabonnementPage(){
 
         AddAbonnementPagee.setVisible(true);
         AddAbonnementPagee.setManaged(true);
-
+        Ban.setVisible(false);
+        Ban.setManaged(false);
     }
 
     public void showEditcatbtn(){
@@ -238,6 +291,8 @@ public void GoToabonnementPage(){
 
         AddAbonnementPagee.setVisible(false);
         AddAbonnementPagee.setManaged(false);
+        Ban.setVisible(false);
+        Ban.setManaged(false);
 
     }
 
@@ -265,6 +320,45 @@ public void GoToabonnementPage(){
         actionsColumncategory.setCellFactory(createButtonCellFactoryCategory());
         CategoryTableView.setItems(categories);
 
+        try {
+            currentAccount = accountService.getAccountByAccountId(Account.getCurrentid());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+
+
+        try {
+             categoriesnames = categoryService.GetCategoriesNames();
+            // Set the obtained category names to the ComboBox
+            abonnementComboBox.setItems(categoriesnames);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+
+        try {
+            // Get user names and set as ComboBox items
+            ObservableList<String> abonnementsNames = abonnements.stream()
+                    .map(Abonnement::getNom)  // Assuming there is a getName() method in the Account class
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));
+
+            ObservableList<String> userNames = accountService.afficher().stream()
+                    .filter(account -> account.getTitle().equals(Account.Title.user))
+                    .map(Account::getNom)  // Assuming there is a getName() method in the Account class
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));
+
+
+
+            userCombo.setItems(userNames);
+            abonnementCombo.setItems(abonnementsNames);
+        } catch (SQLException e) {
+            // Handle exception appropriately based on your application's error handling strategy
+            e.printStackTrace();
+        }
 
 
     }
@@ -368,6 +462,12 @@ public void GoToabonnementPage(){
                             // Add your delete action here
                             try {
                                 categoryService.supprimer(category.getId());
+                                notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has deleted a category ","admin");
+                                try {
+                                    notifService.ajouter(n);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 // reload_page();
 
                             } catch (SQLException e) {
@@ -418,31 +518,49 @@ public void GoToabonnementPage(){
 
 
     @FXML
-    TextField id_categoryField,nomField,dureeField,prixField;
+    TextField nomField,dureeField,prixField;
+    @FXML
+    ComboBox abonnementComboBox;
+
 
     @FXML
-    public void handleAddAbonnement(){
+    public void handleAddAbonnement() throws SQLException {
+        String selectedCategory = (String) abonnementComboBox.getValue();
+        int idcategory=-1;
 
-        int idcategory =Integer.parseInt(id_categoryField.getText());
-        String nom =  nomField.getText();
-        int duree = Integer.parseInt(dureeField.getText());
-        float prix = Float.parseFloat(prixField.getText()) ;
+        if (controleDeSaisi()) {
+            if(selectedCategory!=null){
+                idcategory =categoryService.getCategoryIdByName(selectedCategory);
+            }
+            else {
+                idcategory=-1;
+            }
+            String nom = nomField.getText();
+            int duree = Integer.parseInt(dureeField.getText());
+            float prix = Float.parseFloat(prixField.getText());
 
-        Abonnement abonnement = new Abonnement(-1, idcategory, nom, duree, prix,false);
-        AbonnementService abonnementService =new AbonnementService();
-        System.out.println(abonnement);
+            Abonnement abonnement = new Abonnement(-1, idcategory, nom, duree, prix, false);
+            AbonnementService abonnementService = new AbonnementService();
+            System.out.println(abonnement);
 
-        try {
-            abonnementService.ajouter(abonnement);
-            System.out.println("check A handle add");
+            try {
+                abonnementService.ajouter(abonnement);
+                System.out.println("check A handle add");
 
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            // notif t3 firas ****************
+            notif n = new notif(-1, currentAccount.getNom(), currentAccount.getNom() + " has added a sub ", "admin");
+            try {
+                notifService.ajouter(n);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
-
-        initAbonnementInputs();
-        reload_page();
     }
+
 
     @FXML
     public void handleAddCategory(){
@@ -459,6 +577,13 @@ public void GoToabonnementPage(){
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        // notif t3 firas ****************
+        notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has added a category ","admin");
+        try {
+            notifService.ajouter(n);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         initcategoryInputs();
         reload_pageC();
@@ -474,30 +599,100 @@ public void GoToabonnementPage(){
 
 
     }
-
-    @FXML
-    public void handleEditAbonnement(){
-        int idcategory =Integer.parseInt(id_categoryField.getText());
-        String nom =  nomField.getText();
-        int duree = Integer.parseInt(dureeField.getText());
-        float prix = Float.parseFloat(prixField.getText()) ;
-        boolean fidelite = true ;
-
-        Abonnement abonnement = new Abonnement( instance.SelectedSub,  idcategory, nom, duree, prix,fidelite);
-        AbonnementService abonnementService =new AbonnementService();
-        System.out.println(abonnement);
-
-        try {
-            abonnementService.modifier(abonnement);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+    private boolean isCategoryComboBoxValid() {
+        String selectedCategory = abonnementComboBox.getValue().toString();
+        return selectedCategory != null && !selectedCategory.isEmpty();
+    }
+    private boolean controleDeSaisi() {
+        // Check if category ID is a positive integer
+        if (!isCategoryComboBoxValid()) {
+            showAlert("Please select a valid category.");
+            return false;
         }
 
-        initAbonnementInputs();
-        reload_page();
+        // Check if duree is a positive integer
+        if (!isPositiveInteger(dureeField.getText())) {
+            showAlert("Duration should be a positive integer.");
+            return false;
+        }
 
+        // Check if prix is a valid float value
+        if (!isValidFloat(prixField.getText())) {
+            showAlert("Price should be a valid numeric value.");
+            return false;
+        }
+        // Additional checks if needed...
+        // If all checks pass, return true
+        return true;
     }
 
+    // Helper method to check if a string represents a positive integer
+    private boolean isPositiveInteger(String input) {
+        try {
+            int value = Integer.parseInt(input);
+            return value > 0;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    // Helper method to check if a string represents a valid float value
+    private boolean isValidFloat(String input) {
+        try {
+            float value = Float.parseFloat(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    // Helper method to show an alert for validation messages
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(message);
+        alert.setTitle("Validation Error");
+        alert.setHeaderText(null);
+        alert.showAndWait();
+    }
+
+    @FXML
+    public void handleEditAbonnement() throws SQLException {
+        int idcategory=-1;
+        String selectedCategory = (String) abonnementComboBox.getValue();
+
+        if (controleDeSaisi()) {
+            if(selectedCategory!=null){
+                idcategory =categoryService.getCategoryIdByName(selectedCategory);
+            }
+            else {
+                idcategory=-1;
+            }
+            String nom = nomField.getText();
+            int duree = Integer.parseInt(dureeField.getText());
+            float prix = Float.parseFloat(prixField.getText());
+            boolean fidelite = true;
+
+            Abonnement abonnement = new Abonnement(instance.SelectedSub, idcategory, nom, duree, prix, fidelite);
+            AbonnementService abonnementService = new AbonnementService();
+            System.out.println(abonnement);
+
+            try {
+                abonnementService.modifier(abonnement);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+
+            notif n = new notif(-1, currentAccount.getNom(), currentAccount.getNom() + " has edited a sub ", "admin");
+            try {
+                notifService.ajouter(n);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            initAbonnementInputs();
+            reload_page();
+        }
+    }
 
 
     @FXML
@@ -516,6 +711,13 @@ public void GoToabonnementPage(){
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        // notif t3 firas ****************
+        notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has edited a category ","admin");
+        try {
+            notifService.ajouter(n);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         initcategoryInputs();
         reload_pageC();
@@ -523,7 +725,6 @@ public void GoToabonnementPage(){
     }
 
     void initAbonnementInputs(){
-        id_categoryField.setText("");
         nomField.setText("");
         dureeField.setText("");
         prixField.setText("");
@@ -535,7 +736,6 @@ public void GoToabonnementPage(){
     public void GoToAccountAbonnementPagee(MouseEvent mouseEvent) {
     }
     void fillSubinputs(Abonnement abonnement){
-        id_categoryField.setText(String.valueOf(abonnement.getIdcategory()));
         nomField.setText(abonnement.getNom());
         dureeField.setText(String.valueOf(abonnement.getDuree()));
         prixField.setText(String.valueOf(abonnement.getPrix()));
@@ -580,6 +780,134 @@ public void GoToabonnementPage(){
         }
         GoToCategoriesPage();
 
+    }
+
+
+
+
+
+
+
+    @FXML
+    VBox SatisticsVbox;
+
+    @FXML
+    void StaisticsPage(){
+
+        //graphic
+        AbonnementsPage.setVisible(false);
+        AbonnementsPage.setManaged(false);
+
+        AddCategoryPage.setVisible(false);
+        AddCategoryPage.setManaged(false);
+
+        CategoryPage.setVisible(false);
+        CategoryPage.setManaged(false);
+
+        AddAbonnementPagee.setVisible(false);
+        AddAbonnementPagee.setManaged(false);
+
+        Satistics.setVisible(true);
+        Satistics.setManaged(true);
+
+        SatisticsVbox.getChildren().clear();
+        Label titleLabel = new Label("Number of Members");
+        titleLabel.getStyleClass().add("label-style");
+        titleLabel.getStyleClass().add("title");
+
+
+
+        Map<String,Integer> map = getCountOfMembersByCategory();
+
+
+        // Create BarChart Data
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        BarChart<String, Number> barChart = new BarChart<>(xAxis, yAxis);
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for (Map.Entry<String, Integer> entry : map.entrySet()) {
+            series.getData().add(new XYChart.Data<>(entry.getKey(), entry.getValue()));
+        }
+
+        ObservableList<XYChart.Series<String, Number>> barChartData = FXCollections.observableArrayList();
+        barChartData.add(series);
+
+        barChart.setData(barChartData);
+        SatisticsVbox.getChildren().add(titleLabel);
+        SatisticsVbox.getChildren().add(barChart);
+
+    }
+
+
+
+    //satistics
+    public Map<String, Integer> getCountOfMembersByCategory() {
+        Map<String, Integer> categoryMemberCount = new HashMap<>();
+
+
+        // Iterate through each Abonnement
+        for (Abonnement abonnement : abonnements) {
+            String category = null; // Replace with your actual method to get category
+            try {
+                category = abonnementService.getCategoryName(abonnement.getIdcategory());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            String members = abonnement.getMembres(); // Replace with your actual method to get members
+
+            // Parse the members string and count the number of members
+            int memberCount = members.split(",").length;
+
+            // Update the count in the map
+            categoryMemberCount.put(category, categoryMemberCount.getOrDefault(category, 0) + memberCount);
+        }
+
+        return categoryMemberCount;
+    }
+
+
+
+
+
+    @FXML
+    public void handleBan() {
+        try {
+            // Get the selected user name from the ComboBox
+            String selectedUserName = (String) userCombo.getValue();
+
+            // Get the selected abonnement name from the ComboBox
+            String selectedAbonnementName = (String) abonnementCombo.getValue();
+
+            // Get the ID of the selected user using streams
+            int selectedUserId = accountService.afficher().stream()
+                    .filter(user -> user.getNom().equals(selectedUserName))
+                    .findFirst()
+                    .map(Account::getId)
+                    .orElse(-1); // Replace -1 with a default value or handle appropriately
+
+            // Get the ID of the selected abonnement using streams
+            int selectedAbonnementId = abonnementService.afficher().stream()
+                    .filter(abonnement -> abonnement.getNom().equals(selectedAbonnementName))
+                    .findFirst()
+                    .map(Abonnement::getId)
+                    .orElse(-1); // Replace -1 with a default value or handle appropriately
+
+            // Now you have the IDs of the selected user and abonnement
+            System.out.println("Selected User ID: " + selectedUserId);
+            System.out.println("Selected Abonnement ID: " + selectedAbonnementId);
+
+
+            abonnementService.removeMember(selectedAbonnementId,selectedUserId);
+            GoToabonnementPage();
+            // Perform further actions as needed, such as blocking the user
+            // accountService.blockUser(selectedUserId);
+
+        } catch (SQLException e) {
+            // Handle potential SQL exceptions
+            e.printStackTrace();
+            System.out.println("Error handling ban.");
+        }
     }
 
 }

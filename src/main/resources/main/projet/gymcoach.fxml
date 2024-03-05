@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="coachInterfaces" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="7000.0" prefWidth="1331.0" stylesheets="@css/product.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.projet.gymcoach">
+    <children>
+        <VBox fx:id="gyminterface" prefHeight="907.0" prefWidth="1331.0">
+            <children>
+                <Pane fx:id="UpperSection" prefHeight="215.0" prefWidth="1331.0" styleClass="UpperSection" stylesheets="@css/product.css">
+                    <children>
+                        <TextField layoutX="159.0" layoutY="41.0" prefHeight="37.0" prefWidth="265.0" styleClass="search-field" stylesheets="@css/product.css" />
+                        <Button id="searchBtn" fx:id="productSearchBtn" layoutX="381.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="28.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css" />
+                        <Label layoutX="90.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="80.0" styleClass="label-style" stylesheets="@css/product.css" text="Searsh" />
+                        <ImageView fitHeight="31.0" fitWidth="35.0" layoutX="386.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@icons/search.png" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </Pane>
+                <Pane fx:id="ListContainer" prefHeight="803.0" prefWidth="1331.0" style="-fx-background-color: #1e1e1e;">
+                    <children>
+                        <Label layoutX="61.0" layoutY="39.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="326.0" stylesheets="@css/product.css" text="gym list">
+                            <styleClass>
+                                <String fx:value="label-style" />
+                                <String fx:value="title" />
+                            </styleClass>
+                        </Label>
+                        <ScrollPane fx:id="gymScroll" layoutX="61.0" layoutY="119.0" prefHeight="610.0" prefWidth="1019.0" style="-fx-background-color: #1e1e1e;" stylesheets="@css/product.css">
+                            <content>
+                                <GridPane fx:id="gymGrid" prefHeight="11.0" prefWidth="21.0" style="-fx-background-color: #1e1e1e;">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                    </columnConstraints>
+                                </GridPane>
+                            </content>
+                        </ScrollPane>
+                    </children>
+                </Pane>
+            </children>
+        </VBox>
+        <Pane fx:id="gympage" prefHeight="907.0" prefWidth="1331.0" stylesheets="@css/product.css">
+            <children>
+                <VBox fx:id="SatisticsVbox" layoutX="259.0" layoutY="141.0" maxWidth="1361.0" prefHeight="674.0" prefWidth="742.0" styleClass="add-product-card">
+                    <children>
+                        <Label fx:id="respond" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="683.0" stylesheets="@css/product.css" text="respond : ">
+                            <styleClass>
+                                <String fx:value="label-style" />
+                                <String fx:value="title" />
+                            </styleClass>
+                        </Label>
+                        <Label fx:id="desc" minHeight="-Infinity" minWidth="-Infinity" prefHeight="465.0" prefWidth="683.0" stylesheets="@css/product.css" text="description">
+                            <styleClass>
+                                <String fx:value="label-style" />
+                                <String fx:value="title" />
+                            </styleClass>
+                        </Label>
+                    </children>
+                </VBox>
+                <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToCoaches" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+                    <graphic>
+                        <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@icons/back.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </children>
+        </Pane>
+    </children>
+</VBox>

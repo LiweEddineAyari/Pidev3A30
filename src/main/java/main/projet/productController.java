@@ -22,6 +22,7 @@ import services.ProductService;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -78,6 +79,7 @@ public class productController implements Initializable {
     TableColumn<Exercice, Integer> productnColumn;
     @FXML
     TableColumn<Exercice,Void> actionsColumnex;
+    List<String> productNames ;
 
 
 
@@ -476,6 +478,14 @@ public class productController implements Initializable {
         actionsColumnex.setCellFactory(createButtonCellFactoryEX());
         exerciceTableView.setItems(exercices);
 
+
+        try {
+            productNames = productService.getAllProductNames();
+            productComboBox.getItems().addAll(productNames);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 
@@ -636,11 +646,14 @@ public class productController implements Initializable {
     TextArea productDescField;
 
     @FXML
-    TextField exercicenamefield,exerciceproductidfield,exerciceimgfield,searchExerciceField;
+    TextField exercicenamefield,exerciceimgfield,searchExerciceField;
     @FXML
     TextArea exercicedescfield;
     @FXML
     ToggleGroup target,type,intensity,equipmentneeded;
+
+    @FXML
+     ComboBox<String> productComboBox;
 
 
     void initProductinputs(){
@@ -843,7 +856,6 @@ public class productController implements Initializable {
 
     void initExerciseinputs(){
         exercicenamefield.setText("");
-        exerciceproductidfield.setText("");
         exercicedescfield.setText("");
         exerciceimgfield.setText("");
 
@@ -862,7 +874,6 @@ public class productController implements Initializable {
 
     void fillExerciceinputs(Exercice exercice) {
         exercicenamefield.setText(exercice.getName());
-        exerciceproductidfield.setText(String.valueOf(exercice.getProductid()));
         exercicedescfield.setText(exercice.getDescription());
         exerciceimgfield.setText(exercice.getImg());
 
@@ -917,15 +928,7 @@ public class productController implements Initializable {
             return false;
         }
 
-        // Validate exercise product ID
-        int exerciseProductID;
-        try {
-            exerciseProductID = Integer.parseInt(exerciceproductidfield.getText());
-        } catch (NumberFormatException e) {
-            // Handle the case where the input is not a valid integer
-            exerciceproductError.setText("Exercise product ID must be a valid number.");
-            return false;
-        }
+
 
 
         // Validate exercise image field
@@ -945,9 +948,18 @@ public class productController implements Initializable {
     @FXML
     public void handleExerciceAdd(){
         initErrorLabels();
+        String selectedProductName = productComboBox.getValue();
         if (controleDeSaisi()) {
             String exerciseName = exercicenamefield.getText();
-            int exerciseProductID = Integer.parseInt(exerciceproductidfield.getText());
+            int exerciseProductID = -1;
+
+            try {
+                if(selectedProductName!=null){
+                    exerciseProductID = productService.getProductIdByName(selectedProductName);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
             String exerciseDescription = exercicedescfield.getText();
             String targetValue = getSelectedValue(target);
             String typeValue = getSelectedValue(type);
@@ -971,10 +983,18 @@ public class productController implements Initializable {
     @FXML
     public void handleExerciceEdit(){
         initErrorLabels();
+        String selectedProductName = productComboBox.getValue();
         if (controleDeSaisi()) {
             String exerciseName = exercicenamefield.getText();
-            int exerciseProductID = Integer.parseInt(exerciceproductidfield.getText());
-            String exerciseDescription = exercicedescfield.getText();
+            int exerciseProductID = -1;
+
+            try {
+                if(!selectedProductName.equals("none")){
+                    exerciseProductID = productService.getProductIdByName(selectedProductName);
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }            String exerciseDescription = exercicedescfield.getText();
             String targetValue = getSelectedValue(target);
             String typeValue = getSelectedValue(type);
             String intensityValue = getSelectedValue(intensity);

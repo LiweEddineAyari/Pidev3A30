@@ -3,31 +3,43 @@ package main.projet;
 import entity.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Callback;
-import services.AccountService;
-import services.ChatConversationService;
-import services.ChatSessionService;
-import services.PlanningService;
+import services.notifService;
+import services.*;
+import utils.BadWords;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 public class CoachController implements Initializable {
+
+    services.notifService notifService = new notifService();
 
     private static CoachController instance =new CoachController();
     public static CoachController getInstance() {
@@ -38,11 +50,14 @@ public class CoachController implements Initializable {
 
     ObservableList<ChatConversation> chatConversationsList;
 
-     //coach interfaces
+    private String imageURL=null;
+    String destinationFolderPath = "src/main/java/uploads/chatImages/"; // Adjust the path accordingly
+
+    //coach interfaces
     @FXML
-      VBox Coachaffichage,Planningaffichage;
+    VBox Coachaffichage,Planningaffichage;
     @FXML
-      Pane AddCoachtPage,AddPlanningtPage,EditUserPage;
+    Pane AddCoachtPage,AddPlanningtPage,EditUserPage;
 
 
     //table view coach
@@ -85,6 +100,17 @@ public class CoachController implements Initializable {
 
 
     AccountService accountService =new AccountService();
+    categoryService categoryService = new categoryService();
+
+    @FXML
+    ComboBox coachComboBox,categoryComboBox;
+
+
+
+
+
+
+    private Account currentAccount;
     ObservableList<Account> coaches;
     {
         try {
@@ -108,7 +134,7 @@ public class CoachController implements Initializable {
 
     {
         try {
-              plannings = planningService.afficher();
+            plannings = planningService.afficher();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -128,7 +154,7 @@ public class CoachController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
-     GoToPlanning();
+        GoToPlanning();
     }
     //coach navigation methods
     @FXML
@@ -165,7 +191,7 @@ public class CoachController implements Initializable {
 
 
 
-//planing navigation
+    //planing navigation
     @FXML
     public  void GoToPlanning(){
         //hide interfaces
@@ -184,42 +210,42 @@ public class CoachController implements Initializable {
     }
 
 
-@FXML
-public void addPlanningInterface(){
-    EditPlanningBtn.setVisible(false);
-    AddPlanningBtn.setVisible(true);
-    Coachaffichage.setVisible(false);
-    Coachaffichage.setManaged(false);
-    AddCoachtPage.setVisible(false);
-    AddCoachtPage.setManaged(false);
-    Planningaffichage.setVisible(false);
-    Planningaffichage.setManaged(false);
-    EditUserPage.setVisible(false);
-    EditUserPage.setManaged(false);
-    //show addCoachPage interface
-    AddPlanningtPage.setVisible(true);
-    AddPlanningtPage.setManaged(true);
+    @FXML
+    public void addPlanningInterface(){
+        EditPlanningBtn.setVisible(false);
+        AddPlanningBtn.setVisible(true);
+        Coachaffichage.setVisible(false);
+        Coachaffichage.setManaged(false);
+        AddCoachtPage.setVisible(false);
+        AddCoachtPage.setManaged(false);
+        Planningaffichage.setVisible(false);
+        Planningaffichage.setManaged(false);
+        EditUserPage.setVisible(false);
+        EditUserPage.setManaged(false);
+        //show addCoachPage interface
+        AddPlanningtPage.setVisible(true);
+        AddPlanningtPage.setManaged(true);
 
-}
-
-
-
-void GoToEditCoach(){
-
-    Coachaffichage.setVisible(false);
-    Coachaffichage.setManaged(false);
-    AddCoachtPage.setVisible(false);
-    AddCoachtPage.setManaged(false);
-    Planningaffichage.setVisible(false);
-    Planningaffichage.setManaged(false);
-    AddPlanningtPage.setVisible(false);
-    AddPlanningtPage.setManaged(false);
-    //show edit coach interface
+    }
 
 
-    EditUserPage.setVisible(true);
-    EditUserPage.setManaged(true);
-}
+
+    void GoToEditCoach(){
+
+        Coachaffichage.setVisible(false);
+        Coachaffichage.setManaged(false);
+        AddCoachtPage.setVisible(false);
+        AddCoachtPage.setManaged(false);
+        Planningaffichage.setVisible(false);
+        Planningaffichage.setManaged(false);
+        AddPlanningtPage.setVisible(false);
+        AddPlanningtPage.setManaged(false);
+        //show edit coach interface
+
+
+        EditUserPage.setVisible(true);
+        EditUserPage.setManaged(true);
+    }
 
 
 
@@ -261,8 +287,28 @@ void GoToEditCoach(){
 
         planningTableView.setItems(plannings);
 
+        try {
+            currentAccount = accountService.getAccountByAccountId(Account.getCurrentid());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
+        try {
+            // Get user names and set as ComboBox items
+            ObservableList<String> userNames = accountService.afficher().stream()
+                    .filter(account -> account.getTitle().equals(Account.Title.coach))
+                    .map(Account::getNom)  // Assuming there is a getName() method in the Account class
+                    .collect(Collectors.collectingAndThen(Collectors.toList(), FXCollections::observableArrayList));
+
+            ObservableList<String> titresnames = categoryService.GetCategoriesNames() ;
+
+            coachComboBox.setItems(userNames);
+            categoryComboBox.setItems(titresnames);
+        } catch (SQLException e) {
+            // Handle exception appropriately based on your application's error handling strategy
+            e.printStackTrace();
+        }
 
     }
 
@@ -283,6 +329,12 @@ void GoToEditCoach(){
                             System.out.println("Delete: " + account.getId());
                             try {
                                 accountService.supprimer(account.getId());
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
+                            notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has deleted a coach ","admin");
+                            try {
+                                notifService.ajouter(n);
                             } catch (SQLException e) {
                                 throw new RuntimeException(e);
                             }
@@ -364,6 +416,12 @@ void GoToEditCoach(){
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has edited a coach ","admin");
+        try {
+            notifService.ajouter(n);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         initAdminInputs();
         reload_page();
@@ -387,6 +445,12 @@ void GoToEditCoach(){
             accountService.ajouter(account);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+        notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has added a coach ","admin");
+        try {
+            notifService.ajouter(n);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
 
         initAdminInputs();
@@ -461,15 +525,17 @@ void GoToEditCoach(){
 
 
     @FXML
-     TextField titreField,heureDField,heureFField,idcoachField;
+    TextField heureDField,heureFField;
     @FXML
     TextArea descField;
     @FXML
-     DatePicker dateDField,dateFField;
+    DatePicker dateDField,dateFField;
 
 
     @FXML
     Button AddPlanningBtn,EditPlanningBtn;
+
+
 
 
 
@@ -485,44 +551,53 @@ void GoToEditCoach(){
         if (controleSaisi()) {
             try {
                 // Get values from UI components
-                int id_coach = Integer.parseInt(idcoachField.getText());
+                int id_coach = getCoachIdByName(coachComboBox.getValue().toString());
                 String date_debut = dateDField.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 String date_fin = dateFField.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 String heure_debut = heureDField.getText();
                 String heure_fin = heureFField.getText();
-                String titre = titreField.getText();
+                String titre = categoryComboBox.getValue().toString();
                 String description = descField.getText();
 
                 // Create a new Planning object
                 Planning newPlanning = new Planning(0, id_coach, date_debut, date_fin, heure_debut, heure_fin, titre, description);
 
                 // Add the new planning entry to the database
-                   int newIdPlanning= planningService.ajouter(newPlanning);
+                int newIdPlanning= planningService.ajouter(newPlanning);
+
+                // notif for adding planning  *****************************************
+
+                notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has added a new planning ","admin");
+                try {
+                    notifService.ajouter(n);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
 
                 //planning ytbath f msg lel coach
-                   int idadmin = AppController.getInstance().account.getId();
-                   //1- naml chat session admin-coach
-                   instance.chatSession.setId_user(idadmin);
-                   instance.chatSession.setId_user2(id_coach);
-                   chatSessionService.ajouter(instance.chatSession);
+                int idadmin = AppController.getInstance().account.getId();
+                //1- naml chat session admin-coach
+                instance.chatSession.setId_user(idadmin);
+                instance.chatSession.setId_user2(id_coach);
+                chatSessionService.ajouter(instance.chatSession);
 
-                   int  idSession= chatSessionService.getChatSession(instance.chatSession);
+                int  idSession= chatSessionService.getChatSession(instance.chatSession);
 
-                   instance.chatSession.setId(idSession);
-                  //1- nabath planning f chat li feha chat session admin-coach li deja amaltha taw
+                instance.chatSession.setId(idSession);
+                //1- nabath planning f chat li feha chat session admin-coach li deja amaltha taw
 
 
-                  String message = "new planning \n" +
-                          "titre : "+newPlanning.getTitre() +"\n" +
-                          "date debut : "+newPlanning.getHeure_debut() +"\n" +
-                          "date fin : "+newPlanning.getDate_fin() +"\n" +
-                          "heure debut  : "+newPlanning.getHeure_debut() +"\n" +
-                          "heure fin : "+newPlanning.getHeure_fin() +"\n" +
-                          "description : "+newPlanning.getDescription() +"\n" ;
+                String message = "new planning \n" +
+                        "titre : "+newPlanning.getTitre() +"\n" +
+                        "date debut : "+newPlanning.getHeure_debut() +"\n" +
+                        "date fin : "+newPlanning.getDate_fin() +"\n" +
+                        "heure debut  : "+newPlanning.getHeure_debut() +"\n" +
+                        "heure fin : "+newPlanning.getHeure_fin() +"\n" +
+                        "description : "+newPlanning.getDescription() +"\n" ;
 
-                 ChatConversation chatConversation = new ChatConversation(-1,instance.chatSession.getId(),idadmin,id_coach,newIdPlanning,message);
-                 chatConversationService.ajouter(chatConversation);
+                ChatConversation chatConversation = new ChatConversation(-1,instance.chatSession.getId(),idadmin,id_coach,newIdPlanning,message);
+                chatConversationService.ajouter(chatConversation);
 
                 // Clear input fields
                 clearFields();
@@ -535,11 +610,9 @@ void GoToEditCoach(){
     }
 
     private void setFields(Planning planning) {
-        titreField.setText(planning.getTitre());
         descField.setText(planning.getDescription());
         heureDField.setText(planning.getHeure_debut());
         heureFField.setText(planning.getHeure_fin());
-        idcoachField.setText(String.valueOf(planning.getId_coach()));
         dateDField.setValue(LocalDate.parse(planning.getDate_debut()));
         dateFField.setValue(LocalDate.parse(planning.getDate_fin()));
     }
@@ -550,18 +623,26 @@ void GoToEditCoach(){
         if (controleSaisi()) {
             try {
                 // Get values from UI components
-                int id_coach = Integer.parseInt(idcoachField.getText());
+                int id_coach = getCoachIdByName(coachComboBox.getValue().toString());
                 String date_debut = dateDField.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 String date_fin = dateFField.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 String heure_debut = heureDField.getText();
                 String heure_fin = heureFField.getText();
-                String titre = titreField.getText();
+                String titre = categoryComboBox.getValue().toString();
                 String description = descField.getText();
 
                 selectedPlanning = new Planning(selectedPlanning.getId(), id_coach, date_debut, date_fin, heure_debut, heure_fin, titre, description);
                 // Modify the planning entry in the database
 
                 planningService.modifier(selectedPlanning);
+
+                // notif for modify *****************
+                notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has edited a planing ","admin");
+                try {
+                    notifService.ajouter(n);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
 
                 // Clear input fields
                 clearFields();
@@ -573,13 +654,22 @@ void GoToEditCoach(){
         }
     }
 
+    private int getCoachIdByName(String coachName) {
+        for (Account coach : coaches) {
+            if (coach.getNom().equals(coachName)) {
+                return coach.getId();
+            }
+        }
+        // Return a default value or handle the case where the coach name is not found
+        return -1; // You might want to choose a suitable default value or throw an exception
+    }
+
+
     // Helper method to clear input fields
     private void clearFields() {
-        titreField.clear();
         descField.clear();
         heureDField.clear();
         heureFField.clear();
-        idcoachField.clear();
         dateDField.setValue(null);
         dateFField.setValue(null);
     }
@@ -587,21 +677,28 @@ void GoToEditCoach(){
 
 
     private boolean controleSaisi() {
+        // Check if ComboBoxes are null
+        if (coachComboBox.getValue() == null || categoryComboBox.getValue() == null) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Please select a coach and category.");
+            return false;
+        }
+
         // You can add more specific validation based on your requirements
-        String titre = titreField.getText();
         String description = descField.getText();
         String heureDebut = heureDField.getText();
         String heureFin = heureFField.getText();
-        String idCoach = idcoachField.getText();
         LocalDate dateDebut = dateDField.getValue();
         LocalDate dateFin = dateFField.getValue();
 
-        // Check if any field is empty
-        if (titre.isEmpty() || description.isEmpty() || heureDebut.isEmpty() || heureFin.isEmpty() ||
-                idCoach.isEmpty() || dateDebut == null || dateFin == null) {
-            // Show an error message or handle the validation failure accordingly
-            System.out.println("Please fill in all fields.");
-            showAlert(Alert.AlertType.ERROR, "Error", "Please fill in all fields.");
+        // Check if dateDebut is before dateFin
+        if (dateDebut.isAfter(dateFin)) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Start date must be before end date.");
+            return false;
+        }
+
+        // Check if heureDebut is before heureFin
+        if (LocalTime.parse(heureDebut).isAfter(LocalTime.parse(heureFin))) {
+            showAlert(Alert.AlertType.ERROR, "Error", "Start time must be before end time.");
             return false;
         }
 
@@ -637,7 +734,6 @@ void GoToEditCoach(){
 
         return true;
     }
-
 
     private void showAlert(Alert.AlertType alertType, String title, String content) {
         Alert alert = new Alert(alertType);
@@ -756,12 +852,12 @@ void GoToEditCoach(){
 
 
     @FXML
-            Label ChatTitle;
+    Label ChatTitle;
 
     @FXML
-            Pane chatPage;
+    Pane chatPage;
     @FXML
-            Button editMsgbtn;
+    Button editMsgbtn;
 
 
     void GoChat(){
@@ -795,10 +891,9 @@ void GoToEditCoach(){
 
 
     ChatConversation selectedMessage ;
-
     public void onChatView(Planning planning) {
         messagesContainer.getChildren().clear();
-        ChatTitle.setText("Chat With Coach "+planning.getId_coach());
+        ChatTitle.setText("Chat With Coach ");
 
         //coach set id
         instance.idCoach= planning.getId_coach();
@@ -854,17 +949,29 @@ void GoToEditCoach(){
     @FXML
     void handleSendMessage() {
         String message = messageField.getText();
-        ChatConversation chatConversation = new ChatConversation(-1,instance.chatSession.getId(),instance.selectedadmin,instance.idCoach,instance.idplanning,message);
+        if(!message.isEmpty() && !BadWords.canSend(message)){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mot interdit");
+            alert.setHeaderText(null);
+            alert.setContentText("Ce mot est interdit.");
+            alert.showAndWait();
+        }else {
 
-        try {
-            System.out.println("id planning ajouter :"+chatConversation.getIdplanning());
-            chatConversationService.ajouter(chatConversation);
-            chatConversationsList= chatConversationService.getChatConversationsList( instance.chatSession.getId() );
-            messagesContainer.getChildren().clear();
-            loadConversation(chatConversationsList);
+            ChatConversation chatConversation = new ChatConversation(-1, instance.chatSession.getId(), instance.selectedadmin, instance.idCoach, instance.idplanning, message);
+            if (imageURL != null) {
+                chatConversation.setImageUrl(imageURL);
+                imageURL = null;
+            }
+            try {
+                System.out.println("id planning ajouter :" + chatConversation.getIdplanning());
+                chatConversationService.ajouter(chatConversation);
+                chatConversationsList = chatConversationService.getChatConversationsList(instance.chatSession.getId());
+                messagesContainer.getChildren().clear();
+                loadConversation(chatConversationsList);
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -875,6 +982,7 @@ void GoToEditCoach(){
 
                 String message = chatConversation.getMessage();
                 int sender = chatConversation.getId_sender();
+                String imageUrl=chatConversation.getImageUrl();
 
                 // label
                 Label messageLabel;
@@ -899,13 +1007,51 @@ void GoToEditCoach(){
                         editMsgbtn.setManaged(true);
                     }); // Replace handleButtonAction with your actual method
 
+                    if(imageUrl!=null){
+                        try {
+                            String absolutePath = new File(destinationFolderPath+imageUrl).getAbsolutePath();
+                            System.out.println(absolutePath);
+                            Image image = new Image("file:" + absolutePath);
 
-                    // Add label and button to hbox
-                    messageHBox.getChildren().addAll(actionButton,messageLabel);
+                            ImageView imageView = new ImageView(image);
+                            imageView.setFitWidth(100); // Adjust width as needed
+                            imageView.setFitHeight(100); // Adjust height as needed
 
+                            // hbox for image
+                            HBox imageHBox = new HBox(imageView);
+                            imageHBox.setAlignment(Pos.CENTER_RIGHT);
+
+                            // Add label and button to hbox
+                            messageHBox.getChildren().addAll(actionButton, messageLabel);
+                            messagesContainer.getChildren().add(messageHBox);
+                            messagesContainer.getChildren().add(imageHBox);
+                        }catch (Exception e){
+                            String absolutePath = new File(destinationFolderPath+imageUrl).getAbsolutePath();
+                            System.out.println(absolutePath);
+                            Image image = new Image("file:" + absolutePath);
+
+                            ImageView imageView = new ImageView(image);
+                            imageView.setFitWidth(100); // Adjust width as needed
+                            imageView.setFitHeight(100); // Adjust height as needed
+
+                            // hbox for image
+                            HBox imageHBox = new HBox(imageView);
+                            imageHBox.setAlignment(Pos.CENTER_RIGHT);
+
+                            // Add label and button to hbox
+                            messageHBox.getChildren().addAll(actionButton, messageLabel);
+                            messagesContainer.getChildren().add(messageHBox);
+                            messagesContainer.getChildren().add(imageHBox);
+                        }
+                    }else {
+                        // Add label and button to hbox
+                        messageHBox.getChildren().addAll(actionButton, messageLabel);
+                        messagesContainer.getChildren().add(messageHBox);
+
+                    }
 
                 } else {
-                    messageLabel = new Label(instance.idCoach + ": " + message);
+                    messageLabel = new Label("coach : " + message);
                     messageLabel.getStyleClass().add("user-message");
 
                     // hbox
@@ -913,13 +1059,39 @@ void GoToEditCoach(){
                     messageHBox.setAlignment(Pos.CENTER_LEFT);
                     messageHBox.getStyleClass().add("coach-message-hbox");
                     // Add label and button to hbox
-                    messageHBox.getChildren().addAll(messageLabel);
+                    if(imageUrl!=null){
+                        String absolutePath = new File(destinationFolderPath+imageUrl).getAbsolutePath();
+                        System.out.println(absolutePath);
+                        Image image = new Image("file:" + absolutePath);
+
+                        ImageView imageView = new ImageView(image);
+                        imageView.setFitWidth(100); // Adjust width as needed
+                        imageView.setFitHeight(100); // Adjust height as needed
+
+                        // hbox for image
+                        HBox imageHBox = new HBox(imageView);
+                        imageHBox.setAlignment(Pos.CENTER_LEFT);
+
+                        // Add label and button to hbox
+                        messageHBox.getChildren().addAll(messageLabel);
+                        messagesContainer.getChildren().add(messageHBox);
+                        messagesContainer.getChildren().add(imageHBox);
+
+                        // Add imageHBox to vbox
+
+                    }else {
+                        // Add label and button to hbox
+                        messageHBox.getChildren().addAll( messageLabel);
+                        messagesContainer.getChildren().add(messageHBox);
+
+                    }
+
                 }
 
 
 
                 // Add hbox to vbox
-                messagesContainer.getChildren().add(messageHBox);
+
             }
         }
     }
@@ -956,6 +1128,57 @@ void GoToEditCoach(){
         editMsgbtn.setManaged(false);
     }
 
+
+    @FXML
+    public void handleAddImage(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
+
+
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif)", "*.png", "*.jpg", "*.gif");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show open file dialog
+        Stage stage = (Stage) editMsgbtn.getScene().getWindow(); // Replace 'yourNode' with the actual node from your FXML
+        java.io.File file = fileChooser.showOpenDialog(stage);
+
+
+        if (file != null) {
+            // Process the selected file (e.g., display it in an ImageView)
+            System.out.println("Selected Image: " + file.getAbsolutePath());
+            String absolutePath=file.getAbsolutePath();
+            String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            String generatedID = "image_" + timestamp;
+            String fileExtension = file.getName().substring(file.getName().lastIndexOf("."));
+            File destinationFolder = new File(destinationFolderPath);
+            if (!destinationFolder.exists()) {
+                destinationFolder.mkdirs();
+            }
+            String finalFileName=generatedID + fileExtension;
+            String destinationFilePath = destinationFolderPath + finalFileName;
+            File destinationFile = new File(destinationFilePath);
+            try {
+                // Copy the selected file to the destination folder
+                Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                imageURL=finalFileName;
+
+                // Process the selected file (e.g., display it in an ImageView)
+                System.out.println("Selected Image: " + destinationFile.getAbsolutePath());
+                // Update your ImageView or perform other actions
+            } catch (IOException e) {
+                e.printStackTrace();
+                //showAlert(AlertType.ERROR, "Error", "Failed to copy the image to the destination folder.");
+            }
+
+
+            //copy to resources folder and save it with generatedID depdends on timestimp
+
+            // Update your ImageView or perform other actions
+        } else {
+            // Display an error message if no file was selected
+            //  showAlert(AlertType.ERROR, "Error", "No image selected.");
+        }
+    }
 
 }
 

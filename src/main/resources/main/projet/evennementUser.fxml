@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.HBox?>
 <VBox fx:id="EvennementInterfaces" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="7000.0" prefWidth="1331.0" stylesheets="@css/product.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.projet.EvennementUserController">
    <children>
       <VBox fx:id="EvennementInterfaceuser" prefHeight="907.0" prefWidth="1331.0">
@@ -40,7 +41,7 @@
                      <content>
                         <GridPane fx:id="eventGrid" prefHeight="11.0" prefWidth="21.0" style="-fx-background-color: #1e1e1e;">
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
                            </columnConstraints>
                         </GridPane>
                      </content>
@@ -59,6 +60,23 @@
                         <String fx:value="title" />
                      </styleClass>
                   </Label>
+                  <VBox fx:id="avisContainer" spacing="10">
+                     <!-- Exemple d'un avis -->
+                     <HBox spacing="10">
+                        <Label fx:id="vide"   />
+                        <Label fx:id="userNameLabel"  style="-fx-color-label-visible: red" />
+                        <Label fx:id="commentLabel"  styleClass="comment-label" />
+                     </HBox>
+
+                     <!-- Vous pouvez répéter la structure ci-dessus pour chaque avis -->
+
+                  </VBox>
+
+                  <!-- Champ de texte pour écrire un nouveau commentaire -->
+                  <TextField fx:id="commentInput" promptText="Écrire un commentaire..." />
+
+                  <!-- Bouton pour envoyer le commentaire -->
+                  <Button onAction="#envoyerCommentaire" text="Envoyer commentaire" layoutY="1000" />
                </children>
             </VBox>
             <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToEvennementPage" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">

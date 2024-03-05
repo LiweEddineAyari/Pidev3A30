@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import utils.MyDataBase;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProductService implements IProductService<Product>{
@@ -146,5 +147,40 @@ public class ProductService implements IProductService<Product>{
     }
 
 
+
+    public int getProductIdByName(String productName) throws SQLException {
+        int productId = -1; // Default value if not found
+
+        String sql = "SELECT id FROM product WHERE name = ?";
+
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, productName);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    productId = resultSet.getInt("id");
+                }
+            }
+        }
+
+        return productId;
+    }
+
+
+    public List<String> getAllProductNames() throws SQLException {
+        List<String> productNames = new ArrayList<>();
+
+        String sql = "SELECT name FROM product";
+
+        try (Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            while (resultSet.next()) {
+                String productName = resultSet.getString("name");
+                productNames.add(productName);
+            }
+        }
+
+        return productNames;
+    }
 
 }

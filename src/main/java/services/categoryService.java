@@ -1,6 +1,5 @@
 package services;
 
-import entity.Abonnement;
 import entity.Category;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -75,6 +74,61 @@ public class categoryService implements icategoryService <Category>{
         }
         return categoriesList;
     }
+
+    @Override
+    public ObservableList<String> GetCategoriesNames() throws SQLException {
+        ObservableList<String> categoriesNames = FXCollections.observableArrayList();
+        String sql = "SELECT  nom FROM `category`";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                String nom = resultSet.getString("nom");
+                categoriesNames.add(nom);
+            }
+
+        }
+        return categoriesNames;
+    }
+
+    @Override
+    public int getCategoryIdByName(String categoryName) throws SQLException {
+        int categoryId = -1; // Default value if not found
+        String sql = "SELECT id FROM category WHERE nom = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, categoryName);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    categoryId = resultSet.getInt("id");
+                }
+            }
+        }
+        return categoryId;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

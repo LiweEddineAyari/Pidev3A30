@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="eventInterfaces" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6000.0" prefWidth="1331.0" stylesheets="@css/product.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.projet.EvennementController">
+<VBox fx:id="eventInterfaces" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6000.0" prefWidth="1331.0" stylesheets="@css/product.css" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.projet.EvennementController">
    <children>
       <VBox fx:id="EventsInterface" prefHeight="907.0" prefWidth="1331.0">
          <children>
@@ -70,11 +61,11 @@
                   <TableView fx:id="evennementTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="1147.0" stylesheets="@css/product.css">
                      <columns>
                         <TableColumn fx:id="idColumn" prefWidth="57.0" text="Id" />
-                        <TableColumn fx:id="nomColumn" prefWidth="146.0" text="nom" />
-                        <TableColumn fx:id="dateColumn" prefWidth="118.0" text="date" />
-                        <TableColumn fx:id="typeColumn" prefWidth="123.0" text="type" />
-                        <TableColumn fx:id="descriptionColumn" minWidth="0.0" prefWidth="468.0" text="Description" />
-                        <TableColumn fx:id="actionsColumn" minWidth="0.0" prefWidth="213.0" text="Actions" />
+                        <TableColumn fx:id="nomColumn" prefWidth="120.0" text="nom" />
+                        <TableColumn fx:id="dateColumn" prefWidth="130.0" text="date" />
+                        <TableColumn fx:id="typeColumn" prefWidth="140.0" text="type" />
+                        <TableColumn fx:id="descriptionColumn" minWidth="0.0" prefWidth="150.0" text="Description" />
+                        <TableColumn fx:id="actionsColumn" minWidth="0.0" prefWidth="360.0" text="Actions" />
                      </columns>
                   </TableView>
                </children>
@@ -83,7 +74,7 @@
       </VBox>
       <Pane fx:id="AddEventPage" prefHeight="907.0" prefWidth="1331.0">
          <children>
-            <VBox fx:id="AddProductCard" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="466.0" prefWidth="390.0" styleClass="add-product-card">
+            <VBox fx:id="AddEventCard" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="466.0" prefWidth="390.0" styleClass="add-product-card">
                <children>
                   <Label prefHeight="31.0" prefWidth="307.0" styleClass="title" text="Add a new Event">
                      <font>
@@ -93,30 +84,55 @@
                   <HBox prefHeight="42.0" prefWidth="1231.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="113.0" text="nom:" />
-                        <TextField fx:id="productNameField" prefHeight="37.0" prefWidth="196.0" />
+                        <TextField fx:id="nomEvent" prefHeight="37.0" prefWidth="196.0" />
                      </children>
                   </HBox>
+                   <HBox spacing="10" styleClass="input-field">
+                       <children>
+                           <Label prefHeight="22.0" prefWidth="111.0" text="Map:         " />
+                           <TextField fx:id="localisation" />
+                           <Button text="+" onAction="#map" />
+                       </children>
+                   </HBox>
+                   <HBox spacing="10" styleClass="input-field">
+                       <children>
+                           <Label prefHeight="22.0" prefWidth="111.0" text="Map:         " />
+                           <TextField fx:id="prix" />
+
+                       </children>
+                   </HBox>
                   <HBox spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="111.0" text="type:         " />
-                        <TextField fx:id="productPriceField" />
+                        <TextField fx:id="typeEvent" />
                      </children>
                   </HBox>
-                  <HBox spacing="10" styleClass="input-field">
+                   <HBox spacing="10" styleClass="input-field">
+                       <children>
+                           <Label prefHeight="22.0" prefWidth="111.0" text="image:         " />
+                           <HBox spacing="5">
+                               <TextField fx:id="imageEvent" />
+                               <Button text="+" onAction="#choisirImage" />
+
+                           </HBox>
+                       </children>
+                   </HBox>
+
+                   <HBox spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="111.0" text="date:" />
-                        <DatePicker />
+                        <DatePicker fx:id="dateEvent" />
                      </children>
                   </HBox>
                   <HBox prefHeight="121.0" prefWidth="350.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="53.0" prefWidth="115.0" text="Description:" />
-                        <TextArea prefHeight="58.0" prefWidth="258.0" />
+                        <TextArea fx:id="desEvent" prefHeight="58.0" prefWidth="258.0" />
                      </children>
                   </HBox>
                   <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
                      <children>
-                        <Button fx:id="AddProductBtn" mnemonicParsing="false" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
+                        <Button fx:id="AddProductBtn" onAction="#addEvent" mnemonicParsing="false"  prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Add">
                            <HBox.margin>
                               <Insets left="50.0" />
                            </HBox.margin>
@@ -136,6 +152,7 @@
             </Button>
          </children>
       </Pane>
+
       <VBox fx:id="ParticipantsPage" prefHeight="907.0" prefWidth="1331.0">
          <children>
             <Pane fx:id="UpperSection1" prefHeight="215.0" prefWidth="1331.0" styleClass="UpperSection" stylesheets="@css/product.css">
@@ -161,9 +178,9 @@
                   <TableView fx:id="participantsTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="493.0" stylesheets="@css/product.css">
                      <columns>
                         <TableColumn fx:id="idColumnParticipants" prefWidth="75.0" text="Id" />
-                        <TableColumn fx:id="ideventcolumnn" prefWidth="120.0" text="id_evennement" />
-                        <TableColumn fx:id="iduserrColumn" prefWidth="121.0" text="id_user" />
-                        <TableColumn fx:id="actionsColumnP" prefWidth="161.0" text="Actions" />
+                        <TableColumn fx:id="ideventcolumnn" prefWidth="120.0" text="Evennement" />
+                            <TableColumn fx:id="iduserrColumn" prefWidth="121.0" text="Client" />
+                        <TableColumn fx:id="dateColumnP" prefWidth="161.0" text="Date" />
                      </columns>
                   </TableView>
                </children>
@@ -194,16 +211,102 @@
                   </Label>
                   <TableView fx:id="AvisTableView" layoutX="69.0" layoutY="102.0" prefHeight="544.0" prefWidth="952.0" stylesheets="@css/product.css">
                      <columns>
-                        <TableColumn fx:id="idAvisColumn" prefWidth="56.0" text="Id" />
-                        <TableColumn fx:id="ideventcolumnnA" prefWidth="115.0" text="id_evennement" />
-                        <TableColumn fx:id="iduserrColumnA" prefWidth="109.0" text="id_user" />
-                        <TableColumn fx:id="idcommentaireColumn" prefWidth="434.0" text="Comment" />
+                        <TableColumn fx:id="idAvisColumn" prefWidth="80.0" text="Id" />
+                        <TableColumn fx:id="ideventcolumnnA" prefWidth="80.0" text="id_evennement" />
+                        <TableColumn fx:id="iduserrColumnA" prefWidth="80.0" text="id_user" />
+                        <TableColumn fx:id="idcommentaireColumn" prefWidth="80.0" text="Comment" />
                         <TableColumn fx:id="actionsColumnA" prefWidth="224.0" text="Actions" />
                      </columns>
                   </TableView>
                </children>
             </Pane>
+
          </children>
       </VBox>
+        <Pane fx:id="UpdateEventPage" prefHeight="907.0" prefWidth="1331.0">
+          <children>
+              <VBox fx:id="UpdateProductCard" layoutX="445.0" layoutY="141.0" maxWidth="1361.0" prefHeight="466.0" prefWidth="390.0" styleClass="add-product-card">
+                  <children>
+                      <Label prefHeight="31.0" prefWidth="307.0" styleClass="title" text="Update the Event">
+                          <font>
+                              <Font name="Arial Rounded MT Bold" size="31.0" />
+                          </font>
+                      </Label>
+                      <HBox prefHeight="42.0" prefWidth="1231.0" spacing="10" styleClass="input-field">
+                          <children>
+                              <Label prefHeight="22.0" prefWidth="113.0" text="nom:" />
+                              <TextField fx:id="nomEvent1" prefHeight="37.0" prefWidth="196.0" />
+                          </children>
+                      </HBox>
+                      <HBox spacing="10" styleClass="input-field">
+                          <children>
+                              <Label prefHeight="22.0" prefWidth="111.0" text="type:         " />
+                              <TextField fx:id="typeEvent1" />
+                          </children>
+                      </HBox>
+                      <HBox spacing="10" styleClass="input-field">
+                          <children>
+                              <Label prefHeight="22.0" prefWidth="111.0" text="image:         " />
+                              <HBox spacing="5">
+                                  <TextField fx:id="imageEvent1" />
+                                  <Button text="+" onAction="#choisirImage1" />
+
+                              </HBox>
+                          </children>
+                      </HBox>
+                      <HBox spacing="10" styleClass="input-field">
+                          <children>
+                              <Label prefHeight="22.0" prefWidth="111.0" text="date:" />
+                              <DatePicker fx:id="dateEvent1" />
+                          </children>
+                      </HBox>
+                      <HBox prefHeight="121.0" prefWidth="350.0" spacing="10" styleClass="input-field">
+                          <children>
+                              <Label prefHeight="53.0" prefWidth="115.0" text="Description:" />
+                              <TextArea fx:id="desEvent1" prefHeight="58.0" prefWidth="258.0" />
+                          </children>
+                      </HBox>
+                      <HBox spacing="10" styleClass="input-field">
+                          <children>
+                              <Label prefHeight="22.0" prefWidth="111.0" text="image:         " />
+                              <HBox spacing="5">
+                                  <TextField fx:id="localisation1" />
+                                  <Button text="+" onAction="#choisirImage1" />
+
+                              </HBox>
+                          </children>
+                      </HBox>
+                      <HBox spacing="10" styleClass="input-field">
+                          <children>
+                              <Label prefHeight="22.0" prefWidth="111.0" text="image:         " />
+                              <HBox spacing="5">
+                                  <TextField fx:id="prix1" />
+
+
+                              </HBox>
+                          </children>
+                      </HBox>
+                      <HBox id="submitField" prefHeight="60.0" prefWidth="1290.0">
+                          <children>
+                              <Button fx:id="UpdateEvent" mnemonicParsing="false" onAction="#OnUpdate" prefHeight="46.0" prefWidth="166.0" styleClass="orangebtn" text="Update">
+                                  <HBox.margin>
+                                      <Insets left="50.0" />
+                                  </HBox.margin>
+                              </Button>
+                          </children>
+                      </HBox>
+                  </children>
+              </VBox>
+              <Button layoutX="30.0" layoutY="26.0" mnemonicParsing="false" onAction="#GoToEventPagee" prefHeight="56.0" prefWidth="40.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css">
+                  <graphic>
+                      <ImageView fitHeight="34.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                              <Image url="@icons/back.png" />
+                          </image>
+                      </ImageView>
+                  </graphic>
+              </Button>
+          </children>
+      </Pane>
    </children>
 </VBox>

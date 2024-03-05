@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -94,7 +95,7 @@ public class AbonnementUserConroller implements Initializable, AbonnementListene
     }
 
     void intitialisationAbonnementList(){
-        int column = 0, row = 0;
+        int column = 1, row = 0;
 
         try {
             for (Abonnement abonnement : Abonnements) {
@@ -141,6 +142,32 @@ public class AbonnementUserConroller implements Initializable, AbonnementListene
 
 
 
+
+
+
+    //metier
+
+    @FXML
+    TextField minprice,maxprice,minduree,maxduree,searchAbonnementField;
+
+    @FXML
+    void handleSearchAbonnement(){
+
+        String nameText = searchAbonnementField.getText();
+        String minPriceText = minprice.getText();
+        String maxPriceText = maxprice.getText();
+        String minDureeText = minduree.getText();
+        String maxDureeText = maxduree.getText();
+
+        try {
+            //empty abonnementGrid here
+            abonnementGrid.getChildren().clear();
+            Abonnements =abonnementService.searchAbonnements(minPriceText,maxPriceText,minDureeText,maxDureeText,nameText);
+            intitialisationAbonnementList();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 

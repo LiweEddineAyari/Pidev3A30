@@ -3,6 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -193,14 +194,14 @@
                   </Label>
                   <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
-                        <Label prefHeight="22.0" prefWidth="127.0" text="idCoach:" />
-                        <TextField fx:id="idcoachField" prefHeight="71.0" />
+                        <Label prefHeight="22.0" prefWidth="127.0" text="Coach:" />
+                        <ComboBox fx:id="coachComboBox" prefWidth="150.0" promptText="none" />
                      </children>
                   </HBox>
                   <HBox prefHeight="70.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
                         <Label prefHeight="22.0" prefWidth="127.0" text="Titre:" />
-                        <TextField fx:id="titreField" />
+                        <ComboBox fx:id="categoryComboBox" prefWidth="150.0" promptText="none" />
                      </children>
                   </HBox>
                   <HBox prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
@@ -334,6 +335,7 @@
                   </ScrollPane>
                   <HBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
+                        <Button fx:id="image" mnemonicParsing="false" onAction="#handleAddImage" prefHeight="46.0" prefWidth="86.0" styleClass="orangebtn" text="img" />
                         <TextField fx:id="messageField" maxWidth="-Infinity" prefHeight="37.0" prefWidth="590.0" />
                         <Button fx:id="editMsgbtn" mnemonicParsing="false" onAction="#handleModifierMessage" styleClass="orangebtn" text="Edit" />
                         <Button mnemonicParsing="false" onAction="#handleSendMessage" styleClass="orangebtn" text="Send" />

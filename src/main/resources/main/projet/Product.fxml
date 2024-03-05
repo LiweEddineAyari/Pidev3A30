@@ -3,6 +3,7 @@
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
@@ -102,7 +103,7 @@
                <Label fx:id="pnameError" prefHeight="22.0" prefWidth="523.0" styleClass="errorlabel" textFill="RED" />
             </HBox>
             <HBox spacing="10" styleClass="input-field">
-               <Label prefHeight="22.0" prefWidth="111.0" text="Ref:               " />
+               <Label prefHeight="22.0" prefWidth="111.0" text="Ref:            " />
                <TextField fx:id="productRefField" />
                <Label fx:id="prefError" prefHeight="22.0" prefWidth="523.0" styleClass="errorlabel" textFill="RED" />
             </HBox>
@@ -302,8 +303,8 @@
                </HBox>
                <HBox spacing="10" styleClass="input-field">
                   <children>
-                     <Label prefHeight="22.0" prefWidth="112.0" text="Product Id:" />
-                     <TextField fx:id="exerciceproductidfield" />
+                     <Label prefHeight="22.0" prefWidth="112.0" text="Product :" />
+                     <ComboBox fx:id="productComboBox" prefWidth="150.0" promptText="none" />
                      <Label fx:id="exerciceproductError" prefHeight="37.0" prefWidth="600.0" styleClass="errorlabel" textFill="RED" />
                   </children>
                </HBox>

@@ -70,6 +70,7 @@
                   </ScrollPane>
                   <HBox alignment="CENTER_LEFT" prefHeight="71.0" prefWidth="344.0" spacing="10" styleClass="input-field">
                      <children>
+                        <Button fx:id="image" mnemonicParsing="false" onAction="#handleAddImage" prefHeight="46.0" prefWidth="86.0" styleClass="orangebtn" text="img" />
                         <TextField fx:id="messageField" maxWidth="-Infinity" prefHeight="37.0" prefWidth="590.0" />
                         <Button fx:id="editMsgbtn" mnemonicParsing="false" onAction="#handleModifierMessage" styleClass="orangebtn" text="Edit" />
                         <Button mnemonicParsing="false" onAction="#handleSendMessage" styleClass="orangebtn" text="Send" />

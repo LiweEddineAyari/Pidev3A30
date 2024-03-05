@@ -17,16 +17,31 @@
    <children>
       <VBox fx:id="abonnementInterfaceuser" prefHeight="907.0" prefWidth="1331.0">
          <children>
-            <Pane fx:id="UpperSection" prefHeight="215.0" prefWidth="1331.0" styleClass="UpperSection" stylesheets="@css/product.css">
+            <Pane fx:id="UpperSection" prefHeight="400.0" prefWidth="1331.0" styleClass="UpperSection" stylesheets="@css/product.css">
                <children>
-                  <TextField layoutX="159.0" layoutY="41.0" prefHeight="37.0" prefWidth="265.0" styleClass="search-field" stylesheets="@css/product.css" />
-                  <Button id="searchBtn" fx:id="productSearchBtn" layoutX="381.0" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" prefHeight="40.0" prefWidth="28.0" styleClass="UpperSectionBtn" stylesheets="@css/product.css" />
+                  <TextField fx:id="searchAbonnementField" layoutX="159.0" layoutY="41.0" prefHeight="37.0" prefWidth="265.0" styleClass="search-field" stylesheets="@css/product.css" />
                   <Label layoutX="90.0" layoutY="41.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="80.0" styleClass="label-style" stylesheets="@css/product.css" text="Searsh" />
-                  <ImageView fitHeight="31.0" fitWidth="35.0" layoutX="386.0" layoutY="46.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@icons/search.png" />
-                     </image>
-                  </ImageView>
+                  <HBox alignment="CENTER" layoutX="90.0" layoutY="104.0" prefHeight="47.0" prefWidth="420.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <TextField fx:id="minprice" prefHeight="37.0" prefWidth="196.0" promptText="Min price" />
+                        <TextField fx:id="maxprice" prefHeight="37.0" prefWidth="196.0" promptText="Max price" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="90.0" layoutY="153.0" prefHeight="47.0" prefWidth="420.0" spacing="10" styleClass="input-field">
+                     <children>
+                        <TextField fx:id="minduree" prefHeight="37.0" prefWidth="196.0" promptText="Min duree" />
+                        <TextField fx:id="maxduree" prefHeight="37.0" prefWidth="196.0" promptText="Max duree" />
+                     </children>
+                  </HBox>
+                  <Button layoutX="361.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleSearchAbonnement" prefHeight="41.0" prefWidth="55.0" styleClass="searchBtnStyle">
+                     <graphic>
+                        <ImageView fitHeight="31.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/search.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </Pane>
             <Pane fx:id="ListContainer" prefHeight="803.0" prefWidth="1331.0" style="-fx-background-color: #1e1e1e;">
@@ -37,7 +52,7 @@
                         <String fx:value="title" />
                      </styleClass>
                   </Label>
-                  <ScrollPane fx:id="abonnementScroll" layoutX="61.0" layoutY="119.0" prefHeight="610.0" prefWidth="1019.0" style="-fx-background-color: #1e1e1e;" stylesheets="@css/product.css">
+                  <ScrollPane fx:id="abonnementScroll" layoutX="61.0" layoutY="119.0" prefHeight="483.0" prefWidth="1019.0" style="-fx-background-color: #1e1e1e;" stylesheets="@css/product.css">
                      <content>
                         <GridPane fx:id="abonnementGrid" prefHeight="11.0" prefWidth="21.0" style="-fx-background-color: #1e1e1e;">
                            <columnConstraints>

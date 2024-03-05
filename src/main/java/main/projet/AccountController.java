@@ -1,11 +1,12 @@
 package main.projet;
 
 import entity.Account;
-
+import entity.notif;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -13,20 +14,22 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import services.AccountService;
-
+import services.notifService;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
 
+
 public class AccountController implements Initializable {
     @FXML
-    VBox AccountAffichagee;
+    VBox AccountAffichagee,SatisticsVbox;
     @FXML
-    Pane AddAdminPagee;
-
+    Pane AddAdminPagee,Satistics;
+    private Account currentAccount;
 
 
 
@@ -34,6 +37,7 @@ public class AccountController implements Initializable {
     //table view admin
     @FXML
     TableView<Account> accountTableView;
+
     @FXML
     TableColumn<?, ?> idColumn;
     @FXML
@@ -50,9 +54,10 @@ public class AccountController implements Initializable {
     TableColumn<Account,Void> actionsColumn;
 
     AccountService accountService = new AccountService();
+    notifService notifService = new notifService();
 
 
-        ObservableList<Account> admins;
+    ObservableList<Account> admins;
     {
         try {
             admins = accountService.afficher();
@@ -73,18 +78,21 @@ public class AccountController implements Initializable {
 
 
 
+
+
     @FXML
     public void addAccountInterfacee(){
         //hide interfaces
         AccountAffichagee.setVisible(false);
         AccountAffichagee.setManaged(false);
-
-
-
+        Satistics.setVisible(false);
+        Satistics.setManaged(false);
         //show addAdminPage interface
 
         AddAdminPagee.setVisible(true);
         AddAdminPagee.setManaged(true);
+
+
     }
 
     @FXML
@@ -92,7 +100,8 @@ public class AccountController implements Initializable {
         //hide interfaces
         AddAdminPagee.setVisible(false);
         AddAdminPagee.setManaged(false);
-
+        Satistics.setVisible(false);
+        Satistics.setManaged(false);
 
         //show Adminaffichage interface
 
@@ -105,13 +114,18 @@ public class AccountController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
 
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        // idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nomColumn.setCellValueFactory(new PropertyValueFactory<>("nom"));
         prenomColumn.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         ageColumn.setCellValueFactory(new PropertyValueFactory<>("age"));
         mailColumn.setCellValueFactory(new PropertyValueFactory<>("mail"));
-        passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
+        //  passwordColumn.setCellValueFactory(new PropertyValueFactory<>("password"));
         actionsColumn.setCellFactory(createButtonCellFactory());
+        try {
+            currentAccount = accountService.getAccountByAccountId(Account.getCurrentid());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
         {
@@ -143,6 +157,12 @@ public class AccountController implements Initializable {
                             System.out.println("Delete: " + account.getId());
                             try {
                                 accountService.supprimer(account.getId());
+                                notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has deleted an admin ","admin");
+                                try {
+                                    notifService.ajouter(n);
+                                } catch (SQLException e) {
+                                    throw new RuntimeException(e);
+                                }
                                 reload_page();
 
                             } catch (SQLException e) {
@@ -196,31 +216,75 @@ public class AccountController implements Initializable {
 
 
     @FXML
-    public void handleAddAdmin(){
+    public void handleAddAdmin() {
+        if (validateInput()) {
+            String name = adminNameField.getText();
+            String prenom = adminPrenomField.getText();
+            int age = Integer.parseInt(adminAgeField.getText());
+            String mail = adminMailField1.getText();
+            String password = adminPasswordField.getText();
 
-        String name = adminNameField.getText();
-        String prenom =  adminPrenomField.getText();
-        int age =  Integer.parseInt(adminAgeField.getText());
-        String mail = adminMailField1.getText();
-        String password =  adminPasswordField.getText();
+            notif n = new notif(-1,currentAccount.getNom(),currentAccount.getNom() +" has added a new admin ","admin");
+            try {
+                notifService.ajouter(n);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
-        Account account = new Account(-1, name, prenom, age, mail, password,Account.Title.admin);
-        AccountService accountService =new AccountService();
+            Account account = new Account(-1, name, prenom, age, mail, password, Account.Title.admin);
+            AccountService accountService = new AccountService();
 
-        try {
-            accountService.ajouter(account);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            try {
+                accountService.ajouter(account);
+            } catch (SQLException e) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Error adding admin", e.getMessage());
+            }
+
+            initAdminInputs();
+            reload_page();
+        }
+    }
+
+    private boolean validateInput() {
+        if (adminNameField.getText().isEmpty()
+                || adminPrenomField.getText().isEmpty()
+                || adminAgeField.getText().isEmpty()
+                || adminMailField1.getText().isEmpty()
+                || adminPasswordField.getText().isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "All fields are required", "Please fill in all required fields.");
+            return false;
         }
 
-        initAdminInputs();
-        reload_page();
+        try {
+            int age = Integer.parseInt(adminAgeField.getText());
+            if (age < 0) {
+                showAlert(Alert.AlertType.ERROR, "Validation Error", "Invalid Age", "Age must be a non-negative integer.");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Invalid Age Format", "Age must be a valid integer.");
+            return false;
+        }
+
+        // Add more validation checks as needed.
+
+        return true;
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String headerText, String contentText) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        alert.showAndWait();
     }
 
 
 
 
-
+    private int getCurrentUserId(Account account) {
+        return account.getId();
+    }
 
 
 
@@ -253,4 +317,120 @@ public class AccountController implements Initializable {
         AddAdminPagee.setManaged(false);
 
     }
+
+
+
+
+
+
+
+
+
+
+    //search
+    @FXML
+    Button AdminSearchBtn;
+
+    @FXML
+    TextField minAge,maxAge,nameSearchField;
+
+
+
+    @FXML
+    void handleSearch(){
+        String name ="--";
+
+        if(nameSearchField.getText() != null && !nameSearchField.getText().isEmpty()){
+            name = nameSearchField.getText();
+        }
+
+        int minage = -1;
+        int maxage = -1;
+
+        if (minAge.getText() != null && !minAge.getText().isEmpty()) {
+            minage = Integer.parseInt(minAge.getText());
+        }
+
+        if (maxAge.getText() != null && !maxAge.getText().isEmpty()) {
+            maxage = Integer.parseInt(maxAge.getText());
+        }
+
+
+        {
+            try {
+                admins = accountService.search(name,minage,maxage);
+                admins  =admins.stream()
+                        .filter(account -> account.getTitle().equals(Account.Title.admin))
+                        .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+                accountTableView.setItems(null);
+                accountTableView.setItems(admins);
+                accountTableView.refresh();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+
+    }
+
+
+
+    //satistic
+
+
+    @FXML
+    public void GoToSatistics(){
+        //hide interfaces
+        AddAdminPagee.setVisible(false);
+        AddAdminPagee.setManaged(false);
+
+        AccountAffichagee.setVisible(false);
+        AccountAffichagee.setManaged(false);
+
+        //show Adminaffichage interface
+        SatisticsVbox.getChildren().clear();
+
+
+        ObservableList<PieChart.Data> pieChartData= FXCollections.observableArrayList();
+
+        try {
+            Map<String, Integer> userTypeStatistics = accountService.getUserTypeStatistics();
+
+            // Create PieChart data
+            for (Map.Entry<String, Integer> entry : userTypeStatistics.entrySet()) {
+                String userType = entry.getKey();
+                int count = entry.getValue();
+                pieChartData.add(new PieChart.Data(userType, count));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately in your application
+        }
+
+
+
+            PieChart pieChart = new PieChart(pieChartData);
+            pieChart.setClockwise(true);
+            pieChart.setLabelLineLength(50);
+            pieChart.setLabelsVisible(true);
+            pieChart.setStartAngle(180);
+            pieChart.setStyle("-fx-font-size: 20px; -fx-text-fill: #f16602;");
+
+
+            // Create a label
+            Label titleLabel = new Label("title");
+            titleLabel.getStyleClass().add("label-style");
+            titleLabel.getStyleClass().add("title");
+
+            SatisticsVbox.getChildren().add(titleLabel);
+            SatisticsVbox.getChildren().add(pieChart);
+
+    }
+
+
+
+
 }
+
+

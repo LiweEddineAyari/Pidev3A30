@@ -705,3 +705,32 @@ TextArea {
 .liked {
     -fx-graphic: url('../icons/liked.png');
 }
+
+
+/* Apply the style to the ComboBox */
+.input-field ComboBox {
+    -fx-pref-width: 200;
+    -fx-pref-height: 30;
+    -fx-font-size: 20;
+    -fx-border-color: none;
+    -fx-border-radius: 4;
+    -fx-background-color: linear-gradient(to right, #c44e11, #fd7c2b);
+}
+
+/* Apply the style to the arrow button inside the ComboBox */
+.input-field ComboBox .arrow-button {
+    -fx-background-color: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-border-color: none;
+}
+
+/* Apply the style to the list view that appears when clicking on the ComboBox */
+.input-field ComboBox .list-view {
+    -fx-background-color: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-border-color: none;
+}
+
+/* Apply the style to the items in the list view */
+.input-field ComboBox .list-cell {
+    -fx-background-color: linear-gradient(to right, #c44e11, #fd7c2b);
+    -fx-border-color: none;
+}

@@ -1,0 +1,214 @@
+#pane_top
+{
+    -fx-background-color:#7f7f7f;
+}
+
+#pane_mid
+{
+    -fx-background-color:#D3D3D3;
+}
+
+#pane_logo
+{
+    -fx-background-color:#FFFFFF;
+}
+
+
+
+#my-table-view {
+    -fx-background-color: #7f7f7f;
+}
+
+#my-table-view .column-header-background {
+    -fx-background-color: #7f7f7f;
+    -fx-background-radius: 0;
+}
+
+#my-table-view .column-header {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-padding: 10px;
+}
+
+#my-table-view .table-row-cell {
+    -fx-background-color: white;
+    -fx-font-size: 14px;
+}
+
+#my-table-view .table-row-cell:hover {
+    -fx-background-color: #E6E6E6;
+}
+
+#my-table-view .table-row-cell:selected {
+    -fx-background-color: #FFCC09;
+    -fx-text-fill: white;
+}
+
+#my-button {
+    -fx-background-color: #FFCC09;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+}
+
+#my-button:hover {
+    -fx-background-color: #FFD966;
+}
+
+
+
+
+#add-page {
+    -fx-background-color: white;
+}
+
+#label {
+    -fx-background-color: #D3D3D3;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #D3D3D3;
+    -fx-padding: 10px;
+}
+
+#text-field {
+    -fx-background-color: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-border-color: #7f7f7f;
+    -fx-border-radius: 5px;
+}
+
+#image-view {
+    -fx-padding: 10px;
+}
+
+#add-page .button {
+    -fx-background-color: #FFCC09;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+}
+
+#add-page .button:hover {
+    -fx-background-color: #FFD966;
+}
+
+#submit-button {
+    -fx-background-color: #FFCC09;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+}
+
+#submit-button:hover {
+    -fx-background-color: #FFD966;
+}
+
+ #cancel-button {
+    -fx-background-color: #7f7f7f;
+    -fx-background-radius: 20;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+}
+
+#cancel-button:hover {
+    -fx-background-color: #BFBFBF;
+}
+
+
+
+
+#modify-page {
+    -fx-background-color: #3D3D3D;
+}
+
+#labell {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #FFFFFF;
+    -fx-padding: 10px;
+}
+
+#text-fieldd {
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-padding: 8px;
+    -fx-border-color: #FFFFFF;
+    -fx-border-radius: 5px;
+}
+
+#modify-page .image-view {
+    -fx-padding: 10px;
+}
+
+#modify-page .button {
+    -fx-background-color: #FFCC09;
+    -fx-background-radius: 20;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+}
+
+#modify-page .button:hover {
+    -fx-background-color: #FFD966;
+}
+
+#submitt-button {
+    -fx-background-color: #FFCC09;
+    -fx-background-radius: 20;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+}
+
+#submitt-button:hover {
+    -fx-background-color: #FFD966;
+}
+
+#cancell-button {
+    -fx-background-color: #7f7f7f;
+    -fx-background-radius: 20;
+    -fx-text-fill: #FFFFFF;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px;
+}
+
+#cancell-button:hover {
+    -fx-background-color: #BFBFBF;
+}
+
+
+
+
+#my-combo-box {
+    -fx-background-color: #7f7f7f;
+    -fx-background-insets: 0;
+    -fx-padding: 4px;
+}
+
+#my-combo-box .list-cell {
+    -fx-background-color: #7f7f7f;
+    -fx-text-fill: #FFFFFF;
+}
+
+#my-combo-box .list-cell:hover {
+    -fx-background-color: #FFCC09;
+}
+
+#my-combo-box .list-view {
+    -fx-background-color: #D3D3D3;
+    -fx-border-color: #7f7f7f;
+    -fx-border-radius: 4px;
+}

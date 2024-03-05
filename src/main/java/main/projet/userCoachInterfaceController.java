@@ -12,24 +12,28 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import services.AccountService;
 import services.ChatConversationService;
 import services.ChatSessionService;
+import utils.BadWords;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -38,6 +42,8 @@ public class userCoachInterfaceController implements Initializable, UserListener
 
     private  static  userCoachInterfaceController instance=new userCoachInterfaceController();
     public  static  userCoachInterfaceController getInstance(){return instance;};
+    private String imageURL=null;
+    String destinationFolderPath = "src/main/java/uploads/chatImages/"; // Adjust the path accordingly
 
     AppController appControllerinstance=AppController.getInstance();
 
@@ -150,40 +156,50 @@ public class userCoachInterfaceController implements Initializable, UserListener
         //taw session wallet haka session={-1,user.id,coach.id}
         CoachChatScrollPane.setContent(messagesContainer);
 
-        try {
-            int idSession= chatSessionService.getChatSession(instance.chatSession);
+        if(instance.chatConversationService.getBlockedList(instance.coach.getId()).isUserBlocked(instance.user.getId())){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("You are blocked from sending message to this coach");
+            alert.setContentText("You are blocked from sending message to this coach");
+            alert.showAndWait();
+        }
+        else {
+            try {
+                int idSession= chatSessionService.getChatSession(instance.chatSession);
 
-            if(idSession==-1){
-                // if chatsession doesnt exist add a new chat session between the sender(user) and reciever (coach)
-                chatSessionService.ajouter(instance.chatSession);
-                // after adding the new chat session , get the session id from data base
-                idSession= chatSessionService.getChatSession(instance.chatSession);
-                instance.chatSession.setId(idSession);
-                System.out.println(chatSession);
+                if(idSession==-1){
+                    // if chatsession doesnt exist add a new chat session between the sender(user) and reciever (coach)
+                    chatSessionService.ajouter(instance.chatSession);
+                    // after adding the new chat session , get the session id from data base
+                    idSession= chatSessionService.getChatSession(instance.chatSession);
+                    instance.chatSession.setId(idSession);
+                    System.out.println(chatSession);
 
 
+                }
+                else {
+                    //if chatsession exist get the id of the session
+                    instance.chatSession.setId(idSession);
+                    System.out.println(instance.chatSession);
+                }
+
+
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-            else {
-                //if chatsession exist get the id of the session
-                instance.chatSession.setId(idSession);
-                System.out.println(instance.chatSession);
+
+            //load conversation btw the user and the coach
+            try {
+                chatConversationsList= chatConversationService.getChatConversationsList( instance.chatSession.getId() );
+                System.out.println(chatConversationsList);
+                loadConversation(chatConversationsList);
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-
-
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
 
-        //load conversation btw the user and the coach
-        try {
-            chatConversationsList= chatConversationService.getChatConversationsList( instance.chatSession.getId() );
-            System.out.println(chatConversationsList);
-            loadConversation(chatConversationsList);
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
 
 
         userInterface.setVisible(false);
@@ -198,14 +214,29 @@ public class userCoachInterfaceController implements Initializable, UserListener
         String message = messageField.getText();
         ChatConversation chatConversation = new ChatConversation(-1,instance.chatSession.getId(),instance.coach.getId(),instance.user.getId(),-1,message);
 
-        try {
-            chatConversationService.ajouter(chatConversation);
-            chatConversationsList= chatConversationService.getChatConversationsList( instance.chatSession.getId() );
-            messagesContainer.getChildren().clear();
-            loadConversation(chatConversationsList);
+        if(!message.isEmpty() && !BadWords.canSend(message)){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Mot interdit");
+            alert.setHeaderText(null);
+            alert.setContentText("Ce mot est interdit.");
+            alert.showAndWait();
+        }
+        else {
+            if (imageURL != null) {
+                chatConversation.setImageUrl(imageURL);
+                imageURL = null;
+            }
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            try {
+
+                chatConversationService.ajouter(chatConversation);
+                chatConversationsList = chatConversationService.getChatConversationsList(instance.chatSession.getId());
+                messagesContainer.getChildren().clear();
+                loadConversation(chatConversationsList);
+
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 
@@ -213,7 +244,7 @@ public class userCoachInterfaceController implements Initializable, UserListener
     void loadConversation(ObservableList<ChatConversation> chatConversationsList) {
         if (chatConversationsList != null) {
             for (ChatConversation chatConversation : chatConversationsList) {
-
+                imageURL = chatConversation.getImageUrl();
                 String message = chatConversation.getMessage();
                 int sender = chatConversation.getId_sender();
 
@@ -242,12 +273,58 @@ public class userCoachInterfaceController implements Initializable, UserListener
 
                     }); // Replace handleButtonAction with your actual method
 
+
+                    System.out.println("image li jebneha "+imageURL);
+
+                    if(imageURL!=null){
+                        try {
+                            String absolutePath = new File(destinationFolderPath+imageURL).getAbsolutePath();
+                            System.out.println(absolutePath);
+                            Image image = new Image("file:" + absolutePath);
+
+                            ImageView imageView = new ImageView(image);
+                            imageView.setFitWidth(100); // Adjust width as needed
+                            imageView.setFitHeight(100); // Adjust height as needed
+
+                            // hbox for image
+                            HBox imageHBox = new HBox(imageView);
+                            imageHBox.setAlignment(Pos.CENTER_RIGHT);
+
+                            // Add label and button to hbox
+                            messageHBox.getChildren().addAll(actionButton, messageLabel);
+                            messagesContainer.getChildren().add(messageHBox);
+                            messagesContainer.getChildren().add(imageHBox);
+                        }catch (Exception e){
+                            String absolutePath = new File(destinationFolderPath+imageURL).getAbsolutePath();
+                            System.out.println(absolutePath);
+                            Image image = new Image("file:" + absolutePath);
+
+                            ImageView imageView = new ImageView(image);
+                            imageView.setFitWidth(100); // Adjust width as needed
+                            imageView.setFitHeight(100); // Adjust height as needed
+
+                            // hbox for image
+                            HBox imageHBox = new HBox(imageView);
+                            imageHBox.setAlignment(Pos.CENTER_RIGHT);
+
+                            // Add label and button to hbox
+                            messageHBox.getChildren().addAll(actionButton, messageLabel);
+                            messagesContainer.getChildren().add(messageHBox);
+                            messagesContainer.getChildren().add(imageHBox);
+                        }
+                    }else {
+                        // Add label and button to hbox
+                        messageHBox.getChildren().addAll(actionButton, messageLabel);
+                        messagesContainer.getChildren().add(messageHBox);
+
+                    }
+
                     // Add label and button to hbox
-                    messageHBox.getChildren().addAll(actionButton,messageLabel);
 
 
-                } else {
-                    messageLabel = new Label(instance.coach.getNom() + ": " + message);
+                }
+                else {
+                    messageLabel = new Label("user : " + message);
                     messageLabel.getStyleClass().add("user-message");
 
                     // hbox
@@ -255,15 +332,41 @@ public class userCoachInterfaceController implements Initializable, UserListener
                     messageHBox.setAlignment(Pos.CENTER_LEFT);
                     messageHBox.getStyleClass().add("coach-message-hbox");
                     // Add label and button to hbox
-                    messageHBox.getChildren().addAll(messageLabel);
+                    imageURL = chatConversation.getImageUrl();
+                    if(imageURL!=null){
+                        String absolutePath = new File(destinationFolderPath+imageURL).getAbsolutePath();
+                        System.out.println(absolutePath);
+                        Image image = new Image("file:" + absolutePath);
+
+                        ImageView imageView = new ImageView(image);
+                        imageView.setFitWidth(100); // Adjust width as needed
+                        imageView.setFitHeight(100); // Adjust height as needed
+
+                        // hbox for image
+                        HBox imageHBox = new HBox(imageView);
+                        imageHBox.setAlignment(Pos.CENTER_LEFT);
+
+                        // Add label and button to hbox
+                        messageHBox.getChildren().addAll(messageLabel);
+                        messagesContainer.getChildren().add(messageHBox);
+                        messagesContainer.getChildren().add(imageHBox);
+
+                        // Add imageHBox to vbox
+
+                    }else {
+                        // Add label and button to hbox
+                        messageHBox.getChildren().addAll( messageLabel);
+                        messagesContainer.getChildren().add(messageHBox);
+
+                    }
                 }
 
 
 
-                // Add hbox to vbox
-                messagesContainer.getChildren().add(messageHBox);
             }
         }
+
+        imageURL=null;
     }
 
     void handleButtonAction(ChatConversation chatConversation){
@@ -306,7 +409,56 @@ public class userCoachInterfaceController implements Initializable, UserListener
         chatPage.setVisible(false);
         chatPage.setManaged(false);
     }
+    @FXML
+    public void handleAddImage(ActionEvent actionEvent) {
+        FileChooser fileChooser = new FileChooser();
 
 
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Image files (*.png, *.jpg, *.gif)", "*.png", "*.jpg", "*.gif");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show open file dialog
+        Stage stage = (Stage) editMsgbtn.getScene().getWindow(); // Replace 'yourNode' with the actual node from your FXML
+        java.io.File file = fileChooser.showOpenDialog(stage);
+
+
+        if (file != null) {
+            // Process the selected file (e.g., display it in an ImageView)
+            System.out.println("Selected Image: " + file.getAbsolutePath());
+            String absolutePath=file.getAbsolutePath();
+            String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            String generatedID = "image_" + timestamp;
+            String fileExtension = file.getName().substring(file.getName().lastIndexOf("."));
+            File destinationFolder = new File(destinationFolderPath);
+            if (!destinationFolder.exists()) {
+                destinationFolder.mkdirs();
+            }
+            String finalFileName=generatedID + fileExtension;
+            String destinationFilePath = destinationFolderPath + finalFileName;
+            File destinationFile = new File(destinationFilePath);
+            try {
+                // Copy the selected file to the destination folder
+                Files.copy(file.toPath(), destinationFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                imageURL=finalFileName;
+
+                // Process the selected file (e.g., display it in an ImageView)
+                System.out.println("Selected Image: " + destinationFile.getAbsolutePath());
+                // Update your ImageView or perform other actions
+            } catch (IOException e) {
+                e.printStackTrace();
+                //showAlert(AlertType.ERROR, "Error", "Failed to copy the image to the destination folder.");
+            }
+
+
+            //copy to resources folder and save it with generatedID depdends on timestimp
+
+            // Update your ImageView or perform other actions
+        } else {
+            // Display an error message if no file was selected
+            //  showAlert(AlertType.ERROR, "Error", "No image selected.");
+
+        }
+    }
 
 }
