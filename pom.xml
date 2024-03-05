@@ -71,7 +71,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>main.projet/main.projet.HelloApplication</mainClass>
-                            <launcher>app</launcher>
+                            <lauvncher>app</lauvncher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
                             <noManPages>true</noManPages>

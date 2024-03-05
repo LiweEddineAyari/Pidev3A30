@@ -21,7 +21,7 @@ public class AdminController implements Initializable {
     @FXML
     VBox AdminAffichage;
     @FXML
-    Pane AddAdminPage;
+    Pane AddbAdminPage;
 
 
 
